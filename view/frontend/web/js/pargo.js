@@ -167,6 +167,9 @@ require([
     pargoPointState = true;
   }
 
+
+  /* THe following code does not make sense as it amounts to the smae as the code below ? */
+  /*
   // pargo can be loaded
   if (
     pargoPointState === true &&
@@ -189,6 +192,13 @@ require([
       "pargo_customshipping_pargo_customshipping"
     );
   }
+  */
+  // * changes start
+  if(pargoPointState===true){
+    loadPargoInformation = true;
+    checkout.setSelectedShippingRate("pargo_customshipping_pargo_customshipping");
+  }
+  // * changes end
 
   // iFrame close event listener
   if (window.addEventListener) {
