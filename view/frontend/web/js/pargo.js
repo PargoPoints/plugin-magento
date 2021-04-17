@@ -196,7 +196,7 @@ require([
   // * changes start
   if(pargoPointState===true){
     loadPargoInformation = true;
-    checkout.setSelectedShippingRate("pargo_customshipping_pargo_customshipping");
+    //checkout.setSelectedShippingRate("pargo_customshipping_pargo_customshipping");
   }
   // * changes end
 
