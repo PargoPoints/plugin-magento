@@ -255,10 +255,11 @@ require([
       telephone = $(telephoneSelector).val();
 
     if (name === "") {
-      name = "PARGO SHIPMENT";
+      name = "Pargo Shipment";
     }
     if (lastname === "") {
-      lastname = "PARGO POINT-" + point.data.pargoPointCode;
+      // lastname = "PARGO POINT-" + point.data.pargoPointCode;
+      lastname = " - Collect";
     }
     if (telephone === "") {
       telephone = "";
