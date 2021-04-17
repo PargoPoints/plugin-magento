@@ -190,6 +190,7 @@ require([
     );
   }
 
+  // iFrame close event listener
   if (window.addEventListener) {
     window.addEventListener("message", setPargoPointInformation, false);
   } else {
@@ -197,9 +198,16 @@ require([
   }
 
   function setPargoPointInformation(point) {
+    
+    console.log("setPargoPointInformation");
+
     if (!point.data.pargoPointCode) {
+      console.log("Pargo point code is not set.");
+      console.log("Pargo point: " + point);
       return true;
     }
+
+    console.log("Pargo point: " + point);
 
     localStorage.setItem("pargoPoint", JSON.stringify(point.data));
     // $('input[value="pargo_customshipping_pargo_customshipping"]').trigger(
