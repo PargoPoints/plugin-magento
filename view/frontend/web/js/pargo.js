@@ -314,8 +314,8 @@ require([
             city: JSON.parse(localStorage.getItem("pargoPoint")).city,
             company: JSON.parse(localStorage.getItem("pargoPoint")).storeName,
             country_id: "ZA",
-            firstname: "PARGO SHIPMENT",
-            lastname: "",
+            firstname: "Pargo Shipment",
+            lastname: " - Collect",
             postcode: JSON.parse(localStorage.getItem("pargoPoint")).postalcode,
             region: JSON.parse(localStorage.getItem("pargoPoint")).province,
             // TODO: what to do with this hard coded region id

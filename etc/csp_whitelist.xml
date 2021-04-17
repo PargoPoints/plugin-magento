@@ -8,7 +8,6 @@
         </policy>
         <policy id="img-src">
             <values>
-                <value id="pargo-img" type="host">http://pargo.handycats.com</value>
                 <value id="pargo-img-select" type="host">https://pargo.co.za</value>
             </values>
         </policy>
