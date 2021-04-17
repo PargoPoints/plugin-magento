@@ -240,8 +240,8 @@ require([
         city: point.data.city,
         company: point.data.storeName,
         country_id: "ZA",
-        firstname: "",
-        lastname: "",
+        firstname: "Pargo Shipment",
+        lastname: "- Collect",
         postcode: "",
         region: "",
         street: { 0: "", 1: "", 2: "" },
@@ -259,7 +259,7 @@ require([
     }
     if (lastname === "") {
       // lastname = "PARGO POINT-" + point.data.pargoPointCode;
-      lastname = " - Collect";
+      lastname = "- Collect";
     }
     if (telephone === "") {
       telephone = "";
