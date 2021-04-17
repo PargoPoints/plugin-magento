@@ -36,11 +36,23 @@ class SubmitBefore implements ObserverInterface
         $company = $order->getShippingAddress()->getData('company');
         $pickUpPointData = explode('-', $company);
 
+        /*
         if (
             !$company ||
             !isset($pickUpPointData[1]) ||
             !$pickUpPointData[1] ||
             strpos($pickUpPointData[1], 'pup') === false
+        ) {
+            throw new LocalizedException(
+                __('Please choose a Pargo Point before continuing')
+            );
+        }
+        */
+        // TODO: testing without the pup name check
+        if (
+            !$company ||
+            !isset($pickUpPointData[1]) ||
+            !$pickUpPointData[1]
         ) {
             throw new LocalizedException(
                 __('Please choose a Pargo Point before continuing')
