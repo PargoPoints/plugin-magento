@@ -1,0 +1,584 @@
+require([
+  "jquery",
+  "domReady!",
+  "ko",
+  "uiComponent",
+  "Magento_Checkout/js/model/quote",
+  "Magento_Checkout/js/checkout-data",
+  "Magento_Customer/js/customer-data",
+  "Magento_Checkout/js/checkout-data",
+  "Magento_Checkout/js/action/select-shipping-address",
+  "Magento_Checkout/js/action/create-shipping-address",
+  "Magento_Checkout/js/action/create-billing-address",
+], function (
+  $,
+  ko,
+  Component,
+  quote,
+  domReady,
+  checkout,
+  customer,
+  checkoutData,
+  selectShippingAddressAction,
+  createShippingAddress,
+  createBillingAddress
+) {
+  (function (win) {
+    "use strict";
+    var listeners = [],
+      doc = win.document,
+      MutationObserver = win.MutationObserver || win.WebKitMutationObserver,
+      observer;
+
+    function ready(selector, fn) {
+      // Store the selector and callback to be monitored
+      listeners.push({
+        selector: selector,
+        fn: fn,
+      });
+      if (!observer) {
+        // Watch for changes in the document
+        observer = new MutationObserver(check);
+        observer.observe(doc.documentElement, {
+          childList: true,
+          subtree: true,
+        });
+      }
+      // Check if the element is currently in the DOM
+      check();
+    }
+
+    function check() {
+      // Check the DOM for elements matching a stored selector
+      for (
+        var i = 0, len = listeners.length, listener, elements;
+        i < len;
+        i++
+      ) {
+        listener = listeners[i];
+        // Query for elements matching the specified selector
+        elements = doc.querySelectorAll(listener.selector);
+        for (var j = 0, jLen = elements.length, element; j < jLen; j++) {
+          element = elements[j];
+          // Make sure the callback isn't invoked with the
+          // same element more than once
+          if (!element.ready) {
+            element.ready = true;
+            // Invoke the callback with the element
+            listener.fn.call(element, element);
+          }
+        }
+      }
+    }
+
+    // Expose `ready`
+    win.ready = ready;
+  })(this);
+
+  ready(".opc-progress-bar", function () {
+    $(".opc-progress-bar").click(function () {
+      if (
+        $("input[value='pargo_customshipping_pargo_customshipping']").prop(
+          "checked"
+        ) &&
+        localStorage.getItem("pargoPoint") != null
+      ) {
+        //$('.form-shipping-address').hide();
+        //$('.checkout-shipping-address').hide();
+        $(".continue").attr("disabled", false);
+      }
+    });
+  });
+
+  ready(".action-edit", function () {
+    $(".action-edit").click(function () {
+      if (
+        $("input[value='pargo_customshipping_pargo_customshipping']").prop(
+          "checked"
+        ) &&
+        localStorage.getItem("pargoPoint") != null
+      ) {
+        //$('.form-shipping-address').hide();
+        //$('.checkout-shipping-address').hide();
+        $(".continue").attr("disabled", false);
+      }
+    });
+  });
+
+  ready(".checkout", function () {
+    console.log("ready");
+    $(".checkout").click(function () {
+      console.log(checkout.getSelectedShippingRate());
+
+      var shippingAddressFromData = {
+        city: JSON.parse(localStorage.getItem("pargoPoint")).city,
+        company: JSON.parse(localStorage.getItem("pargoPoint")).storeName,
+        country_id: "ZA",
+        firstname: "PARGO SHIPMENT",
+        lastname: "Salie",
+        postcode: JSON.parse(localStorage.getItem("pargoPoint")).postalCode,
+        region: JSON.parse(localStorage.getItem("pargoPoint")).province,
+        street: {
+          0: JSON.parse(localStorage.getItem("pargoPoint")).address1,
+          1: JSON.parse(localStorage.getItem("pargoPoint")).address2,
+          2: "",
+        },
+        telephone: "0000",
+      };
+      var shippingAddress = {
+        city: JSON.parse(localStorage.getItem("pargoPoint")).city,
+        company: JSON.parse(localStorage.getItem("pargoPoint")).storeName,
+        country_id: "ZA",
+        firstname: "PARGO SHIPMENT",
+        lastname: "Salie",
+        postcode: JSON.parse(localStorage.getItem("pargoPoint")).postalCode,
+        region: JSON.parse(localStorage.getItem("pargoPoint")).province,
+        region_id: "577",
+        street: {
+          0: JSON.parse(localStorage.getItem("pargoPoint")).address1,
+          1: JSON.parse(localStorage.getItem("pargoPoint")).address2,
+          2: "",
+        },
+        save_in_address_book: 0,
+        telephone: "0000",
+      };
+
+      checkout.setSelectedShippingRate(
+        "pargo_customshipping_pargo_customshipping"
+      );
+      checkout.setSelectedShippingAddress(shippingAddressFromData);
+    });
+  });
+  $("input[value='pargo_customshipping_pargo_customshipping']").prop(
+    "checked",
+    true
+  );
+  var pargoPointState = false;
+  var loadPargoInformation = false;
+  var isLoggedIn = false;
+
+  if (window.checkoutConfig.customerData.firstname) {
+    isLoggedIn = true;
+  }
+
+  //set pargo state
+  if (localStorage.getItem("pargoPoint")) {
+    pargoPointState = true;
+  }
+
+  // pargo can be loaded
+  if (
+    pargoPointState === true &&
+    checkout.getSelectedShippingRate() ===
+      "pargo_customshipping_pargo_customshipping"
+  ) {
+    loadPargoInformation = true;
+    pargoPointState = true;
+  }
+
+  //pargo can be loaded just set the shipping rate
+  if (
+    pargoPointState === true &&
+    checkout.getSelectedShippingRate() !==
+      "pargo_customshipping_pargo_customshipping"
+  ) {
+    loadPargoInformation = true;
+    pargoPointState = true;
+    checkout.setSelectedShippingRate(
+      "pargo_customshipping_pargo_customshipping"
+    );
+  }
+
+  if (window.addEventListener) {
+    window.addEventListener("message", setPargoPointInformation, false);
+  } else {
+    window.attachEvent("onmessage", setPargoPointInformation);
+  }
+
+  function setPargoPointInformation(point) {
+    if (!point.data.pargoPointCode) {
+      return true;
+    }
+
+    localStorage.setItem("pargoPoint", JSON.stringify(point.data));
+    // $('input[value="pargo_customshipping_pargo_customshipping"]').trigger(
+    //   "click"
+    // );
+    if (
+      !jQuery("#checkout")
+        .find('input[name="billing-address-same-as-shipping"]')
+        .is(":checked")
+    ) {
+      jQuery(".checkout-shipping-address")
+        .children()
+        .find('input[name="billing-address-same-as-shipping"]')
+        .trigger("click");
+    }
+
+    $(".close").trigger("click");
+    $(".continue").attr("disabled", false);
+    var shippingAddressFromData = {
+        city: point.data.city,
+        company: point.data.storeName,
+        country_id: "ZA",
+        firstname: "Imtiyaaz",
+        lastname: "Salie",
+        postcode: "7780",
+        region: "WC",
+        street: { 0: "dsfds", 1: "", 2: "" },
+        telephone: "035235235",
+      },
+      nameSelector = "input[name=firstname]",
+      lastnameSelector = "input[name=lastname]",
+      telephoneSelector = "input[name=telephone]",
+      name = $(nameSelector).val(),
+      lastname = $(lastnameSelector).val(),
+      telephone = $(telephoneSelector).val();
+
+    if (name === "") {
+      name = "PARGO SHIPMENT";
+    }
+    if (lastname === "") {
+      lastname = "PARGO POINT-" + point.data.pargoPointCode;
+    }
+    if (telephone === "") {
+      telephone = "000";
+    }
+    $(".form-shipping-address")
+      .find("select[name=country_id]")
+      .val("ZA")
+      .change();
+    $(".form-shipping-address").find(nameSelector).val(name).change();
+    $(".form-shipping-address").find(lastnameSelector).val(lastname).change();
+    $(".form-shipping-address")
+      .find("input[name=company]")
+      .val(point.data.storeName + "-" + point.data.pargoPointCode)
+      .change();
+    $(".form-shipping-address")
+      .find('input[name="street[0]"]')
+      .val(point.data.address1)
+      .change();
+    $(".form-shipping-address")
+      .find('input[name="street[1]"]')
+      .val(point.data.address2)
+      .change();
+    $(".form-shipping-address")
+      .find('input[name="street[2]"]')
+      .val(point.data.suburb)
+      .change();
+    $(".form-shipping-address")
+      .find("input[name=city]")
+      .val(point.data.city)
+      .change();
+    $(".form-shipping-address")
+      .find("input[name=region]")
+      .val(point.data.province)
+      .change();
+    $(".form-shipping-address")
+      .find("input[name=postcode]")
+      .val(point.data.postalcode)
+      .change();
+    $(".form-shipping-address").find(telephoneSelector).val(telephone).change();
+    console.log($(".form-shipping-address").find(nameSelector).val());
+
+    pargoAlternativeDisplay();
+    /* Custom updates */
+    jQuery("div#checkout-step-shipping_method").css({
+      opacity: "0.5",
+      "pointer-events": "none",
+    });
+    setTimeout(function () {
+      jQuery(".radio").each(function () {
+        var value = jQuery(this).val();
+        if (value == "pargo_customshipping_pargo_customshipping") {
+          var shippingAddress = {
+            city: JSON.parse(localStorage.getItem("pargoPoint")).city,
+            company: JSON.parse(localStorage.getItem("pargoPoint")).storeName,
+            country_id: "ZA",
+            firstname: "PARGO SHIPMENT",
+            lastname: "Salie",
+            postcode: JSON.parse(localStorage.getItem("pargoPoint")).postalCode,
+            region: JSON.parse(localStorage.getItem("pargoPoint")).province,
+            region_id: "577",
+            street: {
+              0: JSON.parse(localStorage.getItem("pargoPoint")).address1,
+              1: JSON.parse(localStorage.getItem("pargoPoint")).address2,
+              2: "",
+            },
+            save_in_address_book: 0,
+            telephone: parseInt(
+              JSON.parse(localStorage.getItem("pargoPoint")).phoneNumber,
+              10
+            ),
+          };
+          let addr = createShippingAddress(shippingAddress);
+          let billingAddr = createBillingAddress();
+          addr.canUseForBilling(false);
+          checkout.setSelectedShippingRate(
+            "pargo_customshipping_pargo_customshipping"
+          );
+          checkout.setBillingAddressFromData(billingAddr);
+
+          checkout.setSelectedShippingAddress(addr);
+
+          // checkout.setNewCustomerShippingAddress(addr);
+
+          // checkout.getSelectedShippingAddress();
+          // checkout.getNewCustomerShippingAddress();
+          this.checked = true;
+
+          jQuery("#checkout").find(".billing-address-form").show();
+          jQuery("#checkout")
+            .find('input[value="pargo_customshipping_pargo_customshipping"]')
+            .trigger("click");
+
+          jQuery(this).trigger("click");
+        }
+      });
+      jQuery("div#checkout-step-shipping_method").css({
+        opacity: "1",
+        "pointer-events": "visible",
+      });
+    }, 7000);
+  }
+
+  ready(".pargo-btn", function () {
+    if (
+      (pargoPointState === true &&
+        loadPargoInformation === true &&
+        $(".radio:checked").val() ===
+          "pargo_customshipping_pargo_customshipping") ||
+      (checkout.getSelectedShippingRate() ===
+        "pargo_customshipping_pargo_customshipping" &&
+        localStorage.getItem("pargoPoint") !== null)
+    ) {
+      pargoAlternativeDisplay();
+      if (isLoggedIn) {
+        // custom(commented below code) for pargo issue
+        //$('.checkout-shipping-address').hide();
+        var shippingAddressFromData = {
+          city: JSON.parse(localStorage.getItem("pargoPoint")).city,
+          company: JSON.parse(localStorage.getItem("pargoPoint")).storeName,
+          country_id: "ZA",
+          firstname: "PARGO SHIPMENT",
+          lastname: "Salie",
+          postcode: JSON.parse(localStorage.getItem("pargoPoint")).postalCode,
+          region: JSON.parse(localStorage.getItem("pargoPoint")).province,
+          street: {
+            0: JSON.parse(localStorage.getItem("pargoPoint")).address1,
+            1: JSON.parse(localStorage.getItem("pargoPoint")).address2,
+            2: "",
+          },
+          telephone: "0000",
+        };
+        var shippingAddress = {
+          city: JSON.parse(localStorage.getItem("pargoPoint")).city,
+          company: JSON.parse(localStorage.getItem("pargoPoint")).storeName,
+          country_id: "ZA",
+          firstname: "PARGO SHIPMENT",
+          lastname: "Salie",
+          postcode: JSON.parse(localStorage.getItem("pargoPoint")).postalCode,
+          region: JSON.parse(localStorage.getItem("pargoPoint")).province,
+          region_id: "577",
+          street: {
+            0: JSON.parse(localStorage.getItem("pargoPoint")).address1,
+            1: JSON.parse(localStorage.getItem("pargoPoint")).address2,
+            2: "",
+          },
+          save_in_address_book: 0,
+          telephone: "0000",
+        };
+        // selectShippingAddressAction(shippingAddress);
+        // checkoutData.setSelectedShippingAddress(shippingAddressFromData);
+        //checkout.setSelectedShippingRate('pargo_customshipping_pargo_customshipping');
+        // checkout.setShippingAddressFromData(shippingAddressFromData);
+      }
+    } else {
+      pargoDefaultDisplay();
+      if (
+        $(".radio:checked").val() !==
+        "pargo_customshipping_pargo_customshipping"
+      ) {
+        $(".form-shipping-address").show();
+      }
+    }
+
+    $(".radio").change(function () {
+      if (
+        $(this).val() === "pargo_customshipping_pargo_customshipping" &&
+        isLoggedIn
+      ) {
+        pargoDefaultDisplay();
+        //$('.form-shipping-address').hide();
+        //$('.checkout-shipping-address').hide();
+      } else {
+        localStorage.removeItem("pargoPoint");
+        pargoDefaultDisplay();
+        $(".form-shipping-address").show();
+        $(".checkout-shipping-address").show();
+        $(".pargo-btn").hide();
+      }
+
+      if ($(this).val() === "pargo_customshipping_pargo_customshipping") {
+        pargoDefaultDisplay();
+        //$('.form-shipping-address').hide();
+      } else {
+        localStorage.removeItem("pargoPoint");
+        pargoDefaultDisplay();
+        $(".form-shipping-address").show();
+        $(".pargo-btn").hide();
+      }
+    });
+  });
+
+  function pargoDefaultDisplay() {
+    var btnText = "Select a Pargo Point";
+    var btnTextColor = "#ffffff";
+    var btnTextHoverColor = "#000000";
+    var btnColor = "#3475B7";
+    var btnHoverColor = "#3475B7";
+    $(".pargo-store-info").remove();
+    $(".pargo-btn").show();
+
+    if (localStorage.getItem("pargoPoint") === null) {
+      $(".form-shipping-address").hide();
+      $("#pargo-point").hide();
+    }
+
+    $(".pargo-btn").text(btnText);
+    $(this).css("background-color", btnHoverColor);
+    $(this).css("color", btnTextColor);
+
+    $(".pargo-btn")
+      .mouseover(function () {
+        $(this).css("background-color", btnHoverColor);
+        $(this).css("color", btnTextHoverColor);
+      })
+      .mouseout(function () {
+        $(this).css("background-color", btnColor);
+        $(this).css("color", btnTextColor);
+      });
+  }
+
+  function pargoAlternativeDisplay() {
+    if (
+      $(".radio:checked").val() ===
+        "pargo_customshipping_pargo_customshipping" ||
+      checkout.getSelectedShippingRate() ===
+        "pargo_customshipping_pargo_customshipping"
+    ) {
+      pargoDefaultDisplay();
+    }
+
+    var btnText = "Change Pargo Point";
+    var btnTextColor = "#000000";
+    var btnTextHoverColor = "#ffffff";
+    var btnColor = "#FEF051";
+    var btnHoverColor = "#3475B7";
+    $(".form-shipping-address").hide();
+    $(".pargo-btn").show();
+    $(".pargo-btn").text(btnText);
+    $(".pargo-store-info").remove();
+    if (localStorage.getItem("pargoPoint")) {
+      $("#pargo-point")
+        .show()
+        .append(
+          '<div class="pargo-store-info"><strong>Store name</strong><p>' +
+            JSON.parse(localStorage.getItem("pargoPoint")).storeName +
+            "</p><br><strong>Store location</strong><p>" +
+            JSON.parse(localStorage.getItem("pargoPoint")).address1 +
+            ", " +
+            JSON.parse(localStorage.getItem("pargoPoint")).city +
+            ", " +
+            JSON.parse(localStorage.getItem("pargoPoint")).postalcode +
+            ", " +
+            JSON.parse(localStorage.getItem("pargoPoint")).province +
+            ", " +
+            JSON.parse(localStorage.getItem("pargoPoint")).suburb +
+            "</p></div>"
+        );
+    }
+
+    $(this).css("background-color", btnHoverColor);
+    $(this).css("color", btnTextColor);
+
+    $(".pargo-btn")
+      .mouseover(function () {
+        $(this).css("background-color", btnHoverColor);
+        $(this).css("color", btnTextHoverColor);
+      })
+      .mouseout(function () {
+        $(this).css("background-color", btnColor);
+        $(this).css("color", btnTextColor);
+      });
+  }
+
+  function renderPargo() {
+    if (localStorage.getItem("pargoPoint")) {
+      var btnText = "Change Pargo Point";
+      var btnTextColor = "#000000";
+      var btnTextHoverColor = "#ffffff";
+      var btnColor = "#FEF051";
+      var btnHoverColor = "#3475B7";
+      $(".form-shipping-address").hide();
+      $(".pargo-btn").show();
+      $(".pargo-store-info").remove();
+      $("#pargo-point")
+        .show()
+        .append(
+          '<div class="pargo-store-info"><strong>Store name</strong><p>' +
+            JSON.parse(localStorage.getItem("pargoPoint")).storeName +
+            "</p><br><strong>Store location</strong><p>" +
+            JSON.parse(localStorage.getItem("pargoPoint")).address1 +
+            ", " +
+            JSON.parse(localStorage.getItem("pargoPoint")).city +
+            ", " +
+            JSON.parse(localStorage.getItem("pargoPoint")).postalcode +
+            ", " +
+            JSON.parse(localStorage.getItem("pargoPoint")).province +
+            ", " +
+            JSON.parse(localStorage.getItem("pargoPoint")).suburb +
+            "</p></div>"
+        );
+
+      $(".pargo-btn").text(btnText);
+      $(this).css("background-color", btnHoverColor);
+      $(this).css("color", btnTextColor);
+
+      $(".pargo-btn")
+        .mouseover(function () {
+          $(this).css("background-color", btnHoverColor);
+          $(this).css("color", btnTextHoverColor);
+        })
+        .mouseout(function () {
+          $(this).css("background-color", btnColor);
+          $(this).css("color", btnTextColor);
+        });
+    } else {
+      var btnText = "Select a Pargo Point";
+      var btnTextColor = "#ffffff";
+      var btnTextHoverColor = "#000000";
+      var btnColor = "#3475B7";
+      var btnHoverColor = "#3475B7";
+
+      $(".form-shipping-address").hide();
+      $(".pargo-store-info").remove();
+      $(".pargo-btn").show();
+      $("#pargo-point").hide();
+
+      $(".pargo-btn").text(btnText);
+      $(this).css("background-color", btnHoverColor);
+      $(this).css("color", btnTextColor);
+
+      $(".pargo-btn")
+        .mouseover(function () {
+          $(this).css("background-color", btnHoverColor);
+          $(this).css("color", btnTextHoverColor);
+        })
+        .mouseout(function () {
+          $(this).css("background-color", btnColor);
+          $(this).css("color", btnTextColor);
+        });
+    }
+  }
+});

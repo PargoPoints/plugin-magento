@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Magento\Shipping\Model\Rate\Result">
+        <plugin name="pargo_customshipping_rate_result" type="Pargo\CustomShipping\Model\Plugin\Shipping\Rate\Result\Remove" sortOrder="10" disabled="false"/>
+        <plugin name="pargo_customshipping_rate_result_getallrates" type="Pargo\CustomShipping\Model\Plugin\Shipping\Rate\Result\GetFilteredRates" sortOrder="20" disabled="false"/>
+
+    </type>
+
+    <type name="Magento\Checkout\Model\PaymentInformationManagement">
+        <plugin sortOrder="1" name="twinsenCarrierCodeFixPaymentInformationManagement" type="Pargo\CustomShipping\Plugin\Model\PaymentInformationManagementPlugin"/>
+    </type>
+    <type name="Magento\Checkout\Model\GuestPaymentInformationManagement">
+        <plugin sortOrder="1" name="twinsenCarrierCodeFixGuestPaymentInformationManagement" type="Pargo\CustomShipping\Plugin\Model\GuestPaymentInformationManagementPlugin"/>
+    </type>
+</config>

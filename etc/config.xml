@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <carriers>
+            <pargo_customshipping>
+                <active>0</active>
+                <availability>both</availability>
+                <customer>0</customer>
+                <title>Pargo Shipping</title>
+                <name>Not at home? Collect from a local shop when it suits you best</name>
+                <scheduler_enabled>0</scheduler_enabled>
+                <frequency>mon,tue,wed,thu,fri,sat,sun</frequency>
+                <date_start></date_start>
+                <date_end></date_end>
+
+                <hide_enabled>0</hide_enabled>
+                <hide_carriers></hide_carriers>
+
+                <name>Pargo</name>
+                <title>Not at home? Collect from a local shop when it suits you best</title>
+                <price>0.00</price>
+                <cost>0.00</cost>
+                <sallowspecific>1</sallowspecific>
+                <specificcountry>ZA</specificcountry>
+                <model>Pargo\CustomShipping\Model\Carrier\Custom</model>
+                <specificerrmsg>This shipping method is not available. To use this shipping method, please contact us.</specificerrmsg>
+            </pargo_customshipping>
+        </carriers>
+    </default>
+</config>

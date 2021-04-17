@@ -1,0 +1,451 @@
+<style>
+    #pargo-point {
+        margin-top: 15px;
+        border: 1px solid #f0f0f0;
+        padding: 10px;
+        margin-bottom: 0px;
+        border-radius: 4px;
+        display: none;
+    }
+
+    #pargo-point strong {
+        font-weight: bold;
+    }
+
+    .pargo-btn {
+        background-color: #f0f0f0;
+        color: #000;
+        border: 1px solid #f0f0f0;
+        padding: 8px 15px 8px 40px;
+        background-image: url(https://pargo.co.za/external_img/pargo_icn_small.png);
+        background-repeat: no-repeat;
+        background-position: 10px center;
+        border-radius: 4px;
+        display: inline-block;
+
+    }
+
+    .pargo-btn:hover {
+        background-color: #1b75bc;
+        color: #fff;
+        border: 1px solid #1b75bc;
+        cursor: pointer;
+    }
+
+    .pargo-small {
+        color: #237abf;
+        font-size: 10px;
+    }
+
+    .pargo-small:hover,
+    .pargo-point-modal-close:hover {
+        cursor: pointer;
+    }
+
+    #pargo-point p {
+        margin: 0;
+    }
+
+    .modal .checkbox {
+        display: none;
+    }
+
+    #pargo-steps {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        text-align: center;
+    }
+
+    #pargo-steps p {
+        font-size: 16px;
+        line-height: 18px;
+    }
+
+    #pargo-steps img {
+        margin-bottom: 15px;
+        max-width: 200px;
+    }
+
+    #pargo-steps li {
+        padding: 0;
+    }
+
+    #pargo-steps strong {
+        display: block;
+    }
+
+    .pargo-point-modal-close {
+        float: right;
+    }
+
+    .what-is-this h2 {
+        margin-top: 0;
+    }
+
+    /* Gray background */
+    .modal .modal-overlay {
+        opacity: 0;
+        transition: all 0.3s ease;
+        width: 50%;
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: -100;
+        transform: scale(1);
+        display: none;
+        background-color: rgba(0, 0, 0, 0.7);
+    }
+
+    /* Box */
+    .modal .modal-wrap {
+        background-color: #ddd;
+        box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.2);
+        width: 60%;
+        margin: auto;
+        align-self: flex-start;
+        border-radius: 2px;
+        transition: all 0.5s ease;
+    }
+
+
+    .modal .modal-wrap.small {
+        width: 30%;
+    }
+
+    .modal .modal-wrap.full {
+        width: 100%;
+        height: 100%;
+    }
+
+    .modal .modal-wrap.a-center {
+        align-self: center;
+    }
+
+    .modal .modal-wrap.from-left {
+        transform: translateX(-100%);
+    }
+
+    .modal .modal-wrap.from-right {
+        transform: translateX(100%);
+    }
+
+    .modal .modal-wrap.from-top {
+        transform: translateY(-100%);
+    }
+
+    .modal .modal-wrap.from-bottom {
+        transform: translateY(100%);
+    }
+
+    /* Close button */
+    .modal .modal-overlay .close {
+        position: absolute;
+        right: 10px;
+        top: 10px;
+        font-size: 40px;
+        width: 30px;
+        height: 30px;
+        color: #282c34;
+    }
+
+    .modal .modal-overlay .close:hover {
+        cursor: pointer;
+        color: #4b5361;
+    }
+
+    .modal .o-close {
+        width: 100%;
+        height: 100%;
+        position: fixed;
+        left: 0;
+        top: 0;
+        z-index: -100;
+    }
+
+    .modal input:checked~.o-close {
+        z-index: 9998;
+    }
+
+    .modal input:checked~.modal-overlay {
+        transform: scale(1);
+        opacity: 1;
+        z-index: 9997;
+        overflow: auto;
+        display: flex;
+        animation-duration: 0.5s;
+        animation-name: fade-in;
+        -moz-animation-duration: 0.5s;
+        -moz-animation-name: fade-in;
+        -webkit-animation-duration: 0.5s;
+        -webkit-animation-name: fade-in;
+        padding-bottom: 20px;
+    }
+
+    .modal input:checked~.modal-overlay .modal-wrap {
+        transform: translateY(0);
+        z-index: 9999;
+    }
+
+    /* Responsive Design */
+    /* Tablet size */
+    @media (max-width: 800px) {
+        .modal .modal-wrap {
+            width: 80%;
+            padding: 20px;
+        }
+    }
+
+    /* Phone size */
+    @media (max-width: 500px) {
+        .modal .modal-wrap {
+            width: 90%;
+        }
+    }
+
+    /* Fadein from display:none */
+    @keyframes fade-in {
+        0% {
+            display: none;
+            opacity: 0;
+        }
+
+        1% {
+            display: flex;
+            opacity: 0;
+        }
+
+        100% {
+            display: flex;
+            opacity: 1;
+        }
+    }
+
+    @-moz-keyframes fade-in {
+        0% {
+            display: none;
+            opacity: 0;
+        }
+
+        1% {
+            display: flex;
+            opacity: 0;
+        }
+
+        100% {
+            display: flex;
+            opacity: 1;
+        }
+    }
+
+    @-webkit-keyframes fade-in {
+        0% {
+            display: none;
+            opacity: 0;
+        }
+
+        1% {
+            display: flex;
+            opacity: 0;
+        }
+
+        100% {
+            display: flex;
+            opacity: 1;
+        }
+    }
+
+    .resp-iframe {
+        display: block;
+        background: #000;
+        border: none;
+        height: 90vh;
+        width: 100%;
+        left: 0;
+        position: relative;
+    }
+
+    @media (min-width: 320px) {
+        .modal .modal-overlay .close {
+            right: 10px;
+            top: 75px;
+            z-index: 9999;
+        }
+    }
+
+    @media (min-width: 481px) {
+
+        /* portrait e-readers (Nook/Kindle), smaller tablets @ 600 or @ 640 wide. */
+        .modal .modal-overlay .close {
+            right: 10px;
+            top: 75px;
+            z-index: 9999;
+        }
+
+    }
+
+    @media (min-width: 641px) {
+
+        /* portrait tablets, portrait iPad, landscape e-readers, landscape 800x480 or 854x480 phones */
+        .modal .modal-overlay .close {
+            right: 10px;
+            top: 75px;
+            z-index: 9999;
+        }
+
+        #pargo-steps li {
+            padding: 0;
+            float: left;
+            width: 33.33%;
+            position: relative;
+        }
+
+        #pargo-steps .step-inner {
+            padding: 0 15px;
+        }
+
+        #pargo-steps {
+            margin: 30px -15px 0 -15px;
+            position: relative;
+        }
+
+        #pargo-steps p {
+            max-width: 304px;
+            margin: 0 auto;
+        }
+
+        #pargo-steps:before {
+            display: block;
+            content: "";
+            position: absolute;
+            border-top: 6px dashed #237abf;
+            height: 6px;
+            left: 130px;
+            right: 130px;
+            top: 119px;
+        }
+
+    }
+
+    @media (max-width: 640px) {
+        #pargo-steps img {
+            max-width: 150px;
+            margin-top: 15px;
+        }
+    }
+
+
+    @media (min-width: 961px) {
+
+        /* tablet, landscape iPad, lo-res laptops ands desktops */
+        .modal .modal-overlay .close {
+            right: 10px;
+            top: unset;
+            z-index: 9999;
+        }
+    }
+
+    @media (min-width: 1025px) {
+
+        /* big landscape tablets, laptops, and desktops */
+        .modal .modal-overlay .close {
+            right: 10px;
+            top: unset;
+            z-index: 9999;
+        }
+    }
+
+    @media (min-width: 1281px) {
+
+        /* hi-res laptops and desktops */
+        .modal .modal-overlay .close {
+            right: 10px;
+            top: unset;
+            z-index: 9999;
+        }
+    }
+
+    .hide-pargo {
+        visibility: hidden;
+    }
+
+    .what-is-this {
+        background-color: white !important;
+        /* padding: 40px 50px; */
+    }
+
+    @media screen and (min-width: 642px) and (max-width: 1180px) {
+        #pargo-steps img {
+            max-width: 130px;
+        }
+
+        #pargo-steps:before {
+            top: 65px;
+        }
+    }
+
+    .modal input:checked~.modal-overlay .modal-wrap .pargo-map {
+        margin-top: 20px;
+    }
+</style>
+
+
+
+<div class="modal">
+    <input id="modal-trigger-center" class="checkbox" type="checkbox">
+    <div class="modal-overlay">
+        <label for="modal-trigger-center" class="o-close"></label>
+        <div class="modal-wrap what-is-this a-center">
+            <label for="modal-trigger-center" class="pargo-point-modal-close">✖</label>
+            <!-- <h2>Pargo Points - Click & Collect</h2>
+            <p>
+                Never have to wait at home all day for your parcel or miss a delivery again: Pargo delivers your parcels to a store near you.
+                Having partnered with hundreds of stores in South Africa, there's (almost) always a Pick-up Point near you: often with opening hours of up to 15 hours per day - some (like fuel stations) are even open 24/7! Why not give it a try today?
+            </p>
+            <ul id="pargo-steps">
+                <li>
+                    <div class="step-inner">
+                        <img src="http://pargo.co.za/external_img/mag_step1.png" />
+                        <p><strong>1. CHOOSE</strong>
+                            CHOOSE FROM A HUGE NETWORK OF PARGO POINTS.</p>
+                    </div>
+                </li>
+                <li>
+                    <div class="step-inner">
+                        <img src="http://pargo.co.za/external_img/mag_step2.png" />
+                        <p><strong>2. NOTIFY</strong>
+                            RECEIVE SMS & EMAIL NOTIFICATIONS WHEN YOUR PARCEL ARRIVES.</p>
+                    </div>
+                </li>
+                <li>
+                    <div class="step-inner">
+                        <img src="http://pargo.co.za/external_img/mag_step3.png" />
+                        <p><strong>3. COLLECT</strong>
+                            COLLECT YOUR PARCEL WHEN IT SUITS YOU BEST.</p>
+                    </div>
+                </li>
+            </ul> -->
+            <img src="http://pargo.handycats.com/woocommerce/wp-content/plugins/pargo/images/info.png">
+        </div>
+    </div>
+</div>
+
+
+
+<!-- Normal modal -->
+<div class="modal">
+    <input id="modal-trigger" class="checkbox" type="checkbox">
+    <div class="modal-overlay">
+        <label for="modal-trigger" class="o-close"></label>
+        <div class="modal-wrap pargo-map">
+            <label for="modal-trigger" class="close">&#10006;</label>
+            <iframe id="iframe" class="resp-iframe" allow="geolocation" src="https://map.pargo.co.za/?token=<?php echo $this->getContent(); ?>"></iframe>
+        </div>
+    </div>
+</div>
+<!-- End Modal -->
+
+<?= /* @noEscape */ $csp->renderTag('script', ['src' => 'https://map.pargo.co.za']); ?>
