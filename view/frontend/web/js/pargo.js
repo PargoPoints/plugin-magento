@@ -108,46 +108,42 @@ require([
   ready(".checkout", function () {
     console.log("ready");
     $(".checkout").click(function () {
-      console.log(checkout.getSelectedShippingRate());
 
-      var shippingAddressFromData = {
-        city: JSON.parse(localStorage.getItem("pargoPoint")).city,
-        company: JSON.parse(localStorage.getItem("pargoPoint")).storeName,
-        country_id: "ZA",
-        firstname: "Pargo Shipment",
-        lastname: "- Collect",
-        postcode: JSON.parse(localStorage.getItem("pargoPoint")).postalcode,
-        region: JSON.parse(localStorage.getItem("pargoPoint")).province,
-        street: {
-          0: JSON.parse(localStorage.getItem("pargoPoint")).address1,
-          1: JSON.parse(localStorage.getItem("pargoPoint")).address2,
-          2: "",
-        },
-        telephone: (JSON.parse(localStorage.getItem("pargoPoint")).phoneNumber) ? JSON.parse(localStorage.getItem("pargoPoint")).phoneNumber:"0",
-      };
-      var shippingAddress = {
-        city: JSON.parse(localStorage.getItem("pargoPoint")).city,
-        company: JSON.parse(localStorage.getItem("pargoPoint")).storeName,
-        country_id: "ZA",
-        firstname: "Pargo Shipment",
-        lastname: " - Collect",
-        postcode: JSON.parse(localStorage.getItem("pargoPoint")).postalcode,
-        region: JSON.parse(localStorage.getItem("pargoPoint")).province,
-        // TODO: what should be done with this hard coded region id ?
-        region_id: "577",
-        street: {
-          0: JSON.parse(localStorage.getItem("pargoPoint")).address1,
-          1: JSON.parse(localStorage.getItem("pargoPoint")).address2,
-          2: "",
-        },
-        save_in_address_book: 0,
-        telephone: (JSON.parse(localStorage.getItem("pargoPoint")).phoneNumber) ? JSON.parse(localStorage.getItem("pargoPoint")).phoneNumber:"0",
-      };
+      if(localStorage.getItem("pargoPoint")) {
 
-      checkout.setSelectedShippingRate(
-        "pargo_customshipping_pargo_customshipping"
-      );
-      checkout.setSelectedShippingAddress(shippingAddressFromData);
+        console.log("Pargo: checkout");
+        console.log("Pargo: " + localStorage.getItem("pargoPoint"));
+
+        var pargoPoint = JSON.parse(localStorage.getItem("pargoPoint"));
+        var shippingAddress = {
+          firstname: "Pargo Shipment",
+          lastname: "- Collect",
+          code: pargoPoint.pargoPointCode,
+          company: pargoPoint.storeName,
+          street: {
+            0: pargoPoint.address1,
+            1: pargoPoint.address2,
+            2: "",
+          },
+          suburb: pargoPoint.suburb,
+          city: pargoPoint.city,
+          postcode: pargoPoint.postalcode,
+          region: pargoPoint.province,
+          country_id: "ZA",
+          telephone: (!pargoPoint.phoneNumber) ? "(no phone)" : pargoPoint.phoneNumber.toString(),
+          latitude: pargoPoint.latitude,
+          longitude: pargoPoint.longitude,
+          photo: pargoPoint.photo,
+          photo_small: pargoPoint.photo_small,
+        };
+
+        checkout.setSelectedShippingRate(
+          "pargo_customshipping_pargo_customshipping"
+        );
+        checkout.setSelectedShippingAddress(shippingAddress);
+      }else{
+        console.log("Pargo: checkout failed, pargoPoint not found in browser localStorage.");
+      }
     });
   });
   $("input[value='pargo_customshipping_pargo_customshipping']").prop(

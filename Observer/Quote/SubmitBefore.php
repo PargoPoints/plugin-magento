@@ -33,9 +33,11 @@ class SubmitBefore implements ObserverInterface
             return $this;
         }
 
+        $code = $order->getShippingAddress()->getData('code');
         $company = $order->getShippingAddress()->getData('company');
         $pickUpPointData = explode('-', $company);
 
+        $this->logger->info('Pargo: Pickup Point code: ' . $code);
         $this->logger->info('Pargo: Pickup Point company: ' . $company);
         $this->logger->info('Pargo: Pickup Point details: ' . implode(" : ",$pickUpPointData));
         if (
