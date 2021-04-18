@@ -118,7 +118,7 @@ require([
         var shippingAddress = {
           firstname: "Pargo Shipment",
           lastname: "- Collect",
-          pointCode: pargoPoint.pargoPointCode,
+          pargoPointCode: pargoPoint.pargoPointCode,
           company: pargoPoint.storeName,
           street: {
             0: pargoPoint.address1,
