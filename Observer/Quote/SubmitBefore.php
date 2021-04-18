@@ -14,6 +14,13 @@ use Pargo\CustomShipping\Model\Carrier\Custom as PargoCarrier;
 
 class SubmitBefore implements ObserverInterface
 {
+    private $logger;
+
+    public function __construct(\Psr\Log\LoggerInterface $logger)
+    {
+        $this->logger = $logger;
+    }
+
     /**
      * @param Observer $observer
      * @return $this
@@ -21,6 +28,8 @@ class SubmitBefore implements ObserverInterface
      */
     public function execute(Observer $observer)
     {
+        $this->logger->info('Validate Pargo Pickup Point');
+
         /* @var Order $order */
         $order = $observer->getEvent()->getData('order');
 
