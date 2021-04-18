@@ -17,45 +17,27 @@ class SubmitBefore implements ObserverInterface
         $this->logger = $logger;
     }
 
-    /**
-     * @param Observer $observer
-     * @return $this
-     * @throws LocalizedException
-     */
     public function execute(Observer $observer)
     {
-        $this->logger->info('Validate Pargo Pickup Point');
+        $this->logger->info('Pargo: Validate Pickup Point');
 
-        /* @var Order $order */
         $order = $observer->getEvent()->getData('order');
 
         if ((string)$order->getShippingMethod() !== $this->getPargoCarrierCode()) {
+            $this->logger->error('Pargo: Shipping method is not Pargo Pickup Points, ignore.');
             return $this;
         }
 
-        // Shouldn't happen
         if (!$order->getShippingAddress()) {
+            $this->logger->error('Pargo: getShippingAddress returned null');
             return $this;
         }
 
         $company = $order->getShippingAddress()->getData('company');
         $pickUpPointData = explode('-', $company);
 
-        /*
-        if (
-            !$company ||
-            !isset($pickUpPointData[1]) ||
-            !$pickUpPointData[1] ||
-            strpos($pickUpPointData[1], 'pup') === false
-        ) {
-            throw new LocalizedException(
-                __('Please choose a Pargo Point before continuing')
-            );
-        }
-        */
-        // TODO: testing without the pup name check
-        $this->logger->info('Pargo Pickup Point details: ' . implode(" : ",$pickUpPointData));
-        $this->logger->info('Pargo Pickup Point reference: ' . $pickUpPointData[1]);
+        $this->logger->info('Pargo: Pickup Point company: ' . $company);
+        $this->logger->info('Pargo: Pickup Point details: ' . implode(" : ",$pickUpPointData));
         if (
             !$company ||
             !isset($pickUpPointData[1]) ||
@@ -66,14 +48,14 @@ class SubmitBefore implements ObserverInterface
             );
         }
 
+        $this->logger->info('Pargo: Pickup Point validated');
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getPargoCarrierCode()
     {
-        return (PargoCarrier::CARRIER_CODE . '_' . PargoCarrier::CARRIER_CODE);
+        $carrier_code = PargoCarrier::CARRIER_CODE . '_' . PargoCarrier::CARRIER_CODE;
+        $this->logger->info($carrier_code);
+        return ($carrier_code);
     }
 }
