@@ -106,19 +106,19 @@ require([
   });
 
   ready(".checkout", function () {
-    console.log("ready");
+    console.log("Pargo: checkout ready");
+
     $(".checkout").click(function () {
+      console.log("Pargo: checkout clicked");
 
       if(localStorage.getItem("pargoPoint")) {
-
-        console.log("Pargo: checkout");
         console.log("Pargo: " + localStorage.getItem("pargoPoint"));
 
         var pargoPoint = JSON.parse(localStorage.getItem("pargoPoint"));
         var shippingAddress = {
           firstname: "Pargo Shipment",
           lastname: "- Collect",
-          code: pargoPoint.pargoPointCode,
+          pointCode: pargoPoint.pargoPointCode,
           company: pargoPoint.storeName,
           street: {
             0: pargoPoint.address1,
@@ -142,7 +142,7 @@ require([
         );
         checkout.setSelectedShippingAddress(shippingAddress);
       }else{
-        console.log("Pargo: checkout failed, pargoPoint not found in browser localStorage.");
+        console.log("Pargo: error - pargoPoint not found in browser localStorage.");
       }
     });
   });
