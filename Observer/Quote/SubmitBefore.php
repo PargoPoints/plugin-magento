@@ -1,8 +1,4 @@
 <?php
-/**
- * Copyright © Vaimo Group. All rights reserved.
- * See LICENSE_VAIMO.txt for license details.
- */
 
 namespace Pargo\CustomShipping\Observer\Quote;
 
@@ -58,6 +54,8 @@ class SubmitBefore implements ObserverInterface
         }
         */
         // TODO: testing without the pup name check
+        $this->logger->info('Pargo Pickup Point details: ' . implode(" : ",$pickUpPointData));
+        $this->logger->info('Pargo Pickup Point reference: ' . $pickUpPointData[1]);
         if (
             !$company ||
             !isset($pickUpPointData[1]) ||
