@@ -248,7 +248,7 @@ require([
       lastname = "- Collect";
     if (telephone === "")
       telephone = "";
-      
+
     $(".form-shipping-address")
       .find("select[name=country_id]")
       .val("ZA")
@@ -328,6 +328,8 @@ require([
           };
 
           let shipAddr = createShippingAddress(shippingAddress);
+          console.log("Pargo: Shipping Address");
+          console.log(shipAddr);
           let billAddr = createBillingAddress();
           shipAddr.canUseForBilling(false);
           checkout.setSelectedShippingRate(
