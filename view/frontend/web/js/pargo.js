@@ -118,7 +118,10 @@ require([
         var shippingAddress = {
           firstname: "Pargo Shipment",
           lastname: "- Collect",
-          pickupPointCode: pargoPoint.pargoPointCode,
+          extension_attributes: {
+            pickupPointCode: pargoPoint.pargoPointCode,
+          },
+          // pickupPointCode: pargoPoint.pargoPointCode,
           company: pargoPoint.storeName,
           street: {
             0: pargoPoint.address1,
@@ -141,6 +144,7 @@ require([
           "pargo_customshipping_pargo_customshipping"
         );
         checkout.setSelectedShippingAddress(shippingAddress);
+
       }else{
         console.log("Pargo: error - pargoPoint not found in browser localStorage.");
       }
@@ -211,8 +215,6 @@ require([
       console.log("Pargo: pickup point code is not set.");
       return true;
     }
-
-    console.log("Pargo: pickup point: " + point);
 
     localStorage.setItem("pargoPoint", JSON.stringify(point.data));
 
@@ -292,7 +294,6 @@ require([
       .val(point.data.postalcode)
       .change();
     $(".form-shipping-address").find(telephoneSelector).val(telephone).change();
-    console.log($(".form-shipping-address").find(nameSelector).val());
 
     pargoAlternativeDisplay();
     /* Custom updates */
