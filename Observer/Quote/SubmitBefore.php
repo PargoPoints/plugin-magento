@@ -39,14 +39,10 @@ class SubmitBefore implements ObserverInterface
         $this->logger->info('Pargo: Pickup Point Code: ' . $pickupPointCode);
 
         $company = $order->getShippingAddress()->getData('company');
-        $pickUpPointData = explode('-', $company);
-
+        // todo: pickupPointCode check
         $this->logger->info('Pargo: Pickup Point company: ' . $company);
-        $this->logger->info('Pargo: Pickup Point details: ' . implode(" : ",$pickUpPointData));
         if (
-            !$company ||
-            !isset($pickUpPointData[1]) ||
-            !$pickUpPointData[1]
+            !$company
         ) {
             throw new LocalizedException(
                 __('Please choose a Pargo Point before continuing')

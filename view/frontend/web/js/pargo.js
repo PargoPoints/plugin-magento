@@ -220,6 +220,7 @@ require([
 
     localStorage.setItem("pargoPoint", JSON.stringify(point.data));
 
+    // todo: review
     if (
       !jQuery("#checkout")
         .find('input[name="billing-address-same-as-shipping"]')
@@ -234,36 +235,20 @@ require([
     $(".close").trigger("click");
     $(".continue").attr("disabled", false);
 
-    var shippingAddressFromData = {
-        city: point.data.city,
-        company: point.data.storeName,
-        country_id: "ZA",
-        firstname: "Pargo Shipment",
-        lastname: "- Collect",
-        postcode: "",
-        region: "",
-        street: { 0: "", 1: "", 2: "" },
-        telephone: "",
-        extension_attributes: {
-          pickupPointCode: point.data.pargoPointCode,
-        },
-      },
-      nameSelector = "input[name=firstname]",
+    var nameSelector = "input[name=firstname]",
       lastnameSelector = "input[name=lastname]",
       telephoneSelector = "input[name=telephone]",
       name = $(nameSelector).val(),
       lastname = $(lastnameSelector).val(),
       telephone = $(telephoneSelector).val();
 
-    if (name === "") {
+    if (name === "")
       name = "Pargo Shipment";
-    }
-    if (lastname === "") {
+    if (lastname === "")
       lastname = "- Collect";
-    }
-    if (telephone === "") {
+    if (telephone === "")
       telephone = "";
-    }
+      
     $(".form-shipping-address")
       .find("select[name=country_id]")
       .val("ZA")
