@@ -303,10 +303,6 @@ require([
           var shippingAddress = {
             firstname: "Pargo Shipment",
             lastname: "- Collect",
-            extension_attributes: {
-              pickupPointCode: pargoPoint.pargoPointCode,
-            },
-            //pickupPointCode: pargoPoint.pargoPointCode,
             company: pargoPoint.storeName,
             street: {
               0: pargoPoint.address1,
@@ -328,6 +324,8 @@ require([
           };
 
           let shipAddr = createShippingAddress(shippingAddress);
+          shippingAddress['extension_attributes']['pickupPointCode'] = pargoPoint.pargoPointCode;
+          
           console.log("Pargo: Shipping Address");
           console.log(shipAddr);
           let billAddr = createBillingAddress();
