@@ -214,6 +214,8 @@ require([
     if (!point.data.pargoPointCode) {
       console.log("Pargo: pickup point code is not set.");
       return true;
+    }else{
+      console.log("Pargo: pickup point code = " + point.data.pargoPointCode);
     }
 
     localStorage.setItem("pargoPoint", JSON.stringify(point.data));
@@ -242,6 +244,9 @@ require([
         region: "",
         street: { 0: "", 1: "", 2: "" },
         telephone: "",
+        extension_attributes: {
+          pickupPointCode: point.data.pargoPointCode,
+        },
       },
       nameSelector = "input[name=firstname]",
       lastnameSelector = "input[name=lastname]",
@@ -301,6 +306,7 @@ require([
       opacity: "0.5",
       "pointer-events": "none",
     });
+
     setTimeout(function () {
       jQuery(".radio").each(function () {
 
@@ -312,7 +318,10 @@ require([
           var shippingAddress = {
             firstname: "Pargo Shipment",
             lastname: "- Collect",
-            pickupPointCode: pargoPoint.pargoPointCode,
+            extension_attributes: {
+              pickupPointCode: pargoPoint.pargoPointCode,
+            },
+            //pickupPointCode: pargoPoint.pargoPointCode,
             company: pargoPoint.storeName,
             street: {
               0: pargoPoint.address1,
