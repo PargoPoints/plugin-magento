@@ -324,10 +324,10 @@ require([
           };
 
           let shipAddr = createShippingAddress(shippingAddress);
-          if (shipAddr['extension_attributes'] === undefined) {
-            shipAddr['extension_attributes'] = {};
-          }
-          shipAddr['extension_attributes']['pickupPointCode'] = pargoPoint.pargoPointCode;
+          //if (shipAddr['extension_attributes'] === undefined) {
+          //  shipAddr['extension_attributes'] = {};
+          //}
+          //shipAddr['extension_attributes']['pickupPointCode'] = pargoPoint.pargoPointCode;
           
           console.log("Pargo: Shipping Address");
           console.log(shipAddr);
