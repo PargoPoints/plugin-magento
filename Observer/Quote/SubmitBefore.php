@@ -34,9 +34,9 @@ class SubmitBefore implements ObserverInterface
         }
 
         // test custom order address field
-        $extAttributes = $order->getShippingAddress()->getExtensionAttributes();
-        $pickupPointCode = $extAttributes->getPickupPointCode(); 
-        $this->logger->info('Pargo: Pickup Point Code: ' . $pickupPointCode);
+        // $extAttributes = $order->getShippingAddress()->getExtensionAttributes();
+        // $pickupPointCode = $extAttributes->getPickupPointCode(); 
+        // $this->logger->info('Pargo: Pickup Point Code: ' . $pickupPointCode);
 
         $company = $order->getShippingAddress()->getData('company');
         // todo: pickupPointCode check
