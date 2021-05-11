@@ -11,6 +11,8 @@ use Magento\Sales\Model\Order\Shipment;
 
 class ProcessShipment implements ObserverInterface
 {
+    private $logger;
+
     /**
      * @var Config
      */
@@ -35,11 +37,14 @@ class ProcessShipment implements ObserverInterface
     public function __construct(
         Config $helper,
         Curl $curl,
-        TrackFactory $track
+        TrackFactory $track, 
+        \Psr\Log\LoggerInterface $logger
     ) {
         $this->helper = $helper;
         $this->curl = $curl;
         $this->track = $track;
+
+        $this->logger = $logger;
     }
 
     /**
@@ -47,6 +52,8 @@ class ProcessShipment implements ObserverInterface
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
     {
+        $this->logger->info('Pargo: Execute Shipment');
+
         $shipment = $observer->getEvent()->getShipment();
         $order = $shipment->getOrder();
 
@@ -65,6 +72,7 @@ class ProcessShipment implements ObserverInterface
         $addressDetails = explode('-', $shippingAddress['company']);
         $size = sizeof($addressDetails);
         $pickUpPointCode = $addressDetails[$size-1];
+        $this->logger->info('Pargo: Pickup Point Reference: ' . $pickUpPointCode);
         // Fix end
         
         $this->submitShipment($order, $billingAddress, $pickUpPointCode, $shipment);
@@ -78,9 +86,13 @@ class ProcessShipment implements ObserverInterface
      */
     private function submitShipment($order, $billingAddress, $pickUpPointCode, $shipment)
     {
-        $token = $this->authenticate();
+        $this->logger->info('Pargo: Submit Shipment');
 
+        $token = $this->authenticate();
         if (!$token) {
+
+            $this->logger->error('Pargo: API Authentication Failed.');
+
             $order->addStatusHistoryComment("Pargo authentication failed");
             $order->save();
 
@@ -134,18 +146,20 @@ class ProcessShipment implements ObserverInterface
         curl_close($curl);
 
         if ($err) {
+            $this->logger->error('Pargo: Order API request failed.');
             $order->addStatusHistoryComment("Pargo consignment export failed");
             $order->save();
 
             return;
         } else {
             $response = json_decode($response);
-
             $data = [
                 'carrier_code' => 'custom',
                 'title' => 'Pargo Tracking Code',
                 'number' => $response->data->attributes->orderData->trackingCode, // Replace with your tracking number
             ];
+
+            $this->logger->info('Pargo: Order tracking code: ' . $response->data->attributes->orderData->trackingCode);
 
             $track = $this->track->create()->addData($data);
             $shipment->addTrack($track)->save();
@@ -160,6 +174,8 @@ class ProcessShipment implements ObserverInterface
      */
     private function authenticate()
     {
+        $this->logger->info('Pargo: Authenticating API');
+
         $url = $this->helper->getUrl();
         $username = $this->helper->getUsername();
         $password = $this->helper->getPassword();
@@ -186,8 +202,10 @@ class ProcessShipment implements ObserverInterface
         curl_close($curl);
 
         if ($err) {
+            $this->logger->error('Pargo: Failed to authenticate API');
             return false;
         } else {
+            $this->logger->error('Pargo: API Authentication successful');
             $response = json_decode($response);
 
             return $response->access_token;
