@@ -56,7 +56,17 @@ class ProcessShipment implements ObserverInterface
 
         $shippingAddress = $order->getShippingAddress()->getData();
         $billingAddress = $order->getBillingAddress()->getData();
-        $pickUpPointCode = explode('-', $shippingAddress['company'])[1];
+        // Fix start
+        // we need to account for multiple dashes in the address and take the last item in array as this is the pup code
+        // the fact that some pups have dashes in their names has brought out this code limitation.
+        // remove
+        // $pickUpPointCode = explode('-', $shippingAddress['company'])[1];
+        // add
+        $addressDetails = explode('-', $shippingAddress['company']);
+        $size = sizeof($addressDetails);
+        $pickUpPointCode = $addressDetails[$size-1];
+        // Fix end
+        
         $this->submitShipment($order, $billingAddress, $pickUpPointCode, $shipment);
     }
 
