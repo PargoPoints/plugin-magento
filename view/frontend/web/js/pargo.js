@@ -115,6 +115,11 @@ require([
         console.log("Pargo: " + localStorage.getItem("pargoPoint"));
 
         var pargoPoint = JSON.parse(localStorage.getItem("pargoPoint"));
+
+        var pargoPointTelephone = pargoPoint.phoneNumber.toString();
+        if(pargoPointTelephone==="")
+          pargoPointTelephone = "[]";
+      
         var shippingAddress = {
           firstname: "Pargo Shipment",
           lastname: "- Collect",
@@ -133,7 +138,7 @@ require([
           postcode: pargoPoint.postalcode,
           region: pargoPoint.province,
           country_id: "ZA",
-          telephone: (!pargoPoint.phoneNumber) ? "(no phone)" : pargoPoint.phoneNumber.toString(),
+          telephone: pargoPointTelephone,
           latitude: pargoPoint.latitude,
           longitude: pargoPoint.longitude,
           photo: pargoPoint.photo,
@@ -247,7 +252,7 @@ require([
     if (lastname === "")
       lastname = "- Collect";
     if (telephone === "")
-      telephone = "";
+      telephone = "[]";
 
     $(".form-shipping-address")
       .find("select[name=country_id]")
@@ -299,7 +304,12 @@ require([
 
         if (value == "pargo_customshipping_pargo_customshipping") {
 
-          var pargoPoint = JSON.parse(localStorage.getItem("pargoPoint"));
+        var pargoPoint = JSON.parse(localStorage.getItem("pargoPoint"));
+        
+        var pargoPointTelephone = pargoPoint.phoneNumber.toString();
+        if(pargoPointTelephone==="")
+          pargoPointTelephone = "[]";
+  
           var shippingAddress = {
             firstname: "Pargo Shipment",
             lastname: "- Collect",
@@ -314,7 +324,7 @@ require([
             postcode: pargoPoint.postalcode,
             region: pargoPoint.province,
             country_id: "ZA",
-            telephone: (!pargoPoint.phoneNumber) ? "(no phone)" : pargoPoint.phoneNumber.toString(),
+            telephone: pargoPointTelephone,
             latitude: pargoPoint.latitude,
             longitude: pargoPoint.longitude,
             photo: pargoPoint.photo,
@@ -372,6 +382,11 @@ require([
       if (isLoggedIn) {
 
         var pargoPoint = JSON.parse(localStorage.getItem("pargoPoint"));
+
+        var pargoPointTelephone = pargoPoint.phoneNumber.toString();
+        if(pargoPointTelephone==="")
+          pargoPointTelephone = "[]";
+  
         var shippingAddress = {
           firstname: "Pargo Shipment",
           lastname: "- Collect",
@@ -387,7 +402,7 @@ require([
           postcode: pargoPoint.postalcode,
           region: pargoPoint.province,
           country_id: "ZA",
-          telephone: (!pargoPoint.phoneNumber) ? "(no phone)" : pargoPoint.phoneNumber.toString(),
+          telephone: pargoPointTelephone,
           latitude: pargoPoint.latitude,
           longitude: pargoPoint.longitude,
           photo: pargoPoint.photo,

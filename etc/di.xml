@@ -5,11 +5,20 @@
         <plugin name="pargo_customshipping_rate_result_getallrates" type="Pargo\CustomShipping\Model\Plugin\Shipping\Rate\Result\GetFilteredRates" sortOrder="20" disabled="false"/>
 
     </type>
-
     <type name="Magento\Checkout\Model\PaymentInformationManagement">
         <plugin sortOrder="1" name="twinsenCarrierCodeFixPaymentInformationManagement" type="Pargo\CustomShipping\Plugin\Model\PaymentInformationManagementPlugin"/>
     </type>
     <type name="Magento\Checkout\Model\GuestPaymentInformationManagement">
         <plugin sortOrder="1" name="twinsenCarrierCodeFixGuestPaymentInformationManagement" type="Pargo\CustomShipping\Plugin\Model\GuestPaymentInformationManagementPlugin"/>
+    </type>
+    <type name="Magento\Framework\Logger\Monolog">
+        <arguments>
+            <argument name="name" xsi:type="string">main</argument>
+            <argument name="handlers"  xsi:type="array">
+                <item name="system" xsi:type="object">Magento\Framework\Logger\Handler\System</item>
+                <item name="debug" xsi:type="object">Magento\Framework\Logger\Handler\Debug</item>
+                <item name="syslog" xsi:type="object">Magento\Framework\Logger\Handler\Syslog</item>
+            </argument>
+        </arguments>
     </type>
 </config>

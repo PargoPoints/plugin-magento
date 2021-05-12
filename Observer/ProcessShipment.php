@@ -8,42 +8,24 @@ use Magento\Framework\HTTP\Client\Curl;
 use Magento\Sales\Model\Order\Shipment\TrackFactory;
 use Magento\Sales\Model\Order\Interceptor as Order;
 use Magento\Sales\Model\Order\Shipment;
+use \Psr\Log\LoggerInterface;
 
 class ProcessShipment implements ObserverInterface
 {
     private $logger;
-
-    /**
-     * @var Config
-     */
     protected $helper;
-
-    /**
-     * @var Curl
-     */
     protected $curl;
-
-    /**
-     * @var TrackFactory
-     */
     protected $track;
 
-    /**
-     * ProcessShipment constructor.
-     * @param Config $helper
-     * @param Curl $curl
-     * @param TrackFactory $track
-     */
     public function __construct(
         Config $helper,
         Curl $curl,
         TrackFactory $track, 
-        \Psr\Log\LoggerInterface $logger
+        LoggerInterface$logger
     ) {
         $this->helper = $helper;
         $this->curl = $curl;
         $this->track = $track;
-
         $this->logger = $logger;
     }
 
@@ -205,7 +187,7 @@ class ProcessShipment implements ObserverInterface
             $this->logger->error('Pargo: Failed to authenticate API');
             return false;
         } else {
-            $this->logger->error('Pargo: API Authentication successful');
+            $this->logger->info('Pargo: API Authentication successful');
             $response = json_decode($response);
 
             return $response->access_token;
