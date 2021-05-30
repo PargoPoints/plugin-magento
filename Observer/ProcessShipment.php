@@ -6,8 +6,9 @@ use Magento\Framework\Event\ObserverInterface;
 use Pargo\CustomShipping\Helper\Config;
 use Magento\Framework\HTTP\Client\Curl;
 use Magento\Sales\Model\Order\Shipment\TrackFactory;
-use Magento\Sales\Model\Order\Interceptor as Order;
 use Magento\Sales\Model\Order\Shipment;
+use Magento\Sales\Model\Order\Invoice;
+use Magento\Sales\Model\Order;
 use \Psr\Log\LoggerInterface;
 
 class ProcessShipment implements ObserverInterface
@@ -36,15 +37,18 @@ class ProcessShipment implements ObserverInterface
     {
         $this->logger->info('Pargo: Execute Shipment');
 
-        $shipment = $observer->getEvent()->getShipment();
-        $order = $shipment->getOrder();
-
+        $invoice = $observer->getEvent()->getInvoice();
+        $order = $invoice->getOrder();
         if ($order->getShippingMethod() !== 'pargo_customshipping_pargo_customshipping') {
+            $this->logger->info('Pargo: Shipping method mismatch');
+            $this->logger->info('Pargo: Shipping method set is ' . $order->getShippingMethod());
             return;
         }
 
-        $shippingAddress = $order->getShippingAddress()->getData();
-        $billingAddress = $order->getBillingAddress()->getData();
+        $this->logger->info('Pargo: Shipping method matched successfully');
+
+        $shippingAddress = $invoice->getShippingAddress()->getData();
+        $billingAddress = $invoice->getBillingAddress()->getData();
         // Fix start
         // we need to account for multiple dashes in the address and take the last item in array as this is the pup code
         // the fact that some pups have dashes in their names has brought out this code limitation.
@@ -52,21 +56,25 @@ class ProcessShipment implements ObserverInterface
         // $pickUpPointCode = explode('-', $shippingAddress['company'])[1];
         // add
         $addressDetails = explode('-', $shippingAddress['company']);
+
+        $this->logger->info('Pargo: Shipping Address Details' . $shippingAddress['company']);
+
         $size = sizeof($addressDetails);
         $pickUpPointCode = $addressDetails[$size-1];
         $this->logger->info('Pargo: Pickup Point Reference: ' . $pickUpPointCode);
         // Fix end
         
-        $this->submitShipment($order, $billingAddress, $pickUpPointCode, $shipment);
+        $this->logger->info('Pargo: Submit Shipping');
+
+        $this->submitShipment($order, $billingAddress, $pickUpPointCode);
     }
 
     /**
      * @param Order $order
      * @param array $billingAddress
      * @param string $pickUpPointCode
-     * @param Shipment $shipment
      */
-    private function submitShipment($order, $billingAddress, $pickUpPointCode, $shipment)
+    private function submitShipment($order, $billingAddress, $pickUpPointCode)
     {
         $this->logger->info('Pargo: Submit Shipment');
 
@@ -144,7 +152,6 @@ class ProcessShipment implements ObserverInterface
             $this->logger->info('Pargo: Order tracking code: ' . $response->data->attributes->orderData->trackingCode);
 
             $track = $this->track->create()->addData($data);
-            $shipment->addTrack($track)->save();
             $message = "Success! Created waybill <a href='" . $response->data->attributes->orderData->orderLabel . "' target='_blank'>" . $response->data->attributes->orderData->trackingCode . "</a>";
             $order->addStatusHistoryComment($message);
             $order->save();
@@ -194,3 +201,5 @@ class ProcessShipment implements ObserverInterface
         }
     }
 }
+
+
