@@ -13,17 +13,20 @@ use \Psr\Log\LoggerInterface;
 
 class ProcessShipment implements ObserverInterface
 {
+    private $_objectManager;
     private $logger;
     protected $helper;
     protected $curl;
     protected $track;
 
     public function __construct(
+        \Magento\Framework\ObjectManagerInterface $objectmanager,
         Config $helper,
         Curl $curl,
         TrackFactory $track, 
         LoggerInterface$logger
     ) {
+        $this->_objectManager = $objectmanager;
         $this->helper = $helper;
         $this->curl = $curl;
         $this->track = $track;
@@ -143,18 +146,18 @@ class ProcessShipment implements ObserverInterface
             return;
         } else {
             $response = json_decode($response);
-            $data = [
-                'carrier_code' => 'custom',
-                'title' => 'Pargo Tracking Code',
-                'number' => $response->data->attributes->orderData->trackingCode, // Replace with your tracking number
-            ];
 
             $this->logger->info('Pargo: Order tracking code: ' . $response->data->attributes->orderData->trackingCode);
 
-            $track = $this->track->create()->addData($data);
             $message = "Success! Created waybill <a href='" . $response->data->attributes->orderData->orderLabel . "' target='_blank'>" . $response->data->attributes->orderData->trackingCode . "</a>";
             $order->addStatusHistoryComment($message);
             $order->save();
+
+            $this->logger->info('Pargo: Create Shipment');
+
+            $this->createShipment($order, $response->data->attributes->orderData->trackingCode); // Magento Shipment
+
+            $this->logger->info('Pargo: Shipment Created');
         }
     }
 
@@ -198,6 +201,77 @@ class ProcessShipment implements ObserverInterface
             $response = json_decode($response);
 
             return $response->access_token;
+        }
+    }
+
+    private function createShipment($order, $trackingCode)
+    {
+        $this->logger->info('Pargo: Shipment Check');
+
+        // Check if order can be shipped or has already shipped
+        if (! $order->canShip()) {
+
+            $this->logger->info('Pargo: Order Cant Ship');
+
+            throw new \Magento\Framework\Exception\LocalizedException(
+                            __('You can\'t create an shipment.')
+                        );
+        }
+
+        // Initialize the order shipment object
+        $convertOrder = $this->_objectManager->create('Magento\Sales\Model\Convert\Order');
+        $shipment = $convertOrder->toShipment($order);
+
+        // Loop through order items
+        foreach ($order->getAllItems() AS $orderItem) {
+            // Check if order item has qty to ship or is virtual
+            if (! $orderItem->getQtyToShip() || $orderItem->getIsVirtual()) {
+                continue;
+            }
+
+            $qtyShipped = $orderItem->getQtyToShip();
+
+            // Create shipment item with qty
+            $shipmentItem = $convertOrder->itemToShipmentItem($orderItem)->setQty($qtyShipped);
+
+            // Add shipment item to shipment
+            $shipment->addItem($shipmentItem);
+        }
+
+        // Register shipment
+        $shipment->register();
+        $order->setIsInProcess(true);
+
+        $data = array(
+            'carrier_code' => 'pargo_customshipping',
+            'title' => 'Pargo Tracking Code',
+            'number' => $trackingCode, 
+        );
+
+        try {
+            $this->logger->info('Pargo: Save Shipment');
+
+            // Save created shipment and order
+                $track = $this->_objectManager->create('Magento\Sales\Model\Order\Shipment\TrackFactory')->create()->addData($data);
+                $shipment->addTrack($track)->save();
+                $shipment->save();
+                $order->save();
+             
+            // Send email
+            $this->_objectManager->create('Magento\Shipping\Model\ShipmentNotifier')
+                    ->notify($shipment);
+             
+                $shipment->save();
+
+                $this->logger->info('Pargo: Shipment saved');
+
+        } catch (\Exception $e) {
+
+                $this->logger->info('Pargo: Could not save Shipment');
+
+                throw new \Magento\Framework\Exception\LocalizedException(
+                    __($e->getMessage())
+                );
         }
     }
 }
