@@ -1,6 +1,17 @@
 <?php
+/**
+ * Pargo CustomShipping
+ *
+ * @category    Pargo
+ * @package     Pargo_CustomShipping
+ * @copyright   Copyright (c) 2018 Pargo Points (https://pargo.co.za)
+ * @license     http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
+ * @author     dev@pargo.co.za
+ */
 
 namespace Pargo\CustomShipping\Model\Adminhtml\Shipping\Config\Source;
+
+use Magento\Framework\App\Config;
 
 /**
  * @category   Pargo
@@ -13,7 +24,7 @@ namespace Pargo\CustomShipping\Model\Adminhtml\Shipping\Config\Source;
 class Allmethods implements \Magento\Framework\Option\ArrayInterface
 {
     /**
-     * @var \Magento\Framework\App\Config
+     * @var Config
      */
     public $shippingConfig;
 
@@ -23,7 +34,7 @@ class Allmethods implements \Magento\Framework\Option\ArrayInterface
     public $scopeConfig;
 
     public function __construct(
-        \Magento\Framework\App\Config $scopeConfig,
+        Config $scopeConfig,
         \Magento\Shipping\Model\Config $shippingConfig
     ) {
         $this->scopeConfig = $scopeConfig;

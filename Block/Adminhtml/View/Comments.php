@@ -1,14 +1,14 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Pargo CustomShipping
+ *
+ * @category    Pargo
+ * @package     Pargo_CustomShipping
+ * @copyright   Copyright (c) 2018 Pargo Points (https://pargo.co.za)
+ * @license     http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
+ * @author     dev@pargo.co.za
  */
 
-/**
- * Adminhtml sales shipment comment view block
- *
- * @author      Magento Core Team <core@magentocommerce.com>
- */
 namespace Magento\Shipping\Block\Adminhtml\View;
 
 /**
