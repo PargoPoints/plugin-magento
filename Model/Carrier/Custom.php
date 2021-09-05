@@ -73,12 +73,12 @@ class Custom extends \Magento\Shipping\Model\Carrier\AbstractCarrier implements
     /**
      * @var Session
      */
-    private Session $customerSession;
+    private $customerSession;
 
     /**
      * @var \Psr\Log\LoggerInterface
      */
-    private \Psr\Log\LoggerInterface $logger;
+    private $logger;
 
     /**
      * @param ScopeConfigInterface $scopeConfig

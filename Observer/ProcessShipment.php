@@ -32,7 +32,7 @@ class ProcessShipment implements ObserverInterface
     /**
      * @var OrderRepositoryInterface
      */
-    private OrderRepositoryInterface $orderRepository;
+    private $orderRepository;
 
 
     /**

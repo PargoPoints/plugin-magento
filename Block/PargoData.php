@@ -13,10 +13,18 @@ namespace Pargo\CustomShipping\Block;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\View\Element\Template\Context;
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
 
 class PargoData extends \Magento\Framework\View\Element\Template
 {
+    /**
+     * @var ScopeConfigInterface
+     */
     public $scopeConfig;
+
+    /** @var SecureHtmlRenderer */
+    public $secureRenderer;
+
 
     /**
      * @param ScopeConfigInterface $scopeConfig
@@ -26,9 +34,11 @@ class PargoData extends \Magento\Framework\View\Element\Template
     public function __construct(
         ScopeConfigInterface $scopeConfig,
         Context $context,
+        SecureHtmlRenderer $secureRenderer, // \Magento\Csp\Helper\InlineUtil $secureRenderer, older magento 2.5.3
         array $data = []
     ) {
         $this->scopeConfig = $scopeConfig;
+        $this->secureRenderer = $secureRenderer;
 
         parent::__construct($context, $data);
     }
