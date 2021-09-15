@@ -15,6 +15,7 @@ use Magento\Customer\Model\Session;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\Persistent\Model\SessionFactory;
+use Magento\Store\Model\ScopeInterface;
 
 class Config extends \Magento\Framework\App\Helper\AbstractHelper
 {
@@ -42,7 +43,8 @@ class Config extends \Magento\Framework\App\Helper\AbstractHelper
 
     /**
      * @param TimezoneInterface $timezone
-     * @param Session $session
+     * @param SessionFactory $session
+     * @param ScopeConfigInterface $scopeConfig
      */
     public function __construct(
         TimezoneInterface $timezone,
@@ -65,7 +67,7 @@ class Config extends \Magento\Framework\App\Helper\AbstractHelper
     {
         return $this->scopeConfig->getValue(
             $this->tab . '/pargo_customshipping/' . $setting,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            ScopeInterface::SCOPE_STORE
         );
     }
 
@@ -166,13 +168,13 @@ class Config extends \Magento\Framework\App\Helper\AbstractHelper
         if ($this->scopeConfig->getValue('carriers/pargo_customshipping/live') == 1) {
             return $this->scopeConfig->getValue(
                 'carriers/pargo_customshipping/live_url',
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                ScopeInterface::SCOPE_STORE,
                 $storeId
             );
         } else {
             return $this->scopeConfig->getValue(
                 'carriers/pargo_customshipping/staging_url',
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                ScopeInterface::SCOPE_STORE,
                 $storeId
             );
         }
@@ -187,7 +189,7 @@ class Config extends \Magento\Framework\App\Helper\AbstractHelper
     {
         return $this->scopeConfig->getValue(
             'carriers/pargo_customshipping/username',
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            ScopeInterface::SCOPE_STORE,
             $storeId
         );
     }
@@ -201,7 +203,7 @@ class Config extends \Magento\Framework\App\Helper\AbstractHelper
     {
         return $this->scopeConfig->getValue(
             'carriers/pargo_customshipping/password',
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            ScopeInterface::SCOPE_STORE,
             $storeId
         );
     }
@@ -216,7 +218,7 @@ class Config extends \Magento\Framework\App\Helper\AbstractHelper
     {
         $priceMatrix = $this->scopeConfig->getValue(
             'carriers/pargo_customshipping/price_matrix',
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            ScopeInterface::SCOPE_STORE,
             $storeId
         );
 
