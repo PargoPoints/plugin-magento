@@ -266,13 +266,11 @@ class Custom extends \Magento\Shipping\Model\Carrier\AbstractCarrier implements
         $url = $this->helper->getUrl();
         $token = $this->authenticate();
 
-
         $curl = curl_init();
 
         curl_setopt_array($curl, array(
             CURLOPT_URL => $url . '/orders/quotation',
             CURLOPT_RETURNTRANSFER => true,
-
             CURLOPT_ENCODING => "",
             CURLOPT_MAXREDIRS => 10,
             CURLOPT_TIMEOUT => 30,
@@ -297,7 +295,6 @@ class Custom extends \Magento\Shipping\Model\Carrier\AbstractCarrier implements
         } else {
             $this->logger->info('Pargo: Quotation retrieved successfully for door to door');
             $response = json_decode($response);
-
 
             if (isset($response->data)) {
                 return $response->data->attributes->quotation->price;
@@ -348,6 +345,7 @@ class Custom extends \Magento\Shipping\Model\Carrier\AbstractCarrier implements
         $url = $this->helper->getUrl();
         $username = $this->helper->getUsername();
         $password = $this->helper->getPassword();
+
         $curl = curl_init();
 
         curl_setopt_array($curl, array(
