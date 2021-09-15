@@ -80,6 +80,7 @@ class Custom extends \Magento\Shipping\Model\Carrier\AbstractCarrier implements
      * @param MethodFactory $rateMethodFactory
      * @param Helper $helper
      * @param Curl $curl
+     * @param Session $customerSession
      * @param array $data
      */
     public function __construct(
