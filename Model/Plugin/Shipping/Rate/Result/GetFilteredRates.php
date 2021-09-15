@@ -11,14 +11,6 @@
 
 namespace Pargo\CustomShipping\Model\Plugin\Shipping\Rate\Result;
 
-/**
- * @category   Pargo
- * @package    Pargo_CustomShipping
- * @author     imtiyaaz.salie@pargo.co.za
- * @website    https://pargo.co.za
- */
-
-
 class GetFilteredRates
 {
 

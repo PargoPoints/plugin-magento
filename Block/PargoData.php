@@ -25,16 +25,16 @@ class PargoData extends \Magento\Framework\View\Element\Template
     /** @var SecureHtmlRenderer */
     public $secureRenderer;
 
-
     /**
      * @param ScopeConfigInterface $scopeConfig
      * @param Context $context
+     * @param SecureHtmlRenderer $secureRenderer
      * @param array $data
      */
     public function __construct(
         ScopeConfigInterface $scopeConfig,
         Context $context,
-        SecureHtmlRenderer $secureRenderer, // \Magento\Csp\Helper\InlineUtil $secureRenderer, older magento 2.5.3
+        SecureHtmlRenderer $secureRenderer, // \Magento\Csp\Helper\InlineUtil $secureRenderer, older magento 2.3.5
         array $data = []
     ) {
         $this->scopeConfig = $scopeConfig;
@@ -43,6 +43,10 @@ class PargoData extends \Magento\Framework\View\Element\Template
         parent::__construct($context, $data);
     }
 
+    /**
+     * Gets the content for the shipping token
+     * @return mixed
+     */
     public function getContent()
     {
         return $this->scopeConfig->getValue(

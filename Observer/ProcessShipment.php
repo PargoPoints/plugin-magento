@@ -34,7 +34,6 @@ class ProcessShipment implements ObserverInterface
      */
     private $orderRepository;
 
-
     /**
      * @var LoggerInterface
      */
@@ -55,6 +54,15 @@ class ProcessShipment implements ObserverInterface
      */
     protected $track;
 
+    /**
+     * Constructor for the observer
+     * @param ObjectManagerInterface $objectmanager
+     * @param OrderRepositoryInterface $orderRepository
+     * @param Config $helper
+     * @param Curl $curl
+     * @param TrackFactory $track
+     * @param LoggerInterface $logger
+     */
     public function __construct(
         ObjectManagerInterface $objectmanager,
         OrderRepositoryInterface $orderRepository,
@@ -73,7 +81,9 @@ class ProcessShipment implements ObserverInterface
     }
 
     /**
+     * Default Execute method of the observer
      * @param \Magento\Framework\Event\Observer $observer
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
     {
@@ -116,6 +126,7 @@ class ProcessShipment implements ObserverInterface
     }
 
     /**
+     * Submits the door to door shipment
      * @param Order $order
      * @param $shippingAddress
      * @throws \Magento\Framework\Exception\LocalizedException
@@ -240,6 +251,7 @@ class ProcessShipment implements ObserverInterface
     }
 
     /**
+     * Submits the Shipment
      * @param Order $order
      * @param array $billingAddress
      * @param string $pickUpPointCode
@@ -329,6 +341,7 @@ class ProcessShipment implements ObserverInterface
     }
 
     /**
+     * Authenticate the API
      * @return bool
      */
     private function authenticate()
@@ -371,6 +384,12 @@ class ProcessShipment implements ObserverInterface
         }
     }
 
+    /**
+     * Creates a shipment
+     * @param $order
+     * @param $trackingCode
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
     private function createShipment($order, $trackingCode)
     {
         $this->logger->info('Pargo: Shipment Check');

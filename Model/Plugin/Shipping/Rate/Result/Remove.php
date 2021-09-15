@@ -14,14 +14,6 @@ namespace Pargo\CustomShipping\Model\Plugin\Shipping\Rate\Result;
 use Magento\Quote\Model\Quote\Address\RateRequest;
 use Magento\Shipping\Model\Rate\Result;
 
-/**
- * @category   Pargo
- * @package    Pargo_CustomShipping
- * @author     imtiyaaz.salie@pargo.co.za
- * @website    https://pargo.co.za
- */
-
-
 class Remove
 {
 

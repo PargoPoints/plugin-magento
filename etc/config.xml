@@ -23,8 +23,8 @@
                 <title>Pargo Shipping</title>
                 <name>Not at home? Collect from a local shop when it suits you best</name>
                 <doortodoor_enabled>0</doortodoor_enabled>
-                <doortodoor_title>Pargo -  Door to Door</doortodoor_title>
-                <doortodoor_name>Door to door delivery when it suits you</doortodoor_name>
+                <doortodoor_title>Pargo - Door Deliver</doortodoor_title>
+                <doortodoor_name>Door delivery when it suits you</doortodoor_name>
                 <scheduler_enabled>0</scheduler_enabled>
                 <frequency>mon,tue,wed,thu,fri,sat,sun</frequency>
                 <date_start></date_start>

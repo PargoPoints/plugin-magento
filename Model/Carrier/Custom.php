@@ -21,14 +21,6 @@ use Magento\Shipping\Model\Rate\Result;
 use Magento\Shipping\Model\Rate\ResultFactory;
 use Pargo\CustomShipping\Helper\Config as Helper;
 
-/**
- * @category   Pargo
- * @package    Pargo_CustomShipping
- * @author     imtiyaaz.salie@pargo.co.za
- * @website    https://pargo.co.za
- */
-
-
 class Custom extends \Magento\Shipping\Model\Carrier\AbstractCarrier implements
     \Magento\Shipping\Model\Carrier\CarrierInterface
 {

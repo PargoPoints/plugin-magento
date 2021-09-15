@@ -110,20 +110,6 @@
                     <label>Displayed Error Message</label>
                 </field>
 
-                <!--
-                <field id="sallowspecific" translate="label" type="select" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Ship to Applicable Countries</label>
-                    <frontend_class>shipping-applicable-country</frontend_class>
-                    <source_model>Magento\Shipping\Model\Config\Source\Allspecificcountries</source_model>
-                    <comment>Pargo Shipping Method is only available in South Africa at the this moment.</comment>
-                </field>
-
-                <field id="specificcountry" translate="label" type="multiselect" sortOrder="110" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Ship to Specific Countries</label>
-                    <source_model>Magento\Directory\Model\Config\Source\Country</source_model>
-                    <can_be_empty>1</can_be_empty>
-                </field> -->
-
                 <field id="price_matrix" translate="label" sortOrder="115" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Shipping Price Matrix</label>
                     <frontend_model>Pargo\CustomShipping\Block\Adminhtml\System\Config\Field\PriceMatrix</frontend_model>
