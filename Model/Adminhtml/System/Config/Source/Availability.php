@@ -1,14 +1,15 @@
 <?php
-
-namespace Pargo\CustomShipping\Model\Adminhtml\System\Config\Source;
-
 /**
- * @category   Pargo
- * @package    Pargo_CustomShipping
- * @author     imtiyaaz.salie@pargo.co.za
- * @website    https://pargo.co.za
+ * Pargo CustomShipping
+ *
+ * @category    Pargo
+ * @package     Pargo_CustomShipping
+ * @copyright   Copyright (c) 2018 Pargo Points (https://pargo.co.za)
+ * @license     http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
+ * @author     dev@pargo.co.za
  */
 
+namespace Pargo\CustomShipping\Model\Adminhtml\System\Config\Source;
 
 class Availability implements \Magento\Framework\Option\ArrayInterface
 {

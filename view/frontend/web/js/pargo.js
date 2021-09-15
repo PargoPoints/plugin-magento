@@ -1,3 +1,12 @@
+/**
+ * Pargo CustomShipping
+ *
+ * @category    Pargo
+ * @package     Pargo_CustomShipping
+ * @copyright   Copyright (c) 2018 Pargo Points (https://pargo.co.za)
+ * @license     http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
+ * @author     dev@pargo.co.za
+ */
 require([
   "jquery",
   "domReady!",
@@ -119,7 +128,7 @@ require([
         var pargoPointTelephone = pargoPoint.phoneNumber.toString();
         if(pargoPointTelephone==="")
           pargoPointTelephone = "[]";
-      
+
         var shippingAddress = {
           firstname: "Pargo Shipment",
           lastname: "- Collect",
@@ -213,7 +222,7 @@ require([
   }
 
   function setPargoPointInformation(point) {
-    
+
     console.log("Pargo: setPargoPointInformation");
 
     if (!point.data.pargoPointCode) {
@@ -305,11 +314,11 @@ require([
         if (value == "pargo_customshipping_pargo_customshipping") {
 
         var pargoPoint = JSON.parse(localStorage.getItem("pargoPoint"));
-        
+
         var pargoPointTelephone = pargoPoint.phoneNumber.toString();
         if(pargoPointTelephone==="")
           pargoPointTelephone = "[]";
-  
+
           var shippingAddress = {
             firstname: "Pargo Shipment",
             lastname: "- Collect",
@@ -338,7 +347,7 @@ require([
           //  shipAddr['extension_attributes'] = {};
           //}
           //shipAddr['extension_attributes']['pickupPointCode'] = pargoPoint.pargoPointCode;
-          
+
           console.log("Pargo: Shipping Address");
           console.log(shipAddr);
           let billAddr = createBillingAddress();
@@ -386,7 +395,7 @@ require([
         var pargoPointTelephone = pargoPoint.phoneNumber.toString();
         if(pargoPointTelephone==="")
           pargoPointTelephone = "[]";
-  
+
         var shippingAddress = {
           firstname: "Pargo Shipment",
           lastname: "- Collect",
@@ -480,6 +489,9 @@ require([
       .mouseout(function () {
         $(this).css("background-color", btnColor);
         $(this).css("color", btnTextColor);
+      })
+      .onclick(function() {
+          window.alert('hello!');
       });
   }
 

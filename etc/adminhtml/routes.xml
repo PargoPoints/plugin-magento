@@ -10,8 +10,10 @@
  * @author     dev@pargo.co.za
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Api/etc/extension_attributes.xsd">
-    <extension_attributes for="Magento\Sales\Api\Data\OrderAddressExtensionInterface">
-        <attribute code="pickupPointCode" type="string" />
-    </extension_attributes>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:App/etc/routes.xsd">
+    <router id="admin">
+        <route id="pargo_shipping" frontName="pargo_shipping">
+            <module name="Pargo_CustomShipping"/>
+        </route>
+    </router>
 </config>

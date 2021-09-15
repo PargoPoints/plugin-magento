@@ -1,4 +1,15 @@
 <?xml version="1.0"?>
+<!--
+/**
+ * Pargo CustomShipping
+ *
+ * @category    Pargo
+ * @package     Pargo_CustomShipping
+ * @copyright   Copyright (c) 2018 Pargo Points (https://pargo.co.za)
+ * @license     http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
+ * @author     dev@pargo.co.za
+ */
+-->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
     <event name="sales_order_invoice_pay">
         <observer name="pargoshipment" instance="Pargo\CustomShipping\Observer\ProcessShipment" />
@@ -7,4 +18,3 @@
         <observer name="pargo-checkout-quote-submit-before" instance="Pargo\CustomShipping\Observer\Quote\SubmitBefore" />
     </event>
 </config>
-cpon

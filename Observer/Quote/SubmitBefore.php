@@ -1,4 +1,13 @@
 <?php
+/**
+ * Pargo CustomShipping
+ *
+ * @category    Pargo
+ * @package     Pargo_CustomShipping
+ * @copyright   Copyright (c) 2018 Pargo Points (https://pargo.co.za)
+ * @license     http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
+ * @author     dev@pargo.co.za
+ */
 
 namespace Pargo\CustomShipping\Observer\Quote;
 
@@ -17,11 +26,17 @@ class SubmitBefore implements ObserverInterface
         $this->logger = $logger;
     }
 
+    /**
+     * @param Observer $observer
+     * @return $this|void
+     * @throws LocalizedException
+     */
     public function execute(Observer $observer)
     {
         $this->logger->info('Pargo: Validate Pickup Point');
 
         $order = $observer->getEvent()->getData('order');
+
 
         if ((string)$order->getShippingMethod() !== $this->getPargoCarrierCode()) {
             $this->logger->error('Pargo: Shipping method is not Pargo Pickup Points, ignore.');
@@ -35,7 +50,7 @@ class SubmitBefore implements ObserverInterface
 
         // test custom order address field
         // $extAttributes = $order->getShippingAddress()->getExtensionAttributes();
-        // $pickupPointCode = $extAttributes->getPickupPointCode(); 
+        // $pickupPointCode = $extAttributes->getPickupPointCode();
         // $this->logger->info('Pargo: Pickup Point Code: ' . $pickupPointCode);
 
         $company = $order->getShippingAddress()->getData('company');

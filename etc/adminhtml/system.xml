@@ -1,82 +1,119 @@
 <?xml version="1.0"?>
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+<!--
+/**
+ * Pargo CustomShipping
+ *
+ * @category    Pargo
+ * @package     Pargo_CustomShipping
+ * @copyright   Copyright (c) 2018 Pargo Points (https://pargo.co.za)
+ * @license     http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
+ * @author     dev@pargo.co.za
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
     <system>
         <section id="carriers" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
-            <group id="pargo_customshipping" translate="label" type="text" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1">
+            <group id="pargo_customshipping" translate="label" type="text" sortOrder="2" showInDefault="1"
+                   showInWebsite="1" showInStore="1">
 
                 <label>Pargo Shipping Method</label>
 
-                <field id="active" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="active" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1"
+                       showInStore="1">
                     <label>Enabled</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
 
-                <field id="mapToken" translate="label" type="text" sortOrder="31" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="mapToken" translate="label" type="text" sortOrder="31" showInDefault="1" showInWebsite="1"
+                       showInStore="1">
                     <label>Map Token</label>
                 </field>
 
-                <field id="url" translate="label" type="text" sortOrder="33" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>API URL</label>
-                    <comment>https://api.live.pargo.co.za | https://api.staging.pargo.co.za</comment>
+
+                <field id="live_enabled" translate="label" type="select" sortOrder="32" showInDefault="1"
+                       showInWebsite="1" showInStore="1">
+                    <label>Live</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Set to live when testing is done. Default: No.</comment>
                 </field>
 
-                <field id="username" translate="label" type="text" sortOrder="33" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="username" translate="label" type="text" sortOrder="33" showInDefault="1" showInWebsite="1"
+                       showInStore="1">
                     <label>API Username</label>
                 </field>
 
-                <field id="password" translate="label" type="text" sortOrder="34" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="password" translate="label" type="text" sortOrder="34" showInDefault="1" showInWebsite="1"
+                       showInStore="1">
                     <label>API Password</label>
                 </field>
-                
-                <field id="hide_enabled" translate="label" type="select" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1">
+
+
+                <field id="hide_enabled" translate="label" type="select" sortOrder="50" showInDefault="1"
+                       showInWebsite="1" showInStore="1">
                     <label>Hide Other Shipping Methods</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                    <comment>Hide other shipping methods in the frontend when "Pargo Shipping Method" is available. Default: No.</comment>
+                    <comment>Hide other shipping methods in the frontend when "Pargo Shipping Method" is available.
+                        Default: No.
+                    </comment>
                 </field>
 
-                <field id="hide_carriers" translate="label" type="multiselect" sortOrder="51" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="hide_carriers" translate="label" type="multiselect" sortOrder="51" showInDefault="1"
+                       showInWebsite="1" showInStore="1">
                     <label>Hide</label>
                     <source_model>Pargo\CustomShipping\Model\Adminhtml\Shipping\Config\Source\Allmethods</source_model>
-                    <comment>Select one or multiple shipping methods which you would like to hide in the frontend. Default: No selection</comment>
+                    <comment>Select one or multiple shipping methods which you would like to hide in the frontend.
+                        Default: No selection
+                    </comment>
                     <depends>
                         <field id="hide_enabled">1</field>
                     </depends>
                 </field>
 
-                <field id="title" translate="label" type="text" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="title" translate="label" type="text" sortOrder="60" showInDefault="1" showInWebsite="1"
+                       showInStore="1">
                     <label>Method Title</label>
                 </field>
-                
-                <field id="name" translate="label" type="text" sortOrder="70" showInDefault="1" showInWebsite="1" showInStore="1">
+
+                <field id="name" translate="label" type="text" sortOrder="70" showInDefault="1" showInWebsite="1"
+                       showInStore="1">
                     <label>Method Name</label>
                 </field>
 
-                <field id="price" translate="label" type="text" sortOrder="80" showInDefault="1" showInWebsite="1" showInStore="0">
+                <field id="doortodoor_enabled" translate="label" type="select" sortOrder="71" showInDefault="1"
+                       showInWebsite="1" showInStore="1">
+                    <label>Door to Door</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Set to yes to enable door to door shipping method. Default: No.</comment>
+                </field>
+
+                <field id="doortodoor_title" translate="label" type="text" sortOrder="72" showInDefault="1" showInWebsite="1"
+                       showInStore="1">
+                    <label>Door to Door Method Title</label>
+                </field>
+
+                <field id="doortodoor_name" translate="label" type="text" sortOrder="73" showInDefault="1" showInWebsite="1"
+                       showInStore="1">
+                    <label>Door to Door Method Name</label>
+                </field>
+
+
+                <field id="price" translate="label" type="text" sortOrder="80" showInDefault="1" showInWebsite="1"
+                       showInStore="0">
                     <label>Shipping Price</label>
                     <validate>validate-number validate-zero-or-greater</validate>
                 </field>
 
-                <field id="price_matrix" translate="label" sortOrder="81" showInDefault="1" showInWebsite="1" showInStore="0">
-                    <label>Shipping Price Matrix</label>
-                    <frontend_model>Pargo\CustomShipping\Block\Adminhtml\System\Config\Field\PriceMatrix</frontend_model>
-                    <backend_model>Magento\Config\Model\Config\Backend\Serialized\ArraySerialized</backend_model>
-                </field>
 
-                <field id="specificerrmsg" translate="label" type="textarea" sortOrder="90" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="specificerrmsg" translate="label" type="textarea" sortOrder="90" showInDefault="1"
+                       showInWebsite="1" showInStore="1">
                     <label>Displayed Error Message</label>
                 </field>
 
-                <field id="sallowspecific" translate="label" type="select" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Ship to Applicable Countries</label>
-                    <frontend_class>shipping-applicable-country</frontend_class>
-                    <source_model>Magento\Shipping\Model\Config\Source\Allspecificcountries</source_model>
-                    <comment>Pargo Shipping Method is only available in South Africa at the this moment.</comment>
-                </field>
-
-                <field id="specificcountry" translate="label" type="multiselect" sortOrder="110" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Ship to Specific Countries</label>
-                    <source_model>Magento\Directory\Model\Config\Source\Country</source_model>
-                    <can_be_empty>1</can_be_empty>
+                <field id="price_matrix" translate="label" sortOrder="115" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Shipping Price Matrix</label>
+                    <frontend_model>Pargo\CustomShipping\Block\Adminhtml\System\Config\Field\PriceMatrix</frontend_model>
+                    <backend_model>Magento\Config\Model\Config\Backend\Serialized\ArraySerialized</backend_model>
                 </field>
 
                 <field id="showmethod" translate="label" type="select" sortOrder="120" showInDefault="1" showInWebsite="1" showInStore="1">
@@ -84,7 +121,7 @@
                     <frontend_class>shipping-skip-hide</frontend_class>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
-                
+
                 <field id="sort_order" translate="label" type="text" sortOrder="130" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Sort Order</label>
                 </field>

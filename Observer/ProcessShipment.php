@@ -1,8 +1,19 @@
 <?php
+/**
+ * Pargo CustomShipping
+ *
+ * @category    Pargo
+ * @package     Pargo_CustomShipping
+ * @copyright   Copyright (c) 2018 Pargo Points (https://pargo.co.za)
+ * @license     http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
+ * @author     dev@pargo.co.za
+ */
 
 namespace Pargo\CustomShipping\Observer;
 
 use Magento\Framework\Event\ObserverInterface;
+use Magento\Framework\ObjectManagerInterface;
+use Magento\Sales\Api\OrderRepositoryInterface;
 use Pargo\CustomShipping\Helper\Config;
 use Magento\Framework\HTTP\Client\Curl;
 use Magento\Sales\Model\Order\Shipment\TrackFactory;
@@ -13,28 +24,66 @@ use \Psr\Log\LoggerInterface;
 
 class ProcessShipment implements ObserverInterface
 {
-    private $_objectManager;
+    /**
+     * @var ObjectManagerInterface
+     */
+    private $objectManager;
+
+    /**
+     * @var OrderRepositoryInterface
+     */
+    private $orderRepository;
+
+    /**
+     * @var LoggerInterface
+     */
     private $logger;
+
+    /**
+     * @var Config
+     */
     protected $helper;
+
+    /**
+     * @var Curl
+     */
     protected $curl;
+
+    /**
+     * @var TrackFactory
+     */
     protected $track;
 
+    /**
+     * Constructor for the observer
+     * @param ObjectManagerInterface $objectmanager
+     * @param OrderRepositoryInterface $orderRepository
+     * @param Config $helper
+     * @param Curl $curl
+     * @param TrackFactory $track
+     * @param LoggerInterface $logger
+     */
     public function __construct(
-        \Magento\Framework\ObjectManagerInterface $objectmanager,
+        ObjectManagerInterface $objectmanager,
+        OrderRepositoryInterface $orderRepository,
         Config $helper,
         Curl $curl,
-        TrackFactory $track, 
-        LoggerInterface$logger
+        TrackFactory $track,
+        LoggerInterface $logger
     ) {
-        $this->_objectManager = $objectmanager;
+        $this->objectManager = $objectmanager;
+        $this->orderRepository = $orderRepository;
         $this->helper = $helper;
         $this->curl = $curl;
         $this->track = $track;
         $this->logger = $logger;
+
     }
 
     /**
+     * Default Execute method of the observer
      * @param \Magento\Framework\Event\Observer $observer
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
     {
@@ -42,7 +91,8 @@ class ProcessShipment implements ObserverInterface
 
         $invoice = $observer->getEvent()->getInvoice();
         $order = $invoice->getOrder();
-        if ($order->getShippingMethod() !== 'pargo_customshipping_pargo_customshipping') {
+
+        if (!in_array($order->getShippingMethod(), ['pargo_customshipping_pargo_customshipping', 'pargo_customshipping_pargo_customshipping_doortodoor'])) {
             $this->logger->info('Pargo: Shipping method mismatch');
             $this->logger->info('Pargo: Shipping method set is ' . $order->getShippingMethod());
             return;
@@ -62,28 +112,158 @@ class ProcessShipment implements ObserverInterface
 
         $this->logger->info('Pargo: Shipping Address Details' . $shippingAddress['company']);
 
-        $size = sizeof($addressDetails);
-        $pickUpPointCode = $addressDetails[$size-1];
-        $this->logger->info('Pargo: Pickup Point Reference: ' . $pickUpPointCode);
-        // Fix end
-        
-        $this->logger->info('Pargo: Submit Shipping');
+        if ($order->getShippingMethod() == 'pargo_customshipping_pargo_customshipping_doortodoor') {
+            $this->submitShipmentDoorToDoor($order, $shippingAddress);
+        } else {
+            $size = sizeof($addressDetails);
+            $pickUpPointCode = $addressDetails[$size - 1];
 
-        $this->submitShipment($order, $billingAddress, $pickUpPointCode);
+            $this->logger->info('Pargo: Pickup Point Reference: ' . $pickUpPointCode);
+            $this->logger->info('Pargo: Submit Shipping');
+
+            $this->submitShipment($order, $billingAddress, $pickUpPointCode);
+        }
     }
 
     /**
+     * Submits the door to door shipment
+     * @param Order $order
+     * @param $shippingAddress
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    private function submitShipmentDoorToDoor($order, $shippingAddress)
+    {
+        $this->logger->info('Pargo: Submit Shipment - Door to Door');
+
+        $order = $this->orderRepository->get($order->getId());
+
+        $token = $this->authenticate();
+
+        if (!$token) {
+            $this->logger->error('Pargo: API Authentication Failed.');
+
+            $order->addStatusHistoryComment("Pargo authentication failed");
+            $order->save();
+
+            return;
+        }
+
+        $items = $order->getAllItems();
+        $parcels = [];
+
+        foreach ($items as $id => $item) {
+            $iCount = 0;
+
+            while ($iCount < $item->getQtyOrdered()) {
+                $parcels [] =
+                    (object)[
+                        "externalReference" => "quote-ref-" . $id."-".$iCount,
+                        "cubicWeight" => $item->getCubicWeight() ? $item->getCubicWeight(): 1,
+                        "deadWeight" => $item->getDeadWeight() ? $item->getDeadWeight(): 1,
+                        "length" => $item->getLength() ? $item->getLength(): 1,
+                        "weight" => $item->getWeight() ? $item->getWeight(): 1,
+                        "height" => $item->getHeight() ? $item->getHeight(): 1
+                    ];
+
+                $iCount++;
+            }
+        }
+
+        $streetParts = explode("\n",  $shippingAddress["street"]);
+
+        $destSuburb = "";
+        if (count($streetParts) > 1) {
+            $shippingAddress["suburb"] = $streetParts[count($streetParts)-1];
+        }
+
+        $data = [
+            'data' => [
+                'type' => 'W2D',
+                'attributes' => [
+                    'externalReference' => $order->getIncrementId(),
+                    'consignee' => [
+                        'firstName' => $shippingAddress['firstname'],
+                        'lastName' => $shippingAddress['lastname'],
+                        'email' => $shippingAddress['email'],
+                        'phoneNumbers' => [
+                            $shippingAddress['telephone']
+                        ],
+                        "address1" => $shippingAddress["street"],
+                        "address2" => "",
+                        "province" => $shippingAddress["region"],
+                        "suburb" =>  $shippingAddress["suburb"], /**@todo dicuss this**/
+                        "postalCode" => $shippingAddress["postcode"],
+                        "city" => $shippingAddress["city"],
+                        "country" => "ZA"
+                    ],
+
+                   'totalParcels' => count($parcels),
+                   'parcels' => $parcels
+                ]
+            ]
+        ];
+
+        $url = $this->helper->getUrl();
+        $curl = curl_init();
+
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => $url . '/orders',
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => "",
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 30,
+            CURLOPT_FOLLOWLOCATION => false,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => "POST",
+            CURLOPT_POSTFIELDS => json_encode($data),
+            CURLOPT_HTTPHEADER => array(
+                'Content-Type: application/json',
+                'Authorization: Bearer ' . $token
+            ),
+        ));
+
+        $response = curl_exec($curl);
+        $err = curl_error($curl);
+
+        curl_close($curl);
+
+        if ($err) {
+            $this->logger->error('Pargo: Order API request failed.');
+            $order->addStatusHistoryComment("Pargo consignment export failed");
+            $order->save();
+
+            return;
+        } else {
+            $response = json_decode($response);
+
+            $this->logger->info('Pargo: Order tracking code: ' . $response->data->attributes->orderData->trackingCode);
+
+            $message = "Success! Created waybill <a href='" . $response->data->attributes->orderData->orderLabel . "' target='_blank'>" . $response->data->attributes->orderData->trackingCode . "</a>";
+            $order->addStatusHistoryComment($message);
+            $order->save();
+
+            $this->logger->info('Pargo: Create Shipment');
+
+            $this->createShipment($order, $response->data->attributes->orderData->trackingCode); // Magento Shipment
+
+            $this->logger->info('Pargo: Door to Door Shipment Created');
+        }
+    }
+
+    /**
+     * Submits the Shipment
      * @param Order $order
      * @param array $billingAddress
      * @param string $pickUpPointCode
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     private function submitShipment($order, $billingAddress, $pickUpPointCode)
     {
         $this->logger->info('Pargo: Submit Shipment');
 
         $token = $this->authenticate();
-        if (!$token) {
 
+        if (!$token) {
             $this->logger->error('Pargo: API Authentication Failed.');
 
             $order->addStatusHistoryComment("Pargo authentication failed");
@@ -119,10 +299,9 @@ class ProcessShipment implements ObserverInterface
         curl_setopt_array($curl, array(
             CURLOPT_URL => $url . '/orders',
             CURLOPT_RETURNTRANSFER => true,
-
             CURLOPT_ENCODING => "",
             CURLOPT_MAXREDIRS => 10,
-            CURLOPT_TIMEOUT => 0,
+            CURLOPT_TIMEOUT => 30,
             CURLOPT_FOLLOWLOCATION => false,
             CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
             CURLOPT_CUSTOMREQUEST => "POST",
@@ -153,7 +332,7 @@ class ProcessShipment implements ObserverInterface
             $order->addStatusHistoryComment($message);
             $order->save();
 
-            $this->logger->info('Pargo: Create Shipment');
+            $this->logger->info('Pargo: Door to Door Create Shipment');
 
             $this->createShipment($order, $response->data->attributes->orderData->trackingCode); // Magento Shipment
 
@@ -162,6 +341,7 @@ class ProcessShipment implements ObserverInterface
     }
 
     /**
+     * Authenticate the API
      * @return bool
      */
     private function authenticate()
@@ -178,7 +358,7 @@ class ProcessShipment implements ObserverInterface
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING => "",
             CURLOPT_MAXREDIRS => 10,
-            CURLOPT_TIMEOUT => 0,
+            CURLOPT_TIMEOUT => 30,
             CURLOPT_FOLLOWLOCATION => false,
             CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
             CURLOPT_CUSTOMREQUEST => "POST",
@@ -204,6 +384,12 @@ class ProcessShipment implements ObserverInterface
         }
     }
 
+    /**
+     * Creates a shipment
+     * @param $order
+     * @param $trackingCode
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
     private function createShipment($order, $trackingCode)
     {
         $this->logger->info('Pargo: Shipment Check');
@@ -219,7 +405,7 @@ class ProcessShipment implements ObserverInterface
         }
 
         // Initialize the order shipment object
-        $convertOrder = $this->_objectManager->create('Magento\Sales\Model\Convert\Order');
+        $convertOrder = $this->objectManager->create('Magento\Sales\Model\Convert\Order');
         $shipment = $convertOrder->toShipment($order);
 
         // Loop through order items
@@ -245,22 +431,22 @@ class ProcessShipment implements ObserverInterface
         $data = array(
             'carrier_code' => 'pargo_customshipping',
             'title' => 'Pargo Tracking Code',
-            'number' => $trackingCode, 
+            'number' => $trackingCode,
         );
 
         try {
             $this->logger->info('Pargo: Save Shipment');
 
             // Save created shipment and order
-                $track = $this->_objectManager->create('Magento\Sales\Model\Order\Shipment\TrackFactory')->create()->addData($data);
+                $track = $this->objectManager->create('Magento\Sales\Model\Order\Shipment\TrackFactory')->create()->addData($data);
                 $shipment->addTrack($track)->save();
                 $shipment->save();
                 $order->save();
-             
+
             // Send email
-            $this->_objectManager->create('Magento\Shipping\Model\ShipmentNotifier')
+            $this->objectManager->create('Magento\Shipping\Model\ShipmentNotifier')
                     ->notify($shipment);
-             
+
                 $shipment->save();
 
                 $this->logger->info('Pargo: Shipment saved');
@@ -275,5 +461,3 @@ class ProcessShipment implements ObserverInterface
         }
     }
 }
-
-
