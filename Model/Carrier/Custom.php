@@ -164,6 +164,7 @@ class Custom extends \Magento\Shipping\Model\Carrier\AbstractCarrier implements
     public function getAllowedMethods()
     {
         $shippingMethods = [];
+
         if ($this->getConfigData("active")) {
             $shippingMethods[] =  [$this->getCarrierCode() => __($this->getConfigData('name'))];
             if ($this->getConfigData("doortodoor_enabled")) {

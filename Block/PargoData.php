@@ -22,7 +22,9 @@ class PargoData extends \Magento\Framework\View\Element\Template
      */
     public $scopeConfig;
 
-    /** @var SecureHtmlRenderer */
+    /**
+     * @var SecureHtmlRenderer
+     */
     public $secureRenderer;
 
     /**
