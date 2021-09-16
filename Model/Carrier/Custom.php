@@ -149,9 +149,12 @@ class Custom extends \Magento\Shipping\Model\Carrier\AbstractCarrier implements
             $method->setPrice($price);
             $method->setCost($price); //@todo discuss cost
 
-            if ($price > 0.00) {
-                $result->append($method);
+            if ($price == 0.00) {
+                $method->setPrice($this->getPrice($request));
+                $method->setCarrierTitle($this->getConfigData('doortodoor_name'). " Suburb & Postal Code required for an accurate estimate");
             }
+
+            $result->append($method);
         }
 
         return $result;
@@ -162,7 +165,7 @@ class Custom extends \Magento\Shipping\Model\Carrier\AbstractCarrier implements
      *
      * @return array
      */
-    public function getAllowedMethods()
+    public function getAllowedMethods(): array
     {
         $shippingMethods = [];
 
@@ -213,19 +216,26 @@ class Custom extends \Magento\Shipping\Model\Carrier\AbstractCarrier implements
         $customerEmail = "dev@pargo.co.za";
 
         if($this->customerSession->isLoggedIn()){
+            try {
+                $customerName = $this->customerSession->getCustomer()->getName();
+                $customerName = explode(" ", $customerName, 1);
+                $customerFirstName = $customerName[0];
+                $customerLastName = $customerName[0];
 
-            $customerName = $this->customerSession->getCustomer()->getName();
-            $customerName = explode(" ", $customerName, 1);
-            $customerFirstName = $customerName[0];
-            $customerLastName = $customerName[0];
+                if ($this->customerSession->getCustomer()) {
+                    $customerEmail = $this->customerSession->getCustomer()->getEmail();
 
-            $customerEmail =  $this->customerSession->getCustomer()->getEmail();
-            $customerPhone = $this->customerSession->getCustomer()->getDefaultShippingAddress()->getTelephone();
+                    if ($this->customerSession->getCustomer()->getDefaultShippingAddress()) {
+                        $customerAddress = $this->customerSession->getCustomer()->getDefaultShippingAddress()->getData();
 
-            $customerAddress = $this->customerSession->getCustomer()->getDefaultShippingAddress()->getData();
-            $destStreet = $customerAddress['street'];
-            $destCity = $customerAddress['city'];
-            $destPostCode = $customerAddress['postcode'];
+                        $destStreet = $customerAddress['street'];
+                        $destCity = $customerAddress['city'];
+                        $destPostCode = $customerAddress['postcode'];
+                    }
+                }
+            } catch (\Exception $exception) {
+                $this->logger->error('Pargo: Logged in customer details not complete');
+            }
         }
 
         //work out the suburb from the address
@@ -253,7 +263,7 @@ class Custom extends \Magento\Shipping\Model\Carrier\AbstractCarrier implements
                         "address1" => $destStreet,
                         "address2" => "",
                         "province" => $destRegionCode,
-                        "suburb" => $destSuburb, /**@todo dicuss this**/
+                        "suburb" => $destSuburb,
                         "postalCode" => $destPostCode,
                         "city" => $destCity,
                         "country" => "ZA"
