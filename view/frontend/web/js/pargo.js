@@ -489,9 +489,6 @@ require([
       .mouseout(function () {
         $(this).css("background-color", btnColor);
         $(this).css("color", btnTextColor);
-      })
-      .onclick(function() {
-          window.alert('hello!');
       });
   }
 

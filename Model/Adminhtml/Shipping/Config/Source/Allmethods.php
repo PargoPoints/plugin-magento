@@ -51,6 +51,7 @@ class Allmethods implements \Magento\Framework\Option\ArrayInterface
         $carriers = $this->shippingConfig->getActiveCarriers();
         $methods = [];
 
+
         foreach ($carriers as $carrierCode => $carrierModel) {
             if (!$carrierMethods = $carrierModel->getAllowedMethods()) {
                 continue;

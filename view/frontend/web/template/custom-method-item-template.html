@@ -31,8 +31,6 @@
         text="method.method_title"/>
 
     <!-- ko ifnot: method.method_code === "pargo_customshipping" -->
-
-
     <td class="col col-carrier"
         attr="'id': 'label_carrier_' + method.method_code + '_' + method.carrier_code"
         text="method.carrier_title">
@@ -41,7 +39,6 @@
     <!-- /ko -->
 
     <!-- ko if: method.method_code === "pargo_customshipping" -->
-
     <td colspan="2" class="col col-carrier" attr="'id': 'label_carrier_' + method.method_code + '_' + method.carrier_code">
         <p><span data-bind="text: method.carrier_title"></span><label class="pargo-small" for="modal-trigger-center" > [ what is Pargo? ]</label></p>
         <label for="modal-trigger" class="pargo-btn">Select pick up point</label>
@@ -50,7 +47,7 @@
             <p id="store-address"></p>
         </div>
     </td>
-    <!-- /ko -->
+   <!-- /ko -->
 
     <!-- Column with collapsible trigger  -->
 
