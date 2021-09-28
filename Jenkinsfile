@@ -32,7 +32,7 @@ pipeline {
             agent any
             steps {
                 withCredentials([
-                        sshUserPrivateKey(credentialsId: 'pargo-magento-2-4-private-key',keyFileVariable: 'MAGENTO_24_PRIVATE_KEY',passphraseVariable: '',usernameVariable: ''),
+                        file(credentialsId: 'pargo-magento-2-4-private-key',variable: 'MAGENTO_24_PRIVATE_KEY'),
                         file(credentialsId: 'pargo-ansible-vault', variable: 'VAULT_KEY')
                         ])
                     {
