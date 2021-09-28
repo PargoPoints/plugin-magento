@@ -18,7 +18,7 @@ pipeline {
                 dir('playbooks') {
                 git branch: 'main',
                 credentialsId: 'pargo-jenkins-github-organisation-test',
-                url: 'git@github.com:PargoPoints/devops-ansible.git'
+                url: 'https://github.com/PargoPoints/devops-ansible.git'
                 }
             }
         }
