@@ -1,6 +1,7 @@
 pipeline {
     agent none
     environment {
+        VAULT_KEY = credentials('pargo-ansible-vault')
         AWS_CREDENTIALS_ID = 'pargo-jenkins-aws-credentials'
         STAGING_APP_CREDENTIALS_PATH = '/pargo/staging/magento-2-4/'
         AWS_REGION = 'eu-west-1'
@@ -32,11 +33,12 @@ pipeline {
             agent any
             steps {
                 withCredentials([
-                        sshUserPrivateKey(credentialsId: 'pargo-magento-2-4-private-key',keyFileVariable: 'MAGENTO_24_PRIVATE_KEY',passphraseVariable: '',usernameVariable: '',
-                        string(credentialsId: 'pargo-ansible-vault', variable: 'VAULT_KEY'
-                        ]){
+                        sshUserPrivateKey(credentialsId: 'pargo-magento-2-4-private-key',keyFileVariable: 'MAGENTO_24_PRIVATE_KEY',passphraseVariable: '',usernameVariable: ''),
+                        ])
+                    {
                     sh 'ansible-playbook -i playbooks/subprod/inventory.yml -l magento_2_4 -e plugin_version_tag=dev-$GIT_BRANCH playbooks/subprod/install-magento-plugin.yml --list-tasks --private-key=$MAGENTO_24_PRIVATE_KEY --vault-password-file=$VAULT_KEY'
                     }
             }
         }
     }
+}
