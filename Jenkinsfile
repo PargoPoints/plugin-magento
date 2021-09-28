@@ -1,16 +1,10 @@
 pipeline {
     agent none
-    environment {
-        AWS_CREDENTIALS_ID = 'pargo-jenkins-aws-credentials'
-        STAGING_APP_CREDENTIALS_PATH = '/pargo/staging/magento-2-4/'
-        AWS_REGION = 'eu-west-1'
-    }
     stages {
         stage('Clone Playbooks') {
             when {
                 anyOf {
                     branch 'staging'
-                    branch 'feat/deploy-pipeline'
                 }
             }
             agent any
@@ -26,7 +20,6 @@ pipeline {
             when {
                 anyOf {
                     branch 'staging'
-                    branch 'feat/deploy-pipeline'
                 }
             }
             agent any
