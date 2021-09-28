@@ -36,7 +36,7 @@ pipeline {
                         file(credentialsId: 'pargo-ansible-vault', variable: 'VAULT_KEY')
                         ])
                     {
-                        set +x
+                    sh 'set +x'
                     sh 'ansible-playbook -i playbooks/subprod/inventory.yml -l magento_2_4 -e plugin_version_tag=dev-$GIT_BRANCH playbooks/subprod/install-magento-plugin.yml --private-key=$MAGENTO_24_PRIVATE_KEY --vault-password-file=$VAULT_KEY'
                     }
             }
