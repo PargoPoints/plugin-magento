@@ -36,7 +36,7 @@ pipeline {
                                                             keyFileVariable: 'MAGENTO_24_PRIVATE_KEY',
                                                             passphraseVariable: '',
                                                             usernameVariable: '')]) {
-                withCredentials([string(credentialsId: 'pargo-ansible-vault', variable: '$VAULT_KEY')]) {
+                withCredentials([string(credentialsId: 'pargo-ansible-vault', variable: 'VAULT_KEY')]) {
                     sh 'ansible-playbook -i inventory.yml -l magento_2_4 -e plugin_version_tag=dev-$GIT_BRANCH install-magento-plugin.yml --ask-vault-pass --list-tasks --private-key=$MAGENTO_24_PRIVATE_KEY --vault-password-file=$VAULT_KEY'
                 }
                                                             }
