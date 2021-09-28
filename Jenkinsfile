@@ -31,15 +31,8 @@ pipeline {
             }
             agent any
             steps {
-                withCredentials([
-                        file(credentialsId: 'pargo-magento-2-4-private-key',variable: 'MAGENTO_24_PRIVATE_KEY'),
-                        file(credentialsId: 'pargo-ansible-vault', variable: 'VAULT_KEY')
-                        ])
-                    {
-                    sh 'set +x'
-                    sh 'ansible-playbook -i playbooks/subprod/inventory.yml -l magento_2_4 -e plugin_version_tag=dev-$GIT_BRANCH playbooks/subprod/install-magento-plugin.yml --extra-vars="ansible_ssh_private_key_file=$MAGENTO_24_PRIVATE_KEY" --vault-password-file=$VAULT_KEY'
+                    ansiblePlaybook credentialsId: 'pargo-magento-2-4-private-key', inventory: 'playbooks/subprod/inventory.yml', playbook: 'playbooks/subprod/install-magento-plugin.yml', limit: 'magento_2_4', vaultCredentialsId: 'pargo-ansible-vault', extras: '-e plugin_version_tag=$VERSION'
                     }
             }
         }
-    }
 }
