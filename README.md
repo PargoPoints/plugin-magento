@@ -93,6 +93,10 @@ You can customize a suitable title to display with the shipping method here
 
 Change the default name of our shipping module to something more suitable for your site.
 
+**Setting the flat rate shipping price**
+
+Locate the Flat Rate Shipping Price field set your desired price, hit the save config button
+
 **Door to Door**
 
 Choose Yes to enable the Door to Door method
@@ -105,9 +109,9 @@ You can customize a suitable title to display with the shipping method here
 
 Change the default name of our shipping module to something more suitable for your site.
 
-**Setting the shipping price**
+**Setting the flat rate door to door shipping price**
 
-Locate the Shipping Price field set your desired price, hit the save config button
+Locate the Door to Door Flat Rate Shipping Price field set your desired price, hit the save config button
 
 **Set custom display error message**
 
