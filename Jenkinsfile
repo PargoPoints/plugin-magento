@@ -37,7 +37,7 @@ pipeline {
                         ])
                     {
                     sh 'set +x'
-                    sh 'ansible-playbook -i playbooks/subprod/inventory.yml -l magento_2_4 -e plugin_version_tag=dev-$GIT_BRANCH playbooks/subprod/install-magento-plugin.yml --private-key=$MAGENTO_24_PRIVATE_KEY --vault-password-file=$VAULT_KEY'
+                    sh 'ansible-playbook -i playbooks/subprod/inventory.yml -l magento_2_4 -e plugin_version_tag=dev-$GIT_BRANCH playbooks/subprod/install-magento-plugin.yml --extra-vars="ansible_ssh_private_key_file=$MAGENTO_24_PRIVATE_KEY" --vault-password-file=$VAULT_KEY'
                     }
             }
         }
