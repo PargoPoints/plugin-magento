@@ -380,7 +380,13 @@ class ProcessShipment implements ObserverInterface
             $this->logger->info('Pargo: API Authentication successful');
             $response = json_decode($response);
 
-            return $response->access_token;
+            if (!empty($response->access_token)) {
+                $this->logger->info('Pargo: API Authentication successful');
+                return $response->access_token;
+            } else {
+                $this->logger->error('Pargo: Failed to authenticate API');
+                return false;
+            }
         }
     }
 

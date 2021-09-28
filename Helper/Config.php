@@ -207,25 +207,5 @@ class Config extends \Magento\Framework\App\Helper\AbstractHelper
             $storeId
         );
     }
-
-    /**
-     * Retrieve Price Matrix
-     *
-     * @param int $storeId
-     * @return bool|mixed
-     */
-    public function getPriceMatrix($storeId = 0)
-    {
-        $priceMatrix = $this->scopeConfig->getValue(
-            'carriers/pargo_customshipping/price_matrix',
-            ScopeInterface::SCOPE_STORE,
-            $storeId
-        );
-
-        if ($priceMatrix) {
-            return json_decode($priceMatrix, true);
-        }
-
-        return false;
-    }
+    
 }

@@ -35,7 +35,9 @@
                 <live_url>https://api.live.pargo.co.za</live_url>
                 <staging_url>https://api.staging.pargo.co.za</staging_url>
                 <price>0.00</price>
+                <doortodoor_price>0.00</doortodoor_price>
                 <cost>0.00</cost>
+                <mapToken>wuEmCfJ1AKdWHuVJHR71cYobnXPSMz</mapToken>
                 <sallowspecific>1</sallowspecific>
                 <specificcountry>ZA</specificcountry>
                 <specificerrmsg>This shipping method is not available. To use this shipping method, please contact us.</specificerrmsg>

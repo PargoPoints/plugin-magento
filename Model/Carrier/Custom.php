@@ -133,6 +133,10 @@ class Custom extends \Magento\Shipping\Model\Carrier\AbstractCarrier implements
         $method->setPrice($this->getPrice($request));
         $method->setCost($this->getConfigData('cost'));
 
+        if ($method->getPrice() == 0.00) {
+            $method->setCarrierTitle("Please configure your Pargo shipping method flat rate price");
+        }
+
         $result->append($method);
 
         if ($this->getConfigData("doortodoor_enabled")) {
@@ -150,8 +154,13 @@ class Custom extends \Magento\Shipping\Model\Carrier\AbstractCarrier implements
             $method->setCost($price); //@todo discuss cost
 
             if ($price == 0.00) {
-                $method->setPrice($this->getPrice($request));
+                //Fall back if no price is retrieved from the API
+                $method->setPrice($this->getPrice($this->getDoorToDoorFlatPrice($request)));
                 $method->setCarrierTitle($this->getConfigData('doortodoor_name'). " Suburb & Postal Code required for an accurate estimate");
+            }
+
+            if ($method->getPrice() == 0.00) {
+                $method->setCarrierTitle("Please configure your door to door shipping method correctly");
             }
 
             $result->append($method);
@@ -180,7 +189,7 @@ class Custom extends \Magento\Shipping\Model\Carrier\AbstractCarrier implements
     }
 
     /**
-     * Get Price
+     * Get Flat Rate Price
      *
      * @param RateRequest $request
      * @return false|string
@@ -188,21 +197,21 @@ class Custom extends \Magento\Shipping\Model\Carrier\AbstractCarrier implements
     protected function getPrice(RateRequest $request)
     {
         $price = $this->getConfigData('price');
-        $priceMatrix = $this->helper->getPriceMatrix($request->getStoreId());
-
-        if ($priceMatrix) {
-            $subtotal = $request->getBaseSubtotalInclTax();
-
-            foreach ($priceMatrix as $condition) {
-                if ($condition['from'] <= $subtotal and $condition['to'] >= $subtotal) {
-
-                    return $condition['price'];
-                }
-            }
-        }
-
         return $price;
     }
+
+    /**
+     * Get Door to Door Flat Rate Price
+     *
+     * @param RateRequest $request
+     * @return false|string
+     */
+    protected function getDoorToDoorFlatPrice(RateRequest $request)
+    {
+        $price = $this->getConfigData('price');
+        return $price;
+    }
+
 
     protected function getDoorToDoorPrice(RateRequest $request)
     {
@@ -383,10 +392,15 @@ class Custom extends \Magento\Shipping\Model\Carrier\AbstractCarrier implements
             $this->logger->error('Pargo: Failed to authenticate API');
             return false;
         } else {
-            $this->logger->info('Pargo: API Authentication successful');
             $response = json_decode($response);
 
-            return $response->access_token;
+            if (!empty($response->access_token)) {
+                $this->logger->info('Pargo: API Authentication successful');
+                return $response->access_token;
+            } else {
+                $this->logger->error('Pargo: Failed to authenticate API');
+                return false;
+            }
         }
     }
 
