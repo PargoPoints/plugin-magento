@@ -17,7 +17,7 @@ pipeline {
             steps {
                 dir('playbooks') {
                 git branch: 'main',
-                credentialsId: 'pargo-jenkins-github-organisation-test    ',
+                credentialsId: 'pargo-jenkins-github-organisation-test',
                 url: 'git@github.com:PargoPoints/devops-ansible.git'
                 }
             }
