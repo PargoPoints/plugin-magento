@@ -31,12 +31,12 @@ pipeline {
             }
             agent any
             steps {
-                    ansiblePlaybook credentialsId: 'pargo-magento-2-4-private-key', 
-                    disableHostKeyChecking: true, 
-                    inventory: 'playbooks/subprod/inventory.yml', 
-                    playbook: 'playbooks/subprod/install-magento-plugin.yml', 
-                    limit: 'magento_2_4', 
-                    vaultCredentialsId: 'pargo-ansible-vault', 
+                    ansiblePlaybook credentialsId: 'pargo-magento-2-4-private-key',
+                    disableHostKeyChecking: true,
+                    inventory: 'playbooks/subprod/inventory.yml',
+                    playbook: 'playbooks/subprod/install-magento-plugin.yml',
+                    limit: 'magento_2_4',
+                    vaultCredentialsId: 'pargo-ansible-vault',
                     extras: "-e plugin_version_tag=dev-$GIT_BRANCH"
                     }
             }
