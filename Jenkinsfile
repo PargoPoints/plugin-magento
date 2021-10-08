@@ -31,7 +31,19 @@ pipeline {
                     limit: 'magento_2_4',
                     vaultCredentialsId: 'pargo-ansible-vault',
                     extras: "-e plugin_version_tag=dev-$GIT_BRANCH"
-                    }
             }
+                post {
+                success {
+                    slackSend(channel: '#eng-builds',
+                    message: "Staging Magento 2.4 Deploy Successful: \nRepo: ${GIT_URL} \nBuild #: ${env.BUILD_NUMBER} - (<${env.BUILD_URL}|Open>) \nBuilt for branch: ${env.BRANCH_NAME}",
+                    color: 'good')
+                }
+                failure {
+                    slackSend(channel: '#eng-builds',
+                    message: "Staging Magento 2.4 Deploy Failed: \nRepo: ${GIT_URL} \nBuild #: ${env.BUILD_NUMBER} \nLink: (<${env.BUILD_URL}|Open>)",
+                    color: 'danger')
+                }
+                }
         }
+    }
 }
