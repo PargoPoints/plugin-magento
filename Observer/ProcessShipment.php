@@ -196,11 +196,10 @@ class ProcessShipment implements ObserverInterface
                         "city" => $shippingAddress["city"],
                         "country" => "ZA"
                     ],
-
-                   'totalParcels' => count($parcels),
-                   'parcels' => $parcels
+                   'totalParcels' => count($parcels)
                 ]
-            ]
+            ],
+            'source' => 'magento'
         ];
 
         $url = $this->helper->getUrl();
@@ -291,7 +290,8 @@ class ProcessShipment implements ObserverInterface
                         ]
                     ]
                 ]
-            ]
+            ],
+            'source' => 'magento'
         ];
         $url = $this->helper->getUrl();
         $curl = curl_init();
