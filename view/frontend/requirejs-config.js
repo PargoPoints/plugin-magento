@@ -11,7 +11,8 @@ var config = {
     map: {
         '*': {
             'Magento_Checkout/js/model/checkout-data-resolver': 'Pargo_CustomShipping/js/checkout-data-resolver',
-            'Magento_Checkout/js/model/shipping-save-processor/default': 'Pargo_CustomShipping/js/shipping-save-processor/default'
+            'Magento_Checkout/js/model/shipping-save-processor/default': 'Pargo_CustomShipping/js/shipping-save-processor/default',
+            'Magento_Checkout/js/model/shipping-service' : 'Pargo_CustomShipping/js/model/shipping-service'
         }
     },
     config: {

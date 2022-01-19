@@ -124,10 +124,26 @@ require([
         console.log("Pargo: " + localStorage.getItem("pargoPoint"));
 
         var pargoPoint = JSON.parse(localStorage.getItem("pargoPoint"));
-
+/*
         var pargoPointTelephone = pargoPoint.phoneNumber.toString();
         if(pargoPointTelephone==="")
           pargoPointTelephone = "[]";
+*/
+          if(pargoPoint.phoneNumber === "" || pargoPoint.phoneNumber == null)
+          {
+              pargoPointTelephone = "";
+          } else {
+              var pargoPointTelephone = pargoPoint.phoneNumber.toString();
+          }
+
+          if(pargoPoint.address2 == "" || pargoPoint.address2 == null)
+          {
+              var pargoStreet1 = pargoPoint.suburb;
+              var pargoStreet2 = "";
+          } else {
+              var pargoStreet1 = pargoPoint.address2;
+              var pargoStreet2 = pargoPoint.suburb;
+          }
 
         var shippingAddress = {
           firstname: "Pargo Shipment",
@@ -138,11 +154,11 @@ require([
           // pickupPointCode: pargoPoint.pargoPointCode,
           company: pargoPoint.storeName,
           street: {
-            0: pargoPoint.address1,
-            1: pargoPoint.address2,
-            2: "",
+              0: pargoPoint.address1,
+              1: pargoStreet1,
+              2: pargoStreet2,
           },
-          suburb: pargoPoint.suburb,
+          //suburb: pargoPoint.suburb,
           city: pargoPoint.city,
           postcode: pargoPoint.postalcode,
           region: pargoPoint.province,
@@ -263,6 +279,15 @@ require([
     if (telephone === "")
       telephone = "[]";
 
+      if(point.data.address2 == "" || point.data.address2  == null)
+      {
+          var pargoStreet1 = point.data.suburb;
+          var pargoStreet2 = "";
+      } else {
+          var pargoStreet1 = "test";
+          var pargoStreet2 = point.data.suburb;
+      }
+
     $(".form-shipping-address")
       .find("select[name=country_id]")
       .val("ZA")
@@ -279,11 +304,11 @@ require([
       .change();
     $(".form-shipping-address")
       .find('input[name="street[1]"]')
-      .val(point.data.address2)
+      .val(pargoStreet1)
       .change();
     $(".form-shipping-address")
       .find('input[name="street[2]"]')
-      .val(point.data.suburb)
+      .val(pargoStreet2)
       .change();
     $(".form-shipping-address")
       .find("input[name=city]")
@@ -314,10 +339,28 @@ require([
         if (value == "pargo_customshipping_pargo_customshipping") {
 
         var pargoPoint = JSON.parse(localStorage.getItem("pargoPoint"));
-
+/*
         var pargoPointTelephone = pargoPoint.phoneNumber.toString();
         if(pargoPointTelephone==="")
-          pargoPointTelephone = "[]";
+            pargoPointTelephone = "[]";
+
+*/
+
+        if(pargoPoint.phoneNumber === "" || pargoPoint.phoneNumber == null)
+        {
+          pargoPointTelephone = "";
+        } else {
+            var pargoPointTelephone = pargoPoint.phoneNumber.toString();
+        }
+
+        if(pargoPoint.address2 == "" || pargoPoint.address2 == null)
+        {
+            var pargoStreet1 = pargoPoint.suburb;
+            var pargoStreet2 = "";
+        } else {
+            var pargoStreet1 = pargoPoint.address2;
+            var pargoStreet2 = pargoPoint.suburb;
+        }
 
           var shippingAddress = {
             firstname: "Pargo Shipment",
@@ -325,8 +368,8 @@ require([
             company: pargoPoint.storeName,
             street: {
               0: pargoPoint.address1,
-              1: pargoPoint.address2,
-              2: "",
+              1: pargoStreet1,
+              2: pargoStreet2,
             },
             suburb: pargoPoint.suburb,
             city: pargoPoint.city,
@@ -391,21 +434,37 @@ require([
       if (isLoggedIn) {
 
         var pargoPoint = JSON.parse(localStorage.getItem("pargoPoint"));
-
+/*
         var pargoPointTelephone = pargoPoint.phoneNumber.toString();
         if(pargoPointTelephone==="")
           pargoPointTelephone = "[]";
+*/
 
+          if(pargoPoint.phoneNumber === "" || pargoPoint.phoneNumber == null)
+          {
+              pargoPointTelephone = "";
+          } else {
+              var pargoPointTelephone = pargoPoint.phoneNumber.toString();
+          }
+
+          if(pargoPoint.address2 == "" || pargoPoint.address2 == null)
+          {
+              var pargoStreet1 = pargoPoint.suburb;
+              var pargoStreet2 = "";
+          } else {
+              var pargoStreet1 = pargoPoint.address2;
+              var pargoStreet2 = pargoPoint.suburb;
+          }
         var shippingAddress = {
           firstname: "Pargo Shipment",
           lastname: "- Collect",
           pickupPointCode: pargoPoint.pargoPointCode,
           company: pargoPoint.storeName,
-          street: {
-            0: pargoPoint.address1,
-            1: pargoPoint.address2,
-            2: "",
-          },
+            street: {
+                0: pargoPoint.address1,
+                1: pargoStreet1,
+                2: pargoStreet2,
+            },
           suburb: pargoPoint.suburb,
           city: pargoPoint.city,
           postcode: pargoPoint.postalcode,

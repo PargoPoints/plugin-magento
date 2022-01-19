@@ -60,30 +60,32 @@
                 <field id="price" translate="label" type="text" sortOrder="70" showInDefault="1" showInWebsite="1"
                        showInStore="0">
                     <label>Flat Rate Shipping Price</label>
-                    <validate>validate-number validate-zero-or-greater</validate>
+                    <comment>Flat rates are required, even when using live rates, due to their being used as a fallback when the API is unavailable.</comment>
+                    <validate>validate-no-empty validate-number validate-zero-or-greater</validate>
                 </field>
 
                 <field id="doortodoor_enabled" translate="label" type="select" sortOrder="75" showInDefault="1"
                        showInWebsite="1" showInStore="1">
-                    <label>Door to Door</label>
+                    <label>Activate Home Delivery</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                    <comment>Set to yes to enable door to door shipping method. Default: No.</comment>
+                    <comment>Set to yes to enable the home delivery shipping method. Default: No.</comment>
                 </field>
 
                 <field id="doortodoor_title" translate="label" type="text" sortOrder="80" showInDefault="1" showInWebsite="1"
                        showInStore="1">
-                    <label>Door to Door Method Title</label>
+                    <label>Home Deliver Method Title</label>
                 </field>
 
                 <field id="doortodoor_name" translate="label" type="text" sortOrder="85" showInDefault="1" showInWebsite="1"
                        showInStore="1">
-                    <label>Door to Door Method Name</label>
+                    <label>Home Deliver Method Name</label>
                 </field>
 
                 <field id="doortodoor_price" translate="label" type="text" sortOrder="90" showInDefault="1" showInWebsite="1"
                        showInStore="0">
-                    <label>Door to Door Flat Rate Shipping Price</label>
-                    <validate>validate-number validate-zero-or-greater</validate>
+                    <label>Home Delivery Flat Rate Shipping Price</label>
+                    <comment>Flat rates are required, even when using live rates, due to their being used as a fallback when the API is unavailable.</comment>
+                    <validate>validate-no-empty validate-number validate-zero-or-greater</validate>
                 </field>
 
                 <field id="specificerrmsg" translate="label" type="textarea" sortOrder="95" showInDefault="1"
