@@ -172,8 +172,15 @@ class ProcessShipment implements ObserverInterface
         $streetParts = explode("\n",  $shippingAddress["street"]);
 
         $destSuburb = "";
-        if (count($streetParts) > 1) {
+   /*     if (count($streetParts) > 1) {
             $shippingAddress["suburb"] = $streetParts[count($streetParts)-1];
+        }*/
+        if (count($streetParts) == 2){
+            $shippingAddress["address2"] = "";
+            $shippingAddress["suburb"] = $streetParts[1];
+        } else {
+            $shippingAddress["address2"] = $streetParts[1];
+            $shippingAddress["suburb"] = $streetParts[2];
         }
 
         $data = [
@@ -189,7 +196,7 @@ class ProcessShipment implements ObserverInterface
                             $shippingAddress['telephone']
                         ],
                         "address1" => $shippingAddress["street"],
-                        "address2" => "",
+                        "address2" => $shippingAddress["address2"],
                         "province" => $shippingAddress["region"],
                         "suburb" =>  $shippingAddress["suburb"], /**@todo dicuss this**/
                         "postalCode" => $shippingAddress["postcode"],

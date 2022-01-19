@@ -20,6 +20,7 @@ use Magento\Quote\Model\Quote\Address\RateResult\MethodFactory;
 use Magento\Shipping\Model\Rate\Result;
 use Magento\Shipping\Model\Rate\ResultFactory;
 use Pargo\CustomShipping\Helper\Config as Helper;
+use Pargo\CustomShipping\Logger\Logger;
 
 class Custom extends \Magento\Shipping\Model\Carrier\AbstractCarrier implements
     \Magento\Shipping\Model\Carrier\CarrierInterface
@@ -92,11 +93,12 @@ class Custom extends \Magento\Shipping\Model\Carrier\AbstractCarrier implements
         Helper $helper,
         Curl $curl,
         Session $customerSession,
+        Logger $pargoLogger,
         array $data = []
     ) {
         $this->rateResultFactory = $rateResultFactory;
         $this->rateMethodFactory = $rateMethodFactory;
-        $this->logger = $logger;
+        $this->logger = $pargoLogger;
         $this->helper = $helper;
         $this->curl = $curl;
         $this->customerSession = $customerSession;

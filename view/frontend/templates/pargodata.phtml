@@ -9,6 +9,13 @@
  * @author     dev@pargo.co.za
  */
 -->
+<?php
+/**
+* Pargo Data
+*
+* @var $block \Pargo\CustomShipping\Block\PargoData
+*/
+?>
 <style>
     #pargo-point {
         margin-top: 15px;
@@ -421,10 +428,10 @@
         <label for="modal-trigger" class="o-close"></label>
         <div class="modal-wrap pargo-map">
             <label for="modal-trigger" class="close">&#10006;</label>
-            <iframe id="iframe" class="resp-iframe" allow="geolocation" src="https://map.pargo.co.za/?token=<?php echo $this->getContent(); ?>"></iframe>
+            <?php echo $block->getMapIFrame(); ?>
         </div>
     </div>
 </div>
 <!-- End Modal -->
-<script src="https://map.pargo.co.za"></script>
-<?= /* @noEscape */ $block->secureRenderer->renderTag('script', ['src' => 'https://map.pargo.co.za']); ?>
+<?php echo $block->getMapScript(); ?>
+

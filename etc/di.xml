@@ -14,13 +14,28 @@
     <type name="Magento\Shipping\Model\Rate\Result">
         <plugin name="pargo_customshipping_rate_result" type="Pargo\CustomShipping\Model\Plugin\Shipping\Rate\Result\Remove" sortOrder="10" disabled="false"/>
         <plugin name="pargo_customshipping_rate_result_getallrates" type="Pargo\CustomShipping\Model\Plugin\Shipping\Rate\Result\GetFilteredRates" sortOrder="20" disabled="false"/>
-
     </type>
     <type name="Magento\Checkout\Model\PaymentInformationManagement">
         <plugin sortOrder="1" name="twinsenCarrierCodeFixPaymentInformationManagement" type="Pargo\CustomShipping\Plugin\Model\PaymentInformationManagementPlugin"/>
     </type>
     <type name="Magento\Checkout\Model\GuestPaymentInformationManagement">
         <plugin sortOrder="1" name="twinsenCarrierCodeFixGuestPaymentInformationManagement" type="Pargo\CustomShipping\Plugin\Model\GuestPaymentInformationManagementPlugin"/>
+    </type>
+    <type name="Magento\Checkout\Block\Checkout\LayoutProcessor">
+        <plugin sortOrder="10" name="rewrite-street" type="Pargo\CustomShipping\Model\Plugin\Checkout\LayoutProcessorPlugin"/>
+    </type>
+    <type name="Pargo\CustomShipping\Logger\Handler">
+        <arguments>
+            <argument name="filesystem" xsi:type="object">Magento\Framework\Filesystem\Driver\File</argument>
+        </arguments>
+    </type>
+    <type name="Pargo\CustomShipping\Logger\Logger">
+        <arguments>
+            <argument name="name" xsi:type="string">Pargo</argument>
+            <argument name="handlers" xsi:type="array">
+                <item name="system" xsi:type="object">Pargo\CustomShipping\Logger\Handler</item>
+            </argument>
+        </arguments>
     </type>
     <type name="Magento\Framework\Logger\Monolog">
         <arguments>
