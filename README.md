@@ -1,7 +1,7 @@
 # Pargo Shipping Plugin for Magento
 Magento 2 Module Manual
 
-Document Last Update Date: 16-09-2021
+Document Last Update Date: 16-02-2022
 
 # General Information
 
@@ -58,7 +58,7 @@ If you have successfully installed the Pargo plugin you will see our icon once y
 
 Clicking on the icon will take you to the shipping settings where the Pargo Shipping Method will be visible.
 
-![](images/57c1bce6.png)
+![](images/config.png)
 
 The following steps will get you up and running quickly
 
@@ -67,6 +67,7 @@ The following steps will get you up and running quickly
 Enable the plugin in Magento by selecting Yes from the Enabled drop down.
 
 **Adding the the map token provided by Pargo.**
+
 Enter the Map Token provided by Pargo into the Map Token field if required.
 
 **Live**
@@ -77,47 +78,51 @@ Live is by default set to No so you can test, if you are on a production site pl
 
 Enter the email address you use for your account and the password provided by the Pargo team.
 
-**Hiding other shipping methods**
+**Choose if you want to use live or static rates**
 
-Hide other shipping methods in the frontend when &quot;Pargo Shipping Method&quot; is available. The default value is NO. When enabled this allows you to hide some or all the other shipping methods in your store.
+Selecting to use the live api rates will do an api lookup to get the Home Delivery rates.
 
-Locate the Hide Other Shipping Methods field select Yes.
+![](images/shipping.png)
 
-A drop down list of all the other available shipping methods will be displayed, selected the shipping methods that you wish to be hidden when using the Pargo Shipping Method, hit the save config button.
-
-**Method Title**
-
-You can customize a suitable title to display with the shipping method here
-
-**Method Name**
+**Pickup Point Method Title**
 
 Change the default name of our shipping module to something more suitable for your site.
 
-**Setting the flat rate shipping price**
+**Pickup Point Method Name**
 
-Locate the Flat Rate Shipping Price field set your desired price, hit the save config button
+Change the default description of our shipping module to something more suitable for your site.
 
-**Door to Door**
+**Pickup Point Flat Rate Shipping Price**
 
-Choose Yes to enable the Door to Door method
+Set the Pickup Point Flat Rate Shipping Price. Live rates are not used for the Pickup Points.
 
-**Door to Door Method Title**
+**Activate Home Delivery**
 
-You can customize a suitable title to display with the shipping method here
+Choose Yes to enable the Home Delivery Method and Display it as a shipping method.
+
+**Home Delivery Method Title**
+
+Change the default name of our shipping module to something more suitable for your site.
 
 **Door to Door Method Name**
 
-Change the default name of our shipping module to something more suitable for your site.
+Change the default description of our shipping module to something more suitable for your site.
 
-**Setting the flat rate door to door shipping price**
+**Setting the flat rate home delivery shipping price**
 
-Locate the Door to Door Flat Rate Shipping Price field set your desired price, hit the save config button
+Set the Home Delivery Flat rate price. This price is used when live rates is switched off, or when the live rate is not returned for some reason.
+
+![](images/sort.png)
 
 **Set custom display error message**
 
 You can set a custom display error message specific to the Pargo plugin.
 Locate the Displayed Error Message field enter your custom error message, hit the save config button.
 This message normally displays if you the address you are shipping to is outside of the country.
+
+**Show Method if Not Applicable**
+
+If set to No, the Pargo Methods will only show if appropriate information has been entered.
 
 **Sort Shipping method position**
 

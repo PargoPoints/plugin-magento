@@ -284,7 +284,7 @@ require([
           var pargoStreet1 = point.data.suburb;
           var pargoStreet2 = "";
       } else {
-          var pargoStreet1 = "test";
+          var pargoStreet1 = point.data.address2;
           var pargoStreet2 = point.data.suburb;
       }
 
