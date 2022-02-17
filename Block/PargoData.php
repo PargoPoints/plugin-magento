@@ -11,9 +11,18 @@
 
 namespace Pargo\CustomShipping\Block;
 
-use Magento\Csp\Helper\InlineUtil;
+
+
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\View\Element\Template\Context;
+use Magento\Framework\App\ProductMetadataInterface;
+// Used for secure renderer for version 2.3.5 do not use outside of version check
+use Magento\Csp\Model\Collector\DynamicCollector;
+use Magento\Csp\Helper\InlineUtil;
+// Used for secure renderer for version 2.4.0 and higher do not use outside of version check
+use Magento\Framework\Math\Random;
+use Magento\Framework\View\Helper\SecureHtmlRender\HtmlRenderer;
+use Magento\Framework\Escaper;
 use Magento\Framework\View\Helper\SecureHtmlRenderer;
 
 class PargoData extends \Magento\Framework\View\Element\Template
@@ -24,25 +33,32 @@ class PargoData extends \Magento\Framework\View\Element\Template
     public $scopeConfig;
 
     /**
-     * @var SecureHtmlRenderer
+     * @var mixed
      */
     public $secureRenderer;
 
     /**
      * @param ScopeConfigInterface $scopeConfig
      * @param Context $context
-     * @param SecureHtmlRenderer $secureRenderer
+     * @param ProductMetadataInterface $productMetadata
      * @param array $data
      */
     public function __construct(
         ScopeConfigInterface $scopeConfig,
         Context $context,
-        SecureHtmlRenderer $secureRenderer, // \Magento\Csp\Helper\InlineUtil $secureRenderer, older magento 2.3.5
+        ProductMetadataInterface $productMetadata,
         array $data = []
     ) {
         $this->scopeConfig = $scopeConfig;
+        $this->productMetadata = $productMetadata;
+        // Choosing the correct CSP method as per Magento Version
+        if(version_compare($this->productMetadata->getVersion(), "2.4.0", ">="))
+        {
+            $secureRenderer = new SecureHtmlRenderer(new HtmlRenderer(new Escaper()), new Random());
+        } else {
+            $secureRenderer = new InlineUtil(new DynamicCollector());
+        }
         $this->secureRenderer = $secureRenderer;
-
         parent::__construct($context, $data);
     }
 

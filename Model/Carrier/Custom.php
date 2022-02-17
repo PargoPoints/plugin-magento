@@ -130,6 +130,7 @@ class Custom extends \Magento\Shipping\Model\Carrier\AbstractCarrier implements
         $method->setCarrier($this->getCarrierCode());
         $method->setCarrierTitle($this->getConfigData('title'));
 
+        // Setting up the Pargo Pickup method
         $method->setMethod($this->getCarrierCode());
         $method->setMethodTitle($this->getConfigData('name'));
         $method->setPrice($this->getPrice($request));
@@ -141,6 +142,7 @@ class Custom extends \Magento\Shipping\Model\Carrier\AbstractCarrier implements
 
         $result->append($method);
 
+        // Setting up the Home Delivery method
         if ($this->getConfigData("doortodoor_enabled")) {
             /** @var \Magento\Quote\Model\Quote\Address\RateResult\Method $method */
             $method = $this->rateMethodFactory->create();
@@ -150,15 +152,20 @@ class Custom extends \Magento\Shipping\Model\Carrier\AbstractCarrier implements
             $method->setMethod($this->getCarrierCode() . "_doortodoor");
             $method->setMethodTitle($this->getConfigData('doortodoor_name'));
 
-            $price = (float)$this->getDoorToDoorPrice($request);
+            if($this->getConfigData("live_rates_enabled")) {
+                $price = (float)$this->getDoorToDoorPrice($request);
 
-            $method->setPrice($price);
-            $method->setCost($price); //@todo discuss cost
+                $method->setPrice($price);
+                $method->setCost($price); //@todo discuss cost
 
-            if ($price == 0.00) {
-                //Fall back if no price is retrieved from the API
+                if ($price == 0.00) {
+                    //Fall back if no price is retrieved from the API
+                    $method->setPrice($this->getDoorToDoorFlatPrice($request));
+                    $method->setMethodTitle($this->getConfigData('doortodoor_name') . ". Suburb, City & Postal Code required for an accurate estimate");
+                }
+            } else {
                 $method->setPrice($this->getDoorToDoorFlatPrice($request));
-                $method->setMethodTitle($this->getConfigData('doortodoor_name'). ". Suburb & Postal Code required for an accurate estimate");
+                $method->setMethodTitle($this->getConfigData('doortodoor_name') . ". Flat rates in use.");
             }
 
             if ($method->getPrice() == 0.00) {

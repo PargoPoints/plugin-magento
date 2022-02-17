@@ -32,9 +32,9 @@
 
                 <field id="live_enabled" translate="label" type="select" sortOrder="30" showInDefault="1"
                        showInWebsite="1" showInStore="1">
-                    <label>Live</label>
+                    <label>Use Pargo Production Site</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                    <comment>Set to live when testing is done. Default: No.</comment>
+                    <comment>Set to Yes when testing is done. Default: No.</comment>
                 </field>
 
                 <field id="username" translate="label" type="text" sortOrder="40" showInDefault="1" showInWebsite="1"
@@ -47,19 +47,26 @@
                     <label>API Password</label>
                 </field>
 
+                <field id="live_rates_enabled" translate="label" type="select" sortOrder="55" showInDefault="1"
+                       showInWebsite="1" showInStore="1">
+                    <label>Use Pargo Live Api Rates</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Yes, to make Pargo Api calls for live rates. No to use Flat Rates. Applies to all methods.</comment>
+                </field>
+
                 <field id="title" translate="label" type="text" sortOrder="60" showInDefault="1" showInWebsite="1"
                        showInStore="1">
-                    <label>Method Title</label>
+                    <label>Pickup Point Method Title</label>
                 </field>
 
                 <field id="name" translate="label" type="text" sortOrder="65" showInDefault="1" showInWebsite="1"
                        showInStore="1">
-                    <label>Method Name</label>
+                    <label>Pickup Point Method Name</label>
                 </field>
 
                 <field id="price" translate="label" type="text" sortOrder="70" showInDefault="1" showInWebsite="1"
                        showInStore="0">
-                    <label>Flat Rate Shipping Price</label>
+                    <label>Pickup Point Flat Rate Shipping Price</label>
                     <comment>Flat rates are required, even when using live rates, due to their being used as a fallback when the API is unavailable.</comment>
                     <validate>validate-no-empty validate-number validate-zero-or-greater</validate>
                 </field>
@@ -73,12 +80,12 @@
 
                 <field id="doortodoor_title" translate="label" type="text" sortOrder="80" showInDefault="1" showInWebsite="1"
                        showInStore="1">
-                    <label>Home Deliver Method Title</label>
+                    <label>Home Delivery Method Title</label>
                 </field>
 
                 <field id="doortodoor_name" translate="label" type="text" sortOrder="85" showInDefault="1" showInWebsite="1"
                        showInStore="1">
-                    <label>Home Deliver Method Name</label>
+                    <label>Home Delivery Method Name</label>
                 </field>
 
                 <field id="doortodoor_price" translate="label" type="text" sortOrder="90" showInDefault="1" showInWebsite="1"
