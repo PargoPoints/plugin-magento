@@ -30,7 +30,7 @@ There are two ways to install the Pargo Shipping extension:
 From your magento folder running as the owner of the website (typically the credentials you have been given by your ISP) run the following command:
 
 ```ssh
-  composer require pargopoints/plugin-magento-2-4
+  composer require pargopoints/plugin-magento
 ```
 
 **Manual Installation**
