@@ -1,5 +1,5 @@
 {
-    "name": "pargopoints/plugin-magento-2-4",
+    "name": "pargopoints/plugin-magento",
     "type": "magento2-module",
     "description": "This Magento 2 module allows you to provide a click and collect solution provided by Pargo",
     "license": "OSL-3.0",
