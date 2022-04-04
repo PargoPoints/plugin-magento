@@ -149,7 +149,8 @@ class ProcessShipment implements ObserverInterface
         }
 
         $items = $order->getAllItems();
-        $parcels = [];
+        // This parcel information has been removed. However might be used in later versions, hence left in.
+        /*$parcels = [];
 
         foreach ($items as $id => $item) {
             $iCount = 0;
@@ -168,6 +169,7 @@ class ProcessShipment implements ObserverInterface
                 $iCount++;
             }
         }
+        */
 
         $streetParts = explode("\n",  $shippingAddress["street"]);
 
@@ -202,8 +204,7 @@ class ProcessShipment implements ObserverInterface
                         "postalCode" => $shippingAddress["postcode"],
                         "city" => $shippingAddress["city"],
                         "country" => "ZA"
-                    ],
-                   'totalParcels' => count($parcels)
+                    ]
                 ]
             ],
             'source' => 'magento'
