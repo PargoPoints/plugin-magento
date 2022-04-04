@@ -18,6 +18,7 @@
                 <name>Pargo</name>
                 <title>Not at home? Collect from a local shop when it suits you best</title>
                 <active>0</active>
+                <invoice_link_enabled>1</invoice_link_enabled>
                 <availability>both</availability>
                 <customer>0</customer>
                 <title>Pargo Shipping</title>

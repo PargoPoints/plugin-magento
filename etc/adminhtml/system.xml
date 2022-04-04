@@ -21,20 +21,20 @@
 
                 <field id="active" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1"
                        showInStore="1">
-                    <label>Enabled</label>
+                    <label>Module Enabled</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
 
-                <field id="mapToken" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1"
-                       showInStore="1">
-                    <label>Map Token</label>
-                </field>
-
-                <field id="live_enabled" translate="label" type="select" sortOrder="30" showInDefault="1"
+                <field id="live_enabled" translate="label" type="select" sortOrder="20" showInDefault="1"
                        showInWebsite="1" showInStore="1">
                     <label>Use Pargo Production Site</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                     <comment>Set to Yes when testing is done. Default: No.</comment>
+                </field>
+
+                <field id="mapToken" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1"
+                       showInStore="1">
+                    <label>Map Token</label>
                 </field>
 
                 <field id="username" translate="label" type="text" sortOrder="40" showInDefault="1" showInWebsite="1"
@@ -52,6 +52,13 @@
                     <label>Use Pargo Live Api Rates</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                     <comment>Yes, to make Pargo Api calls for live rates. No to use Flat Rates. Applies to all methods.</comment>
+                </field>
+
+                <field id="invoice_link_enabled" translate="label" type="select" sortOrder="57" showInDefault="1"
+                       showInWebsite="1" showInStore="1">
+                    <label>Send directly to Pargo</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Yes, to send shipping booking directly to Pargo. No, to allow other modules to use Pargo data to send bookings.</comment>
                 </field>
 
                 <field id="title" translate="label" type="text" sortOrder="60" showInDefault="1" showInWebsite="1"
