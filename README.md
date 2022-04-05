@@ -62,9 +62,9 @@ Clicking on the icon will take you to the shipping settings where the Pargo Ship
 
 The following steps will get you up and running quickly
 
-**Enabling the Plugin**
+**Enabling the Module**
 
-Enable the plugin in Magento by selecting Yes from the Enabled drop down.
+Enable the module in Magento by selecting Yes from the Module Enabled drop down.
 
 **Adding the the map token provided by Pargo.**
 
@@ -81,6 +81,12 @@ Enter the email address you use for your account and the password provided by th
 **Choose if you want to use live or static rates**
 
 Selecting to use the live api rates will do an api lookup to get the Home Delivery rates.
+
+![](images/invoicefire.png)
+
+**Send directly to Pargo**
+
+With the default set to Yes, collections will automatically be sent to Pargo, when the customer is invoiced. The Pargo module can be used to collect data which is then used by a third party module to book the collections. In this event the selection needs to be No.
 
 ![](images/shipping.png)
 

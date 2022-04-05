@@ -265,7 +265,8 @@ class Custom extends \Magento\Shipping\Model\Carrier\AbstractCarrier implements
         }
 
         $parcels = $this->getParcels($request);
-
+        // Enforcing the return of a single parcel for now in line with order sent.
+        $parcels =array($parcels[0]);
         $data = [
             'data' => [
                 'type' => 'W2D',
@@ -325,7 +326,6 @@ class Custom extends \Magento\Shipping\Model\Carrier\AbstractCarrier implements
         } else {
             $this->logger->info('Pargo: Quotation retrieved successfully for door to door');
             $response = json_decode($response);
-
             if (isset($response->data)) {
                 return $response->data->attributes->quotation->price;
             } else {
