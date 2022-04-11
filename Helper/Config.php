@@ -165,7 +165,7 @@ class Config extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getUrl($storeId = 0)
     {
-        if ($this->scopeConfig->getValue('carriers/pargo_customshipping/live') == 1) {
+        if ($this->scopeConfig->getValue('carriers/pargo_customshipping/live_enabled') == 1) {
             return $this->scopeConfig->getValue(
                 'carriers/pargo_customshipping/live_url',
                 ScopeInterface::SCOPE_STORE,
@@ -207,5 +207,5 @@ class Config extends \Magento\Framework\App\Helper\AbstractHelper
             $storeId
         );
     }
-    
+
 }
