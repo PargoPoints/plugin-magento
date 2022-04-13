@@ -1,11 +1,22 @@
 # Pargo Shipping Plugin for Magento
 Magento 2 Module Manual
 
-Document Last Update Date: 16-09-2021
+Document Last Update Date: 08-04-2022
+
+Compatibility: 
+
+- Designed for Magento 2.4 
+- Tested up to 2.4.3
+- Backward compatibility tested up to Magento 2.3.7-p1
+- PayPal integration tested
 
 # General Information
 
-Before using the Pargo Shipping Method you need to contact Pargo to retrieve your unique map token and authorization code. This allows your customers and yourself to use the Pargo service.
+Before using the Pargo Shipping Method you need to contact Pargo to create a user account. 
+
+This is needed to get your unique map token and authorization code from Pargo. This allows your customers and yourself to use the Pargo service.
+
+If starting off in staging, request staging authorization credentials from Pargo. When moving over to production, request production credentials from Pargo.
 
 **Pargo contact information:**
 
@@ -30,7 +41,7 @@ There are two ways to install the Pargo Shipping extension:
 From your magento folder running as the owner of the website (typically the credentials you have been given by your ISP) run the following command:
 
 ```ssh
-  composer require pargopoints/plugin-magento-2-4
+  composer require pargopoints/plugin-magento
 ```
 
 **Manual Installation**
@@ -58,68 +69,105 @@ If you have successfully installed the Pargo plugin you will see our icon once y
 
 Clicking on the icon will take you to the shipping settings where the Pargo Shipping Method will be visible.
 
-![](images/57c1bce6.png)
+![](images/shippingmethod1.png)
 
 The following steps will get you up and running quickly
 
-**Enabling the Plugin**
+**Enabling the Module**
 
-Enable the plugin in Magento by selecting Yes from the Enabled drop down.
+Enable the module in Magento by selecting Yes from the Module Enabled drop down.
 
-**Adding the the map token provided by Pargo.**
-Enter the Map Token provided by Pargo into the Map Token field if required.
+**Use Pargo Production Site**
 
-**Live**
+![](images/useproduction.png)
 
-Live is by default set to No so you can test, if you are on a production site please set this to Yes.
+By default this is set to No so you can test in staging, if you are on a production site please set this to Yes.
 
-**Adding the API credentials provided by Pargo.**
+**Maptoken**
 
-Enter the email address you use for your account and the password provided by the Pargo team.
+![](images/maptoken.png)
 
-**Hiding other shipping methods**
+Your business will receive an authentication map token to enable your iFrame to show your pickup points. Enter this map token in the field shown.
+If you would like to start in staging, make sure you are using a staging map token. This token can be used for staging testing: ​​QbafKcMXhXHUFruJFbxRFL80BNjAl95EsJt4Xw4qs78X6eMv
+When you are ready to move to production, ensure you use a production map token provided by Pargo. This will make the Pickup Point map visible.
 
-Hide other shipping methods in the frontend when &quot;Pargo Shipping Method&quot; is available. The default value is NO. When enabled this allows you to hide some or all the other shipping methods in your store.
+**API credentials**
 
-Locate the Hide Other Shipping Methods field select Yes.
+![](images/apicredentials.png)
 
-A drop down list of all the other available shipping methods will be displayed, selected the shipping methods that you wish to be hidden when using the Pargo Shipping Method, hit the save config button.
+The API username (an email address) and password can be obtained from Pargo.
+Make sure you are using staging credentials when testing in staging, and production credentials when you are ready to start shipping on your live site.
 
-**Method Title**
 
-You can customize a suitable title to display with the shipping method here
+**Choose if you want to use live or static rates**
 
-**Method Name**
+![](images/useliverates.png)
 
-Change the default name of our shipping module to something more suitable for your site.
+Selecting Yes to use the live api rates will do an api lookup to get the Home Delivery rates that Pargo charges for different regions, for under 5kg weights. This allows you to pass the benefit of region based costing onto your customers. 
 
-**Door to Door**
+When used in conjunction with the Pargo Pickup Point Shipping Method, it can help lower your logistics costs, by encouraging regional Pickup Point Selection at checkout
 
-Choose Yes to enable the Door to Door method
 
-**Door to Door Method Title**
+**Send directly to Pargo**
 
-You can customize a suitable title to display with the shipping method here
+![](images/invoicefire.png)
+
+Set to “Yes” for order collections to be created automatically with Pargo when the customer is invoiced. These will show up on your MyPargo portal for further actioning (including collection readiness confirmation).
+Set to “No” to disable automatic order creation if you would like to develop custom triggers. 
+
+The Pargo module can be used to collect data which is then used by a third party module to book the collections and make the deliveries. More information in the Pargo Privacy Policy. If this is not the intention of use the selection needs to be No.
+
+
+**Shipping methods configurations**
+
+![](images/configs.png)
+
+**Pickup Point Method Title**
+
+Use the default name of our Pickup Point shipping module or change it to something more suitable for your site.
+
+**Pickup Point Method Name**
+
+Use the default name of our Pickup Point shipping module or change it to something more suitable for your site.
+
+**Pickup Point Flat Rate Shipping Price**
+
+Set the Pickup Point Flat Rate Shipping Price. Live rates are not used for the Pickup Points. This field cannot be empty.
+
+**Activate Home Delivery**
+
+Choose Yes to enable the Home Delivery Method and Display it as a shipping method.
+
+**Home Delivery Method Title**
+
+Use the default name of our Home Delivery shipping module or change it to something more suitable for your site.
 
 **Door to Door Method Name**
 
-Change the default name of our shipping module to something more suitable for your site.
+Use the default name of our Home Delivery shipping module or change it to something more suitable for your site.
 
-**Setting the shipping price**
+**Setting the flat rate home delivery shipping price**
 
-Locate the Shipping Price field set your desired price, hit the save config button
+Set the Home Delivery Flat rate price. This price is used when live rates is switched off.
 
 **Set custom display error message**
 
-You can set a custom display error message specific to the Pargo plugin.
-Locate the Displayed Error Message field enter your custom error message, hit the save config button.
-This message normally displays if you the address you are shipping to is outside of the country.
+![](images/customerror.png)
+
+Use the default Displayed Error Message or set to a custom display error message specific to the Pargo plugin.
+This message normally displays if the address fields have not all been completed, or for example, the country has not been set to South Africa. It can also appear when dynamic rates are turned on for home delivery, and the API call to retrieve the rate is taking longer than expected. A recommended default message has been set which covers both scenarios.
+
+**Show Method if Not Applicable**
+
+If set to No, the Pargo Methods will only show if appropriate information has been entered. For dynamic rates it is best to set this to Yes.
 
 **Sort Shipping method position**
 
-You can sort the shipping method position.
+This field can be left blank.
 
-Locate the Sort field enter position rank in numeric form, hit the save config button.
-To make the Pargo Shipping method rank on the top set the order field to 0 and hit the save config button.
+**Save Config**
+
+Make sure you save the configs and clear your Magento Cache for configs to reflect. Start shipping.
 
 **Thank you for using Pargo!**
+

@@ -20,6 +20,7 @@ use Magento\Quote\Model\Quote\Address\RateResult\MethodFactory;
 use Magento\Shipping\Model\Rate\Result;
 use Magento\Shipping\Model\Rate\ResultFactory;
 use Pargo\CustomShipping\Helper\Config as Helper;
+use Pargo\CustomShipping\Logger\Logger;
 
 class Custom extends \Magento\Shipping\Model\Carrier\AbstractCarrier implements
     \Magento\Shipping\Model\Carrier\CarrierInterface
@@ -92,11 +93,12 @@ class Custom extends \Magento\Shipping\Model\Carrier\AbstractCarrier implements
         Helper $helper,
         Curl $curl,
         Session $customerSession,
+        Logger $pargoLogger,
         array $data = []
     ) {
         $this->rateResultFactory = $rateResultFactory;
         $this->rateMethodFactory = $rateMethodFactory;
-        $this->logger = $logger;
+        $this->logger = $pargoLogger;
         $this->helper = $helper;
         $this->curl = $curl;
         $this->customerSession = $customerSession;
@@ -128,30 +130,46 @@ class Custom extends \Magento\Shipping\Model\Carrier\AbstractCarrier implements
         $method->setCarrier($this->getCarrierCode());
         $method->setCarrierTitle($this->getConfigData('title'));
 
+        // Setting up the Pargo Pickup method
         $method->setMethod($this->getCarrierCode());
         $method->setMethodTitle($this->getConfigData('name'));
         $method->setPrice($this->getPrice($request));
         $method->setCost($this->getConfigData('cost'));
 
+        if ($method->getPrice() == 0.00) {
+            $method->setCarrierTitle("Please configure your Pargo shipping method flat rate price");
+        }
+
         $result->append($method);
 
+        // Setting up the Home Delivery method
         if ($this->getConfigData("doortodoor_enabled")) {
             /** @var \Magento\Quote\Model\Quote\Address\RateResult\Method $method */
             $method = $this->rateMethodFactory->create();
             $method->setCarrier($this->getCarrierCode());
-            $method->setCarrierTitle($this->getConfigData('doortodoor_name'));
+            $method->setCarrierTitle($this->getConfigData('doortodoor_title'));
 
             $method->setMethod($this->getCarrierCode() . "_doortodoor");
-            $method->setMethodTitle($this->getConfigData('doortodoor_title'));
+            $method->setMethodTitle($this->getConfigData('doortodoor_name'));
 
-            $price = (float)$this->getDoorToDoorPrice($request);
+            if($this->getConfigData("live_rates_enabled")) {
+                $price = (float)$this->getDoorToDoorPrice($request);
 
-            $method->setPrice($price);
-            $method->setCost($price); //@todo discuss cost
+                $method->setPrice($price);
+                $method->setCost($price); //@todo discuss cost
 
-            if ($price == 0.00) {
-                $method->setPrice($this->getPrice($request));
-                $method->setCarrierTitle($this->getConfigData('doortodoor_name'). " Suburb & Postal Code required for an accurate estimate");
+                if ($price == 0.00) {
+                    //Fall back if no price is retrieved from the API
+                    $method->setPrice($this->getDoorToDoorFlatPrice($request));
+                    $method->setMethodTitle($this->getConfigData('doortodoor_name') . ". Suburb, City & Postal Code required for an accurate estimate");
+                }
+            } else {
+                $method->setPrice($this->getDoorToDoorFlatPrice($request));
+                $method->setMethodTitle($this->getConfigData('doortodoor_name') . ". Flat rates in use.");
+            }
+
+            if ($method->getPrice() == 0.00) {
+                $method->setMethodTitle("Please configure your door to door shipping method correctly");
             }
 
             $result->append($method);
@@ -180,7 +198,7 @@ class Custom extends \Magento\Shipping\Model\Carrier\AbstractCarrier implements
     }
 
     /**
-     * Get Price
+     * Get Flat Rate Price
      *
      * @param RateRequest $request
      * @return false|string
@@ -188,21 +206,21 @@ class Custom extends \Magento\Shipping\Model\Carrier\AbstractCarrier implements
     protected function getPrice(RateRequest $request)
     {
         $price = $this->getConfigData('price');
-        $priceMatrix = $this->helper->getPriceMatrix($request->getStoreId());
-
-        if ($priceMatrix) {
-            $subtotal = $request->getBaseSubtotalInclTax();
-
-            foreach ($priceMatrix as $condition) {
-                if ($condition['from'] <= $subtotal and $condition['to'] >= $subtotal) {
-
-                    return $condition['price'];
-                }
-            }
-        }
-
         return $price;
     }
+
+    /**
+     * Get Door to Door Flat Rate Price
+     *
+     * @param RateRequest $request
+     * @return false|string
+     */
+    protected function getDoorToDoorFlatPrice(RateRequest $request)
+    {
+        $price = $this->getConfigData('doortodoor_price');
+        return $price;
+    }
+
 
     protected function getDoorToDoorPrice(RateRequest $request)
     {
@@ -247,7 +265,8 @@ class Custom extends \Magento\Shipping\Model\Carrier\AbstractCarrier implements
         }
 
         $parcels = $this->getParcels($request);
-
+        // Enforcing the return of a single parcel for now in line with order sent.
+        $parcels =array($parcels[0]);
         $data = [
             'data' => [
                 'type' => 'W2D',
@@ -271,7 +290,8 @@ class Custom extends \Magento\Shipping\Model\Carrier\AbstractCarrier implements
                     'totalParcels' => count($parcels),
                     'parcels' => $parcels
                 ]
-            ]
+            ],
+            'source' => 'magento'
         ];
 
         $url = $this->helper->getUrl();
@@ -306,7 +326,6 @@ class Custom extends \Magento\Shipping\Model\Carrier\AbstractCarrier implements
         } else {
             $this->logger->info('Pargo: Quotation retrieved successfully for door to door');
             $response = json_decode($response);
-
             if (isset($response->data)) {
                 return $response->data->attributes->quotation->price;
             } else {
@@ -381,12 +400,19 @@ class Custom extends \Magento\Shipping\Model\Carrier\AbstractCarrier implements
 
         if ($err) {
             $this->logger->error('Pargo: Failed to authenticate API');
+            $this->logger->error(print_r($err, true));
             return false;
         } else {
-            $this->logger->info('Pargo: API Authentication successful');
             $response = json_decode($response);
 
-            return $response->access_token;
+            if (!empty($response->access_token)) {
+                $this->logger->info('Pargo: API Authentication successful');
+                return $response->access_token;
+            } else {
+                $this->logger->error('Pargo: Failed to authenticate API');
+
+                return false;
+            }
         }
     }
 

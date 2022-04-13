@@ -165,7 +165,7 @@ class Config extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getUrl($storeId = 0)
     {
-        if ($this->scopeConfig->getValue('carriers/pargo_customshipping/live') == 1) {
+        if ($this->scopeConfig->getValue('carriers/pargo_customshipping/live_enabled') == 1) {
             return $this->scopeConfig->getValue(
                 'carriers/pargo_customshipping/live_url',
                 ScopeInterface::SCOPE_STORE,
@@ -208,24 +208,4 @@ class Config extends \Magento\Framework\App\Helper\AbstractHelper
         );
     }
 
-    /**
-     * Retrieve Price Matrix
-     *
-     * @param int $storeId
-     * @return bool|mixed
-     */
-    public function getPriceMatrix($storeId = 0)
-    {
-        $priceMatrix = $this->scopeConfig->getValue(
-            'carriers/pargo_customshipping/price_matrix',
-            ScopeInterface::SCOPE_STORE,
-            $storeId
-        );
-
-        if ($priceMatrix) {
-            return json_decode($priceMatrix, true);
-        }
-
-        return false;
-    }
 }

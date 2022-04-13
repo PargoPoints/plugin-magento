@@ -21,108 +21,99 @@
 
                 <field id="active" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1"
                        showInStore="1">
-                    <label>Enabled</label>
+                    <label>Module Enabled</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
 
-                <field id="mapToken" translate="label" type="text" sortOrder="31" showInDefault="1" showInWebsite="1"
+                <field id="live_enabled" translate="label" type="select" sortOrder="20" showInDefault="1"
+                       showInWebsite="1" showInStore="1">
+                    <label>Use Pargo Production Site</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Set to Yes when testing is done. Default: No.</comment>
+                </field>
+
+                <field id="mapToken" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1"
                        showInStore="1">
                     <label>Map Token</label>
                 </field>
 
-
-                <field id="live_enabled" translate="label" type="select" sortOrder="32" showInDefault="1"
-                       showInWebsite="1" showInStore="1">
-                    <label>Live</label>
-                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                    <comment>Set to live when testing is done. Default: No.</comment>
-                </field>
-
-                <field id="username" translate="label" type="text" sortOrder="33" showInDefault="1" showInWebsite="1"
+                <field id="username" translate="label" type="text" sortOrder="40" showInDefault="1" showInWebsite="1"
                        showInStore="1">
                     <label>API Username</label>
                 </field>
 
-                <field id="password" translate="label" type="text" sortOrder="34" showInDefault="1" showInWebsite="1"
+                <field id="password" translate="label" type="text" sortOrder="50" showInDefault="1" showInWebsite="1"
                        showInStore="1">
                     <label>API Password</label>
                 </field>
 
-
-                <field id="hide_enabled" translate="label" type="select" sortOrder="50" showInDefault="1"
+                <field id="live_rates_enabled" translate="label" type="select" sortOrder="55" showInDefault="1"
                        showInWebsite="1" showInStore="1">
-                    <label>Hide Other Shipping Methods</label>
+                    <label>Use Pargo Live Api Rates</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                    <comment>Hide other shipping methods in the frontend when "Pargo Shipping Method" is available.
-                        Default: No.
-                    </comment>
+                    <comment>Yes, to make Pargo Api calls for live rates. No to use Flat Rates. Applies to all methods.</comment>
                 </field>
 
-                <field id="hide_carriers" translate="label" type="multiselect" sortOrder="51" showInDefault="1"
+                <field id="invoice_link_enabled" translate="label" type="select" sortOrder="57" showInDefault="1"
                        showInWebsite="1" showInStore="1">
-                    <label>Hide</label>
-                    <source_model>Pargo\CustomShipping\Model\Adminhtml\Shipping\Config\Source\Allmethods</source_model>
-                    <comment>Select one or multiple shipping methods which you would like to hide in the frontend.
-                        Default: No selection
-                    </comment>
-                    <depends>
-                        <field id="hide_enabled">1</field>
-                    </depends>
+                    <label>Send directly to Pargo</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Yes, to send shipping booking directly to Pargo. No, to allow other modules to use Pargo data to send bookings.</comment>
                 </field>
 
                 <field id="title" translate="label" type="text" sortOrder="60" showInDefault="1" showInWebsite="1"
                        showInStore="1">
-                    <label>Method Title</label>
+                    <label>Pickup Point Method Title</label>
                 </field>
 
-                <field id="name" translate="label" type="text" sortOrder="70" showInDefault="1" showInWebsite="1"
+                <field id="name" translate="label" type="text" sortOrder="65" showInDefault="1" showInWebsite="1"
                        showInStore="1">
-                    <label>Method Name</label>
+                    <label>Pickup Point Method Name</label>
                 </field>
 
-                <field id="doortodoor_enabled" translate="label" type="select" sortOrder="71" showInDefault="1"
-                       showInWebsite="1" showInStore="1">
-                    <label>Door to Door</label>
-                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                    <comment>Set to yes to enable door to door shipping method. Default: No.</comment>
-                </field>
-
-                <field id="doortodoor_title" translate="label" type="text" sortOrder="72" showInDefault="1" showInWebsite="1"
-                       showInStore="1">
-                    <label>Door to Door Method Title</label>
-                </field>
-
-                <field id="doortodoor_name" translate="label" type="text" sortOrder="73" showInDefault="1" showInWebsite="1"
-                       showInStore="1">
-                    <label>Door to Door Method Name</label>
-                </field>
-
-
-                <field id="price" translate="label" type="text" sortOrder="80" showInDefault="1" showInWebsite="1"
+                <field id="price" translate="label" type="text" sortOrder="70" showInDefault="1" showInWebsite="1"
                        showInStore="0">
-                    <label>Shipping Price</label>
-                    <validate>validate-number validate-zero-or-greater</validate>
+                    <label>Pickup Point Flat Rate Shipping Price</label>
+                    <comment>Flat rates are required, even when using live rates, due to their being used as a fallback when the API is unavailable.</comment>
+                    <validate>validate-no-empty validate-number validate-zero-or-greater</validate>
                 </field>
 
+                <field id="doortodoor_enabled" translate="label" type="select" sortOrder="75" showInDefault="1"
+                       showInWebsite="1" showInStore="1">
+                    <label>Activate Home Delivery</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Set to yes to enable the home delivery shipping method. Default: No.</comment>
+                </field>
 
-                <field id="specificerrmsg" translate="label" type="textarea" sortOrder="90" showInDefault="1"
+                <field id="doortodoor_title" translate="label" type="text" sortOrder="80" showInDefault="1" showInWebsite="1"
+                       showInStore="1">
+                    <label>Home Delivery Method Title</label>
+                </field>
+
+                <field id="doortodoor_name" translate="label" type="text" sortOrder="85" showInDefault="1" showInWebsite="1"
+                       showInStore="1">
+                    <label>Home Delivery Method Name</label>
+                </field>
+
+                <field id="doortodoor_price" translate="label" type="text" sortOrder="90" showInDefault="1" showInWebsite="1"
+                       showInStore="0">
+                    <label>Home Delivery Flat Rate Shipping Price</label>
+                    <comment>Flat rates are required, even when using live rates, due to their being used as a fallback when the API is unavailable.</comment>
+                    <validate>validate-no-empty validate-number validate-zero-or-greater</validate>
+                </field>
+
+                <field id="specificerrmsg" translate="label" type="textarea" sortOrder="95" showInDefault="1"
                        showInWebsite="1" showInStore="1">
                     <label>Displayed Error Message</label>
                 </field>
 
-                <field id="price_matrix" translate="label" sortOrder="115" showInDefault="1" showInWebsite="1" showInStore="0">
-                    <label>Shipping Price Matrix</label>
-                    <frontend_model>Pargo\CustomShipping\Block\Adminhtml\System\Config\Field\PriceMatrix</frontend_model>
-                    <backend_model>Magento\Config\Model\Config\Backend\Serialized\ArraySerialized</backend_model>
-                </field>
-
-                <field id="showmethod" translate="label" type="select" sortOrder="120" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="showmethod" translate="label" type="select" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Show Method if Not Applicable</label>
                     <frontend_class>shipping-skip-hide</frontend_class>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
 
-                <field id="sort_order" translate="label" type="text" sortOrder="130" showInDefault="1" showInWebsite="1" showInStore="0">
+                <field id="sort_order" translate="label" type="text" sortOrder="110" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Sort Order</label>
                 </field>
 

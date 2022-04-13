@@ -12,6 +12,6 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
     <menu>
-        <add id="Pargo_CustomShipping::pargo_shipping" title="Pargo" module="Pargo_CustomShipping" sortOrder="1" resource="Pargo_CustomShipping::pargo_shipping" action="admin/system_config/edit/section/carriers" />
+        <add id="Pargo_CustomShipping::pargo_shipping" title="Pargo" module="Pargo_CustomShipping" sortOrder="15" resource="Pargo_CustomShipping::pargo_shipping" action="admin/system_config/edit/section/carriers" />
     </menu>
 </config>

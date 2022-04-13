@@ -20,7 +20,9 @@ use Magento\Sales\Model\Order\Shipment\TrackFactory;
 use Magento\Sales\Model\Order\Shipment;
 use Magento\Sales\Model\Order\Invoice;
 use Magento\Sales\Model\Order;
+use Pargo\CustomShipping\Helper\Config as Helper;
 use \Psr\Log\LoggerInterface;
+use Pargo\CustomShipping\Logger\Logger;
 
 class ProcessShipment implements ObserverInterface
 {
@@ -62,6 +64,7 @@ class ProcessShipment implements ObserverInterface
      * @param Curl $curl
      * @param TrackFactory $track
      * @param LoggerInterface $logger
+     * @param Logger $pargoLogger
      */
     public function __construct(
         ObjectManagerInterface $objectmanager,
@@ -69,15 +72,15 @@ class ProcessShipment implements ObserverInterface
         Config $helper,
         Curl $curl,
         TrackFactory $track,
-        LoggerInterface $logger
+        LoggerInterface $logger,
+        Logger $pargoLogger
     ) {
         $this->objectManager = $objectmanager;
         $this->orderRepository = $orderRepository;
         $this->helper = $helper;
         $this->curl = $curl;
         $this->track = $track;
-        $this->logger = $logger;
-
+        $this->logger = $pargoLogger;
     }
 
     /**
@@ -88,41 +91,48 @@ class ProcessShipment implements ObserverInterface
     public function execute(\Magento\Framework\Event\Observer $observer)
     {
         $this->logger->info('Pargo: Execute Shipment');
-
         $invoice = $observer->getEvent()->getInvoice();
         $order = $invoice->getOrder();
 
-        if (!in_array($order->getShippingMethod(), ['pargo_customshipping_pargo_customshipping', 'pargo_customshipping_pargo_customshipping_doortodoor'])) {
-            $this->logger->info('Pargo: Shipping method mismatch');
-            $this->logger->info('Pargo: Shipping method set is ' . $order->getShippingMethod());
-            return;
-        }
+        // Only use if send directly to Pargo is yes.
+        if($this->helper->getConfig('invoice_link_enabled'))
+        {
+            if (!in_array($order->getShippingMethod(), ['pargo_customshipping_pargo_customshipping', 'pargo_customshipping_pargo_customshipping_doortodoor'])) {
+                $this->logger->info('Pargo: Shipping method mismatch');
+                $this->logger->info('Pargo: Shipping method set is ' . $order->getShippingMethod());
+                return;
+            }
 
-        $this->logger->info('Pargo: Shipping method matched successfully');
+            $this->logger->info('Pargo: Shipping method matched successfully');
 
-        $shippingAddress = $invoice->getShippingAddress()->getData();
-        $billingAddress = $invoice->getBillingAddress()->getData();
-        // Fix start
-        // we need to account for multiple dashes in the address and take the last item in array as this is the pup code
-        // the fact that some pups have dashes in their names has brought out this code limitation.
-        // remove
-        // $pickUpPointCode = explode('-', $shippingAddress['company'])[1];
-        // add
-        $addressDetails = explode('-', $shippingAddress['company']);
+            $shippingAddress = $invoice->getShippingAddress()->getData();
+            $billingAddress = $invoice->getBillingAddress()->getData();
+            // Fix start
+            // we need to account for multiple dashes in the address and take the last item in array as this is the pup code
+            // the fact that some pups have dashes in their names has brought out this code limitation.
+            // remove
+            // $pickUpPointCode = explode('-', $shippingAddress['company'])[1];
+            // add
+            $addressDetails = explode('-', $shippingAddress['company']);
 
-        $this->logger->info('Pargo: Shipping Address Details' . $shippingAddress['company']);
+            $this->logger->info('Pargo: Shipping Address Details' . $shippingAddress['company']);
 
-        if ($order->getShippingMethod() == 'pargo_customshipping_pargo_customshipping_doortodoor') {
-            $this->submitShipmentDoorToDoor($order, $shippingAddress);
+            if ($order->getShippingMethod() == 'pargo_customshipping_pargo_customshipping_doortodoor') {
+                $this->submitShipmentDoorToDoor($order, $shippingAddress);
+            } else {
+                $size = sizeof($addressDetails);
+                $pickUpPointCode = $addressDetails[$size - 1];
+
+                $this->logger->info('Pargo: Pickup Point Reference: ' . $pickUpPointCode);
+                $this->logger->info('Pargo: Submit Shipping');
+
+                $this->submitShipment($order, $billingAddress, $pickUpPointCode);
+            }
         } else {
-            $size = sizeof($addressDetails);
-            $pickUpPointCode = $addressDetails[$size - 1];
-
-            $this->logger->info('Pargo: Pickup Point Reference: ' . $pickUpPointCode);
-            $this->logger->info('Pargo: Submit Shipping');
-
-            $this->submitShipment($order, $billingAddress, $pickUpPointCode);
+            $orderIncrementId = $order->getIncrementId();
+            $this->logger->info('Order ' . $orderIncrementId . ' not submitted awaiting third party module');
         }
+
     }
 
     /**
@@ -149,7 +159,8 @@ class ProcessShipment implements ObserverInterface
         }
 
         $items = $order->getAllItems();
-        $parcels = [];
+        // This parcel information has been removed. However might be used in later versions, hence left in.
+        /*$parcels = [];
 
         foreach ($items as $id => $item) {
             $iCount = 0;
@@ -168,12 +179,20 @@ class ProcessShipment implements ObserverInterface
                 $iCount++;
             }
         }
+        */
 
         $streetParts = explode("\n",  $shippingAddress["street"]);
 
         $destSuburb = "";
-        if (count($streetParts) > 1) {
+   /*     if (count($streetParts) > 1) {
             $shippingAddress["suburb"] = $streetParts[count($streetParts)-1];
+        }*/
+        if (count($streetParts) == 2){
+            $shippingAddress["address2"] = "";
+            $shippingAddress["suburb"] = $streetParts[1];
+        } else {
+            $shippingAddress["address2"] = $streetParts[1];
+            $shippingAddress["suburb"] = $streetParts[2];
         }
 
         $data = [
@@ -189,18 +208,16 @@ class ProcessShipment implements ObserverInterface
                             $shippingAddress['telephone']
                         ],
                         "address1" => $shippingAddress["street"],
-                        "address2" => "",
+                        "address2" => $shippingAddress["address2"],
                         "province" => $shippingAddress["region"],
                         "suburb" =>  $shippingAddress["suburb"], /**@todo dicuss this**/
                         "postalCode" => $shippingAddress["postcode"],
                         "city" => $shippingAddress["city"],
                         "country" => "ZA"
-                    ],
-
-                   'totalParcels' => count($parcels),
-                   'parcels' => $parcels
+                    ]
                 ]
-            ]
+            ],
+            'source' => 'magento'
         ];
 
         $url = $this->helper->getUrl();
@@ -291,7 +308,8 @@ class ProcessShipment implements ObserverInterface
                         ]
                     ]
                 ]
-            ]
+            ],
+            'source' => 'magento'
         ];
         $url = $this->helper->getUrl();
         $curl = curl_init();
@@ -380,7 +398,13 @@ class ProcessShipment implements ObserverInterface
             $this->logger->info('Pargo: API Authentication successful');
             $response = json_decode($response);
 
-            return $response->access_token;
+            if (!empty($response->access_token)) {
+                $this->logger->info('Pargo: API Authentication successful');
+                return $response->access_token;
+            } else {
+                $this->logger->error('Pargo: Failed to authenticate API');
+                return false;
+            }
         }
     }
 
