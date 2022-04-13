@@ -69,7 +69,7 @@ If you have successfully installed the Pargo plugin you will see our icon once y
 
 Clicking on the icon will take you to the shipping settings where the Pargo Shipping Method will be visible.
 
-![](images/config.png)
+![](images/shippingmethod1.png)
 
 The following steps will get you up and running quickly
 
@@ -79,9 +79,13 @@ Enable the module in Magento by selecting Yes from the Module Enabled drop down.
 
 **Use Pargo Production Site**
 
+![](images/useproduction.png)
+
 By default this is set to No so you can test in staging, if you are on a production site please set this to Yes.
 
 **Maptoken**
+
+![](images/maptoken.png)
 
 Your business will receive an authentication map token to enable your iFrame to show your pickup points. Enter this map token in the field shown.
 If you would like to start in staging, make sure you are using a staging map token. This token can be used for staging testing: ​​QbafKcMXhXHUFruJFbxRFL80BNjAl95EsJt4Xw4qs78X6eMv
@@ -89,26 +93,34 @@ When you are ready to move to production, ensure you use a production map token 
 
 **API credentials**
 
+![](images/apicredentials.png)
+
 The API username (an email address) and password can be obtained from Pargo.
 Make sure you are using staging credentials when testing in staging, and production credentials when you are ready to start shipping on your live site.
 
 
 **Choose if you want to use live or static rates**
 
+![](images/useliverates.png)
+
 Selecting Yes to use the live api rates will do an api lookup to get the Home Delivery rates that Pargo charges for different regions, for under 5kg weights. This allows you to pass the benefit of region based costing onto your customers. 
 
 When used in conjunction with the Pargo Pickup Point Shipping Method, it can help lower your logistics costs, by encouraging regional Pickup Point Selection at checkout
 
-![](images/invoicefire.png)
 
 **Send directly to Pargo**
+
+![](images/invoicefire.png)
 
 Set to “Yes” for order collections to be created automatically with Pargo when the customer is invoiced. These will show up on your MyPargo portal for further actioning (including collection readiness confirmation).
 Set to “No” to disable automatic order creation if you would like to develop custom triggers. 
 
 The Pargo module can be used to collect data which is then used by a third party module to book the collections and make the deliveries. More information in the Pargo Privacy Policy. If this is not the intention of use the selection needs to be No.
 
-![](images/shipping.png)
+
+**Shipping methods configurations**
+
+![](images/configs.png)
 
 **Pickup Point Method Title**
 
@@ -138,9 +150,9 @@ Use the default name of our Home Delivery shipping module or change it to someth
 
 Set the Home Delivery Flat rate price. This price is used when live rates is switched off.
 
-![](images/sort.png)
-
 **Set custom display error message**
+
+![](images/customerror.png)
 
 Use the default Displayed Error Message or set to a custom display error message specific to the Pargo plugin.
 This message normally displays if the address fields have not all been completed, or for example, the country has not been set to South Africa. It can also appear when dynamic rates are turned on for home delivery, and the API call to retrieve the rate is taking longer than expected. A recommended default message has been set which covers both scenarios.
@@ -153,7 +165,8 @@ If set to No, the Pargo Methods will only show if appropriate information has be
 
 This field can be left blank.
 
-Save Config
+**Save Config**
+
 Make sure you save the configs and clear your Magento Cache for configs to reflect. Start shipping.
 
 **Thank you for using Pargo!**
