@@ -5,18 +5,18 @@ Document Last Update Date: 08-04-2022
 
 Compatibility: 
 
-Designed for Magento 2.4 
-Tested up to 2.4.3
-Backward compatibility tested up to Magento 2.3.7-p1
-PayPal integration tested
-General Information
-Before using the Pargo Shipping Method you need to contact Pargo to create a user account. This is needed to get your unique map token and authorization code from Pargo. This allows your customers and yourself to use the Pargo service.
-
-If starting off in staging, request staging authorization credentials from Pargo. When moving over to production, request production credentials from Pargo.
+- Designed for Magento 2.4 
+- Tested up to 2.4.3
+- Backward compatibility tested up to Magento 2.3.7-p1
+- PayPal integration tested
 
 # General Information
 
-Before using the Pargo Shipping Method you need to contact Pargo to retrieve your unique map token and authorization code. This allows your customers and yourself to use the Pargo service.
+Before using the Pargo Shipping Method you need to contact Pargo to create a user account. 
+
+This is needed to get your unique map token and authorization code from Pargo. This allows your customers and yourself to use the Pargo service.
+
+If starting off in staging, request staging authorization credentials from Pargo. When moving over to production, request production credentials from Pargo.
 
 **Pargo contact information:**
 
