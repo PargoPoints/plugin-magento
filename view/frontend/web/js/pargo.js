@@ -524,10 +524,10 @@ require([
 
   function pargoDefaultDisplay() {
     var btnText = "Select a Pargo Point";
-    var btnTextColor = "#ffffff";
-    var btnTextHoverColor = "#000000";
-    var btnColor = "#3475B7";
-    var btnHoverColor = "#3475B7";
+    var btnTextColor = "#000";
+    var btnTextHoverColor = "#fff";
+    var btnColor = "#fff200";
+    var btnHoverColor = "#000";
     $(".pargo-store-info").remove();
     $(".pargo-btn").show();
 
@@ -647,10 +647,10 @@ require([
         });
     } else {
       var btnText = "Select a Pargo Point";
-      var btnTextColor = "#ffffff";
-      var btnTextHoverColor = "#000000";
-      var btnColor = "#3475B7";
-      var btnHoverColor = "#3475B7";
+      var btnTextColor = "#000";
+      var btnTextHoverColor = "#fff";
+      var btnColor = "#fff200";
+      var btnHoverColor = "#000";
 
       $(".form-shipping-address").hide();
       $(".pargo-store-info").remove();
