@@ -51,7 +51,7 @@
                        showInWebsite="1" showInStore="1">
                     <label>Use Pargo Live Api Rates</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                    <comment>Yes, to make Pargo Api calls for live rates. No to use Flat Rates. Applies to all methods.</comment>
+                    <comment>Yes, to make Pargo Api calls for live rates. No to use Flat Rates. Live quotations are available for Home Delivery.</comment>
                 </field>
 
                 <field id="invoice_link_enabled" translate="label" type="select" sortOrder="57" showInDefault="1"
