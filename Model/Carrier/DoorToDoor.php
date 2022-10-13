@@ -142,17 +142,18 @@ class DoorToDoor extends \Magento\Shipping\Model\Carrier\AbstractCarrier impleme
             $method->setMethodTitle($this->getConfigData('doortodoor_name'));
 
             if ($this->getConfigData("doortodoor_enable_free_shipping") == "1") {
-                $freeThreshold = (float)$this->getConfigData("doortodoor_free-shipping_threshold");
+                $freeThreshold = (float)$this->getConfigData("doortodoor_free_shipping_threshold");
                 $cartSubtotal = $this->cart->getQuote()->getSubtotal();
-                $this->logger->info('steve ' . $cartSubtotal);
 
-                if ($cartSubtotal < $freeThreshold) {
+                if ($cartSubtotal > $freeThreshold) {
+
                     $price = 0.00;
                     $method->setPrice($price);
                     $method->setCost($price);
                     $method->setMethodTitle($this->getConfigData('doortodoor_name') . ". You have qualified for Free Shipping");
 
-                } else {
+
+            }else {
 
                     if ($this->getConfigData("live_rates_enabled")) {
                         $price = (float)$this->getDoorToDoorPrice($request);
@@ -174,7 +175,7 @@ class DoorToDoor extends \Magento\Shipping\Model\Carrier\AbstractCarrier impleme
                         $method->setMethodTitle("Please configure your door to door shipping method correctly");
                     }
                 }
-            }
+        }
             $result->append($method);
         }
 
@@ -390,7 +391,6 @@ class DoorToDoor extends \Magento\Shipping\Model\Carrier\AbstractCarrier impleme
         $err = curl_error($curl);
 
         curl_close($curl);
-        $this->logger->info('Pargo Door to Door: deets' . " " . $url . " " . $username . " " . $password);
 
         if ($err) {
             $this->logger->error('Pargo Door to Door: Failed to authenticate API' . $err);

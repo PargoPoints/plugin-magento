@@ -144,10 +144,10 @@ class Custom extends \Magento\Shipping\Model\Carrier\AbstractCarrier implements
         $method->setMethodTitle($this->getConfigData('name'));
 
         if ($this->getConfigData("enable_free_shipping") == "1") {
-            $freeThreshold = (float)$this->getConfigData("free-shipping_threshold");
+            $freeThreshold = (float)$this->getConfigData("free_shipping_threshold");
             $cartSubtotal = $this->cart->getQuote()->getSubtotal();
 
-            if ($cartSubtotal < $freeThreshold) {
+            if ($cartSubtotal > $freeThreshold) {
                 $price = 0.00;
                 $method->setPrice($price);
                 $method->setCost($price);
