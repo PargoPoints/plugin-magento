@@ -143,7 +143,7 @@ class Custom extends \Magento\Shipping\Model\Carrier\AbstractCarrier implements
         $method->setMethod($this->getCarrierCode());
         $method->setMethodTitle($this->getConfigData('name'));
 
-        if ($this->getConfigData("enable_free_shipping" == 1)) {
+        if ($this->getConfigData("enable_free_shipping") == "1") {
             $freeThreshold = (float)$this->getConfigData("free-shipping_threshold");
             $cartSubtotal = $this->cart->getQuote()->getSubtotal();
 

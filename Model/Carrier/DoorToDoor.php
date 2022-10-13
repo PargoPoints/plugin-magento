@@ -141,7 +141,7 @@ class DoorToDoor extends \Magento\Shipping\Model\Carrier\AbstractCarrier impleme
             $method->setMethod($this->getCarrierCode());// . "_doortodoor");
             $method->setMethodTitle($this->getConfigData('doortodoor_name'));
 
-            if ($this->getConfigData("doortodoor_enable_free_shipping" == 1)) {
+            if ($this->getConfigData("doortodoor_enable_free_shipping") == "1") {
                 $freeThreshold = (float)$this->getConfigData("doortodoor_free-shipping_threshold");
                 $cartSubtotal = $this->cart->getQuote()->getSubtotal();
                 $this->logger->info('steve ' . $cartSubtotal);
