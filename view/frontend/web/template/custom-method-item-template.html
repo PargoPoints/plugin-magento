@@ -26,28 +26,26 @@
     <td class="col col-price">
         <each args="element.getRegion('price')" render=""/>
     </td>
-    <td class="col col-method"
-        attr="'id': 'label_method_' + method.method_code + '_' + method.carrier_code"
-        text="method.method_title"/>
+    <td class="col col-method" attr="'id': 'label_method_' + method.method_code + '_' + method.carrier_code" text="method.method_title">
+
+    </td>
 
     <!-- ko ifnot: method.method_code === "pargo_customshipping" -->
-    <td class="col col-carrier"
-        attr="'id': 'label_carrier_' + method.method_code + '_' + method.carrier_code"
-        text="method.carrier_title">
+    <td class="col col-carrier" attr="'id': 'label_carrier_' + method.method_code + '_' + method.carrier_code" text="method.carrier_title">
 
     </td>
     <!-- /ko -->
 
     <!-- ko if: method.method_code === "pargo_customshipping" -->
     <td colspan="2" class="col col-carrier" attr="'id': 'label_carrier_' + method.method_code + '_' + method.carrier_code">
-        <p><span data-bind="text: method.carrier_title"></span><label class="pargo-small" for="modal-trigger-center" > [ what is Pargo? ]</label></p>
+        <p><span data-bind="text: method.carrier_title"></span><label class="pargo-small" for="modal-trigger-center"> [what is Pargo? ]</label></p>
         <label for="modal-trigger" class="pargo-btn">Select pick up point</label>
         <div style="display:none;" id="pargo-point">
             <strong id="store-name"></strong>
             <p id="store-address"></p>
         </div>
     </td>
-   <!-- /ko -->
+    <!-- /ko -->
 
     <!-- Column with collapsible trigger  -->
 
@@ -63,16 +61,14 @@
     </td>
 
 </tr>-->
-<tr class="row row-error"
-    if="method.error_message">
+<tr class="row row-error" if="method.error_message">
     <td class="col col-error" colspan="5">
         <div role="alert" class="message error">
             <div text="method.error_message"></div>
         </div>
         <span class="no-display">
-                <input type="radio"
-                       attr="'value' : method.method_code, 'id': 's_method_' + method.method_code"/>
-            </span>
+                <input type="radio" attr="'value' : method.method_code, 'id': 's_method_' + method.method_code" />
+        </span>
     </td>
 </tr>
 </tbody>

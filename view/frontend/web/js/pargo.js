@@ -562,10 +562,10 @@ require([
     }
 
     var btnText = "Change Pargo Point";
-    var btnTextColor = "#000000";
-    var btnTextHoverColor = "#ffffff";
-    var btnColor = "#FEF051";
-    var btnHoverColor = "#3475B7";
+    var btnTextColor = "#000";
+    var btnTextHoverColor = "#fff";
+    var btnColor = "#fff200";
+    var btnHoverColor = "#000";
     $(".form-shipping-address").hide();
     $(".pargo-btn").show();
     $(".pargo-btn").text(btnText);
@@ -607,10 +607,10 @@ require([
   function renderPargo() {
     if (localStorage.getItem("pargoPoint")) {
       var btnText = "Change Pargo Point";
-      var btnTextColor = "#000000";
-      var btnTextHoverColor = "#ffffff";
-      var btnColor = "#FEF051";
-      var btnHoverColor = "#3475B7";
+      var btnTextColor = "#000";
+      var btnTextHoverColor = "#fff";
+      var btnColor = "#fff200";
+      var btnHoverColor = "#000";
       $(".form-shipping-address").hide();
       $(".pargo-btn").show();
       $(".pargo-store-info").remove();

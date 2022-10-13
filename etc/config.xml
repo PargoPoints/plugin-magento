@@ -23,29 +23,41 @@
                 <customer>0</customer>
                 <title>Pargo Shipping</title>
                 <name>Not at home? Collect from a local shop when it suits you best</name>
-                <doortodoor_enabled>0</doortodoor_enabled>
-                <doortodoor_title>Pargo - Home Delivery</doortodoor_title>
-                <doortodoor_name>Door delivery when it suits you</doortodoor_name>
                 <scheduler_enabled>0</scheduler_enabled>
                 <frequency>mon,tue,wed,thu,fri,sat,sun</frequency>
                 <date_start></date_start>
                 <date_end></date_end>
                 <live_enabled>0</live_enabled>
                 <hide_enabled>0</hide_enabled>
-                <live_rates_enabled>1</live_rates_enabled>
                 <hide_carriers></hide_carriers>
                 <live_url>https://api.live.pargo.co.za</live_url>
                 <staging_url>https://api.staging.pargo.co.za</staging_url>
                 <live_map_url>https://map.pargo.co.za</live_map_url>
                 <staging_map_url>https://map.staging.pargo.co.za</staging_map_url>
                 <price>0.00</price>
-                <doortodoor_price>0.00</doortodoor_price>
                 <cost>0.00</cost>
+                <enableFreeShipping>0</enableFreeShipping>
+                <freeShipppingThreshold>0.00</freeShipppingThreshold>
                 <mapToken>wuEmCfJ1AKdWHuVJHR71cYobnXPSMz</mapToken>
                 <sallowspecific>1</sallowspecific>
                 <specificcountry>ZA</specificcountry>
                 <specificerrmsg>This shipping method is not available. To use this shipping method, please contact us.</specificerrmsg>
             </pargo_customshipping>
+            <pargo_customshipping_doortodoor>
+                <model>Pargo\CustomShipping\Model\Carrier\DoorToDoor</model>
+                <active>0</active>
+                <doortodoor_enabled>0</doortodoor_enabled>
+                <doortodoor_title>Pargo - Home Delivery</doortodoor_title>
+                <doortodoor_name>Door delivery when it suits you</doortodoor_name>
+                <live_rates_enabled>1</live_rates_enabled>
+                <doortodoor_price>0.00</doortodoor_price>
+                <doortodoor_enable_free_shipping>0</doortodoor_enable_free_shipping>
+                <doortodoor_free-shipping_threshold>0.00</doortodoor_free-shipping_threshold>
+                <sallowspecific>1</sallowspecific>
+                <specificcountry>ZA</specificcountry>
+                <specificerrmsg>This shipping method is not available. To use this shipping method, please contact us.</specificerrmsg>
+            </pargo_customshipping_doortodoor>
+
         </carriers>
     </default>
 </config>

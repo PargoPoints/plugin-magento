@@ -126,8 +126,8 @@ class PargoData extends \Magento\Framework\View\Element\Template
      */
     public function getMapScript()
     {
-        $returnString = $this->secureRenderer->renderTag('script', ['src' => $this->getMapUrl() . 'assets/pargo-map.full.min.js?v=fe9a11fa']);
-        $returnString .= $this->secureRenderer->renderTag('script', ['src' => $this->getMapUrl() . 'assets/app.js?v=fe9a11fa']);
+        $returnString = $this->secureRenderer->renderTag('script', ['src' => $this->getMapUrl() . '/assets/pargo-map.full.min.js?v=fe9a11fa']);
+        $returnString .= $this->secureRenderer->renderTag('script', ['src' => $this->getMapUrl() . '/assets/app.js?v=fe9a11fa']);
 
         return $returnString;
     }
