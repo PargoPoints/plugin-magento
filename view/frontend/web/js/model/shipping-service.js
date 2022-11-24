@@ -20,7 +20,7 @@ define(
 
             setTimeout(function() {
                 console.log('running');
-                jQuery(':input[name="postcode"], :input[name="city"], :input[name="street[1]"]').blur(function (event) {
+                jQuery(':input[name="postcode"], :input[name="city"], :input[name="street[1]"]').on('blur', function (event) {
                     requirejs([
                         'Magento_Checkout/js/model/quote',
                         'Magento_Checkout/js/model/shipping-rate-registry'
