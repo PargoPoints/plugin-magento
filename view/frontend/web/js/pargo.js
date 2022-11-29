@@ -85,7 +85,7 @@ require([
   })(this);
 
   ready(".opc-progress-bar", function () {
-    $(".opc-progress-bar").click(function () {
+    $(".opc-progress-bar").on('click', function () {
       if (
         $("input[value='pargo_customshipping_pargo_customshipping']").prop(
           "checked"
@@ -100,7 +100,7 @@ require([
   });
 
   ready(".action-edit", function () {
-    $(".action-edit").click(function () {
+    $(".action-edit").on('click', function () {
       if (
         $("input[value='pargo_customshipping_pargo_customshipping']").prop(
           "checked"
@@ -117,7 +117,7 @@ require([
   ready(".checkout", function () {
     console.log("Pargo: checkout ready");
 
-    $(".checkout").click(function () {
+    $(".checkout").on('click', function () {
       console.log("Pargo: checkout clicked");
 
       if(localStorage.getItem("pargoPoint")) {
@@ -494,7 +494,7 @@ require([
       }
     }
 
-    $(".radio").change(function () {
+    $(".radio").on('change', function () {
       if (
         $(this).val() === "pargo_customshipping_pargo_customshipping" &&
         isLoggedIn
@@ -541,11 +541,11 @@ require([
     $(this).css("color", btnTextColor);
 
     $(".pargo-btn")
-      .mouseover(function () {
+      .on('mouseover', (function () {
         $(this).css("background-color", btnHoverColor);
         $(this).css("color", btnTextHoverColor);
       })
-      .mouseout(function () {
+      .on('mouseout', function () {
         $(this).css("background-color", btnColor);
         $(this).css("color", btnTextColor);
       });
@@ -594,11 +594,11 @@ require([
     $(this).css("color", btnTextColor);
 
     $(".pargo-btn")
-      .mouseover(function () {
+      .on('mouseover', (function () {
         $(this).css("background-color", btnHoverColor);
         $(this).css("color", btnTextHoverColor);
       })
-      .mouseout(function () {
+      .on('mouseout', function () {
         $(this).css("background-color", btnColor);
         $(this).css("color", btnTextColor);
       });
@@ -637,11 +637,11 @@ require([
       $(this).css("color", btnTextColor);
 
       $(".pargo-btn")
-        .mouseover(function () {
+        .on('mouseover', function () {
           $(this).css("background-color", btnHoverColor);
           $(this).css("color", btnTextHoverColor);
         })
-        .mouseout(function () {
+        .on('mouseout', function () {
           $(this).css("background-color", btnColor);
           $(this).css("color", btnTextColor);
         });
@@ -662,11 +662,11 @@ require([
       $(this).css("color", btnTextColor);
 
       $(".pargo-btn")
-        .mouseover(function () {
+        .on('mouseover', function () {
           $(this).css("background-color", btnHoverColor);
           $(this).css("color", btnTextHoverColor);
         })
-        .mouseout(function () {
+        .on('mouseout', function () {
           $(this).css("background-color", btnColor);
           $(this).css("color", btnTextColor);
         });
