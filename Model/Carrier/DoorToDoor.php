@@ -196,7 +196,7 @@ class DoorToDoor extends \Magento\Shipping\Model\Carrier\AbstractCarrier impleme
 
 //        }
         if ($this->getConfigData("doortodoor_enabled")) {
-            $shippingMethods[] .= [$this->getCarrierCode() => __($this->getConfigData('doortodoor_name'))];
+            $shippingMethods[] = [$this->getCarrierCode() => __($this->getConfigData('doortodoor_name'))];
         }
         return $shippingMethods;
     }
