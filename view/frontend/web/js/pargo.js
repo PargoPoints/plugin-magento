@@ -541,7 +541,7 @@ require([
     $(this).css("color", btnTextColor);
 
     $(".pargo-btn")
-      .on('mouseover', (function () {
+      .on('mouseover', function () {
         $(this).css("background-color", btnHoverColor);
         $(this).css("color", btnTextHoverColor);
       })
@@ -594,7 +594,7 @@ require([
     $(this).css("color", btnTextColor);
 
     $(".pargo-btn")
-      .on('mouseover', (function () {
+      .on('mouseover', function () {
         $(this).css("background-color", btnHoverColor);
         $(this).css("color", btnTextHoverColor);
       })
