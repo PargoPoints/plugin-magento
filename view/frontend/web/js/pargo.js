@@ -304,7 +304,7 @@ require([
         setTimeout(function () {
             $(".radio").each(function () {
 
-                var value = $(this).val();
+                const value = $(this).val();
 
                 if (value === "pargo_customshipping_pargo_customshipping") {
 
