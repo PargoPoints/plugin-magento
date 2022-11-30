@@ -306,7 +306,7 @@ require([
 
                 var value = $(this).val();
 
-                if (value == "pargo_customshipping_pargo_customshipping") {
+                if (value === "pargo_customshipping_pargo_customshipping") {
 
                     const pargoPoint = JSON.parse(localStorage.getItem("pargoPoint"));
                     /*
@@ -373,8 +373,7 @@ require([
                     this.checked = true;
 
                     $("#checkout").find(".billing-address-form").show();
-                    $("#checkout")
-                        .find('input[value="pargo_customshipping_pargo_customshipping"]')
+                    $("#checkout input[value=\"pargo_customshipping_pargo_customshipping\"]")
                         .trigger("click");
 
                     $(this).trigger("click");
@@ -400,29 +399,25 @@ require([
             pargoAlternativeDisplay();
             if (isLoggedIn) {
 
-                var pargoPoint = JSON.parse(localStorage.getItem("pargoPoint"));
+                const pargoPoint = JSON.parse(localStorage.getItem("pargoPoint"));
                 /*
                         var pargoPointTelephone = pargoPoint.phoneNumber.toString();
                         if(pargoPointTelephone==="")
                           pargoPointTelephone = "[]";
                 */
-
-                if(pargoPoint.phoneNumber === "" || pargoPoint.phoneNumber == null)
+                let pargoPointTelephone = "";
+                if(pargoPoint.phoneNumber !== "" && pargoPoint.phoneNumber)
                 {
-                    pargoPointTelephone = "";
-                } else {
-                    var pargoPointTelephone = pargoPoint.phoneNumber.toString();
+                    pargoPointTelephone = pargoPoint.phoneNumber.toString();
                 }
-
-                if(pargoPoint.address2 == "" || pargoPoint.address2 == null)
+                let pargoStreet1 = pargoPoint.suburb;
+                let pargoStreet2 = "";
+                if(pargoPoint.address2 !== "" && pargoPoint.address2)
                 {
-                    var pargoStreet1 = pargoPoint.suburb;
-                    var pargoStreet2 = "";
-                } else {
-                    var pargoStreet1 = pargoPoint.address2;
-                    var pargoStreet2 = pargoPoint.suburb;
+                    pargoStreet1 = pargoPoint.address2;
+                    pargoStreet2 = pargoPoint.suburb;
                 }
-                var shippingAddress = {
+                const shippingAddress = {
                     firstname: "Pargo Shipment",
                     lastname: "- Collect",
                     pickupPointCode: pargoPoint.pargoPointCode,
@@ -528,11 +523,11 @@ require([
             pargoDefaultDisplay();
         }
 
-        var btnText = "Change Pargo Point";
-        var btnTextColor = "#000";
-        var btnTextHoverColor = "#fff";
-        var btnColor = "#fff200";
-        var btnHoverColor = "#000";
+        const btnText = "Change Pargo Point";
+        const btnTextColor = "#000";
+        const btnTextHoverColor = "#fff";
+        const btnColor = "#fff200";
+        const btnHoverColor = "#000";
         $(".form-shipping-address").hide();
         $(".pargo-btn").show();
         $(".pargo-btn").text(btnText);
@@ -573,10 +568,10 @@ require([
 
     function renderPargo() {
         let btnText = "Change Pargo Point";
-        let btnTextColor = "#000";
-        let btnTextHoverColor = "#fff";
-        let btnColor = "#fff200";
-        let btnHoverColor = "#000";
+        const btnTextColor = "#000";
+        const btnTextHoverColor = "#fff";
+        const btnColor = "#fff200";
+        const btnHoverColor = "#000";
         if (localStorage.getItem("pargoPoint")) {
             $(".form-shipping-address").hide();
             $(".pargo-btn").show();
