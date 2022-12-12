@@ -37,7 +37,7 @@
                 <price>0.00</price>
                 <cost>0.00</cost>
                 <enable_free_shipping>0</enable_free_shipping>
-                <free_shippping_threshold>0.00</free_shippping_threshold>
+                <free_shipping_threshold>0.00</free_shipping_threshold>
                 <mapToken>wuEmCfJ1AKdWHuVJHR71cYobnXPSMz</mapToken>
                 <sallowspecific>1</sallowspecific>
                 <specificcountry>ZA</specificcountry>
