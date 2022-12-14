@@ -34,9 +34,9 @@ require([
 ) {
     (function (win) {
         "use strict";
-        let listeners = [];
-        let doc = win.document;
-        let MutationObserver = win.MutationObserver || win.WebKitMutationObserver;
+        const listeners = [];
+        const doc = win.document;
+        const MutationObserver = win.MutationObserver || win.WebKitMutationObserver;
         let observer;
 
         function ready(selector, fn) {
@@ -316,14 +316,14 @@ require([
 
                     */
                     let pargoPointTelephone = "";
-                    if(pargoPoint.phoneNumber !== "" && pargoPoint.phoneNumber)
+                    if(pargoPoint.phoneNumber)
                     {
                         pargoPointTelephone = pargoPoint.phoneNumber.toString();
                     }
 
                     let pargoStreet1 = pargoPoint.suburb;
                     let pargoStreet2 = "";
-                    if(pargoPoint.address2 !== "" && pargoPoint.address2)
+                    if(pargoPoint.address2)
                     {
                         pargoStreet1 = pargoPoint.address2;
                         pargoStreet2 = pargoPoint.suburb;
@@ -406,13 +406,13 @@ require([
                           pargoPointTelephone = "[]";
                 */
                 let pargoPointTelephone = "";
-                if(pargoPoint.phoneNumber !== "" && pargoPoint.phoneNumber)
+                if(pargoPoint.phoneNumber)
                 {
                     pargoPointTelephone = pargoPoint.phoneNumber.toString();
                 }
                 let pargoStreet1 = pargoPoint.suburb;
                 let pargoStreet2 = "";
-                if(pargoPoint.address2 !== "" && pargoPoint.address2)
+                if(pargoPoint.address2)
                 {
                     pargoStreet1 = pargoPoint.address2;
                     pargoStreet2 = pargoPoint.suburb;
