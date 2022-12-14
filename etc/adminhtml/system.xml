@@ -18,7 +18,7 @@
             <group id="pargo_customshipping" translate="label" type="text" sortOrder="2" showInDefault="1"
                    showInWebsite="1" showInStore="1">
 
-                <label>Pargo Shipping Method</label>
+                <label>Pargo Shipping: Pickup Point Delivery</label>
 
                 <field id="active" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1"
                        showInStore="1">
@@ -115,7 +115,7 @@
             <group id="pargo_customshipping_doortodoor" translate="label" type="text" sortOrder="2" showInDefault="1"
                    showInWebsite="1" showInStore="1">
 
-                <label>Pargo Shipping Home Delivery</label>
+                <label>Pargo Shipping: Home Delivery</label>
                 <field id="active" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1"
                        showInStore="1">
                     <label>Module Enabled</label>
