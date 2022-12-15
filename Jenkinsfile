@@ -26,6 +26,7 @@ pipeline {
             steps {
                     sh "python3 ci/packagist_check.py $GIT_BRANCH $GIT_COMMIT"
             }
+        }
         stage('Run Playbook 2.4') {
             when {
                 anyOf {
