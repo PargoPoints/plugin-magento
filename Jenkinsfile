@@ -17,12 +17,18 @@ pipeline {
             }
         }
         stage('Wait for Packagist update') {
+            agent {
+                docker {
+                    image '229355314865.dkr.ecr.eu-west-1.amazonaws.com/eng-python-workplace:3.10.1'
+                    registryUrl 'https://229355314865.dkr.ecr.eu-west-1.amazonaws.com'
+                    registryCredentialsId 'ecr:eu-west-1:pargo-jenkins-aws-credentials'
+                }
+            }
             when {
                 anyOf {
                     branch 'feat/polling-test'
                 }
             }
-            agent any
             steps {
                     sh "python3 ci/packagist_check.py $GIT_BRANCH $GIT_COMMIT"
             }
