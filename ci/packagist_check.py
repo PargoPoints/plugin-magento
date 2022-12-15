@@ -6,10 +6,10 @@ import json
 http = urllib3.PoolManager()    
 BRANCH_NAME = 'dev-{}'.format(sys.argv[1])
 GIT_BRANCH_REF = sys.argv[2]
-REPO_API_URL = 'https://packagist.org/packages/PargoPoints/plugin-magento.json'
+REPO_API_URL = 'https://repo.packagist.org/p2/pargopoints/plugin-magento~dev.json'
 
 def get_package_version():
-  REPO_API_URL = 'https://repo.packagist.org/p2/pargopoints/plugin-magento~dev.json'
+  
   headers = {'Cache-Control': 'no-cache', 'Pragma': 'no-cache', 'Expires': 'Thu, 01 Jan 1970 00:00:00 GMT'}
   source_ref = 'a'
   dist_ref = 'b'
