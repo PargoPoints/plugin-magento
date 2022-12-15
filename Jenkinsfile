@@ -19,7 +19,7 @@ pipeline {
         stage('Wait for Packagist update') {
             agent {
                 docker {
-                    image '229355314865.dkr.ecr.eu-west-1.amazonaws.com/eng-python-workplace:3.10.1'
+                    image '229355314865.dkr.ecr.eu-west-1.amazonaws.com/eng-python-workplace:3.10.1-urllib'
                     registryUrl 'https://229355314865.dkr.ecr.eu-west-1.amazonaws.com'
                     registryCredentialsId 'ecr:eu-west-1:pargo-jenkins-aws-credentials'
                 }
