@@ -4,7 +4,7 @@ pipeline {
         stage('Clone Playbooks') {
             when {
                 anyOf {
-                    branch 'staging'
+                    branch 'feat/polling-test'
                 }
             }
             agent any
@@ -16,6 +16,16 @@ pipeline {
                 }
             }
         }
+        stage('Wait for Packagist update') {
+            when {
+                anyOf {
+                    branch 'staging'
+                }
+            }
+            agent any
+            steps {
+                    sh "python3 ci/packagist_check.py $GIT_BRANCH $GIT_COMMIT"
+            }
         stage('Run Playbook 2.4') {
             when {
                 anyOf {
