@@ -4,7 +4,7 @@ pipeline {
         stage('Clone Playbooks') {
             when {
                 anyOf {
-                    branch 'feat/polling-test'
+                    branch 'staging'
                 }
             }
             agent any
@@ -19,7 +19,7 @@ pipeline {
         stage('Wait for Packagist update') {
             when {
                 anyOf {
-                    branch 'staging'
+                    branch 'feat/polling-test'
                 }
             }
             agent any
