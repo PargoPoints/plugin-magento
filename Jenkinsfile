@@ -26,7 +26,7 @@ pipeline {
             }
             when {
                 anyOf {
-                    branch 'feat/polling-test'
+                    branch 'staging'
                 }
             }
             steps {

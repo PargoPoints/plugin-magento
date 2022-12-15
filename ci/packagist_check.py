@@ -16,7 +16,6 @@ def get_package_version():
   while dist_ref != GIT_BRANCH_REF and source_ref != GIT_BRANCH_REF:
     version_data = http.request('GET', REPO_API_URL, headers=headers)
     version_json = (json.loads(version_data.data))
-    print (json.dumps(version_json, indent=4))
     for item in version_json['packages']['pargopoints/plugin-magento']:
       if item['version'] == BRANCH_NAME:
         source_ref = (item['source']['reference'])
