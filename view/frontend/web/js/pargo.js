@@ -82,6 +82,7 @@ require([
 
         // Expose `ready`
         win.ready = ready;
+
     })(this);
 
     ready(".opc-progress-bar", function () {
@@ -93,6 +94,7 @@ require([
                 localStorage.getItem("pargoPoint") !== null
             ) {
                 //$('.form-shipping-address').hide();
+                hideShippingAddressFields();
                 //$('.checkout-shipping-address').hide();
                 $(".continue").attr("disabled", false);
             }
@@ -108,6 +110,7 @@ require([
                 localStorage.getItem("pargoPoint") !== null
             ) {
                 //$('.form-shipping-address').hide();
+                hideShippingAddressFields();
                 //$('.checkout-shipping-address').hide();
                 $(".continue").attr("disabled", false);
             }
@@ -129,10 +132,6 @@ require([
                         if(pargoPointTelephone==="")
                           pargoPointTelephone = "[]";
                 */
-                let pargoPointTelephone = "";
-                if(pargoPoint.phoneNumber !== "" && pargoPoint.phoneNumber) {
-                    pargoPointTelephone = pargoPoint.phoneNumber.toString();
-                }
                 let pargoStreet1 = pargoPoint.suburb;
                 let pargoStreet2 = "";
                 if(pargoPoint.address2 !== "" && pargoPoint.address2)
@@ -220,7 +219,7 @@ require([
     }
     */
     // * changes start
-    if(pargoPointState===true){
+    if(pargoPointState === true){
         loadPargoInformation = true;
         //checkout.setSelectedShippingRate("pargo_customshipping_pargo_customshipping");
     }
@@ -405,11 +404,6 @@ require([
                         if(pargoPointTelephone==="")
                           pargoPointTelephone = "[]";
                 */
-                let pargoPointTelephone = "";
-                if(pargoPoint.phoneNumber)
-                {
-                    pargoPointTelephone = pargoPoint.phoneNumber.toString();
-                }
                 let pargoStreet1 = pargoPoint.suburb;
                 let pargoStreet2 = "";
                 if(pargoPoint.address2)
@@ -417,6 +411,7 @@ require([
                     pargoStreet1 = pargoPoint.address2;
                     pargoStreet2 = pargoPoint.suburb;
                 }
+                let pargoPointTelephone = $('input[name=telephone]').val();
                 const shippingAddress = {
                     firstname: "Pargo Shipment",
                     lastname: "- Collect",
@@ -452,7 +447,8 @@ require([
                 $(".radio:checked").val() !==
                 "pargo_customshipping_pargo_customshipping"
             ) {
-                $(".form-shipping-address").show();
+                // $(".form-shipping-address").show();
+                showShippingAddressFields();
             }
         }
 
@@ -463,11 +459,13 @@ require([
             ) {
                 pargoDefaultDisplay();
                 //$('.form-shipping-address').hide();
+                hideShippingAddressFields();
                 //$('.checkout-shipping-address').hide();
             } else {
                 localStorage.removeItem("pargoPoint");
                 pargoDefaultDisplay();
-                $(".form-shipping-address").show();
+                // $(".form-shipping-address").show();
+                showShippingAddressFields();
                 $(".checkout-shipping-address").show();
                 $(".pargo-btn").hide();
             }
@@ -475,14 +473,28 @@ require([
             if ($(this).val() === "pargo_customshipping_pargo_customshipping") {
                 pargoDefaultDisplay();
                 //$('.form-shipping-address').hide();
+                hideShippingAddressFields();
             } else {
                 localStorage.removeItem("pargoPoint");
                 pargoDefaultDisplay();
-                $(".form-shipping-address").show();
+                // $(".form-shipping-address").show();
+                showShippingAddressFields();
                 $(".pargo-btn").hide();
             }
         });
     });
+
+    function hideShippingAddressFields() {
+        console.log('hiding shipping address fields');
+        $(".field[name^='shippingAddress.']").hide();
+        $(".field.street legend.label").hide();
+        $(".field[name='shippingAddress.telephone']").show();
+    }
+
+    function showShippingAddressFields() {
+        $(".field[name^='shippingAddress.']").show();
+        $(".field.street legend.label").show();
+    }
 
     function pargoDefaultDisplay() {
         const btnText = "Select a Pargo Point";
@@ -494,7 +506,7 @@ require([
         $(".pargo-btn").show();
 
         if (localStorage.getItem("pargoPoint") === null) {
-            $(".form-shipping-address").hide();
+            // $(".form-shipping-address").hide();
             $("#pargo-point").hide();
         }
 
@@ -528,7 +540,7 @@ require([
         const btnTextHoverColor = "#fff";
         const btnColor = "#fff200";
         const btnHoverColor = "#000";
-        $(".form-shipping-address").hide();
+        // $(".form-shipping-address").hide();
         $(".pargo-btn").show();
         $(".pargo-btn").text(btnText);
         $(".pargo-store-info").remove();
@@ -573,7 +585,7 @@ require([
         const btnColor = "#fff200";
         const btnHoverColor = "#000";
         if (localStorage.getItem("pargoPoint")) {
-            $(".form-shipping-address").hide();
+            // $(".form-shipping-address").hide();
             $(".pargo-btn").show();
             $(".pargo-store-info").remove();
             $("#pargo-point")
@@ -610,7 +622,7 @@ require([
         } else {
             btnText = "Select a Pargo Point";
 
-            $(".form-shipping-address").hide();
+            // $(".form-shipping-address").hide();
             $(".pargo-store-info").remove();
             $(".pargo-btn").show();
             $("#pargo-point").hide();
