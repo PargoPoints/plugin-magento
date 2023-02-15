@@ -44,7 +44,7 @@ From your magento folder running as the owner of the website (typically the cred
   composer require pargopoints/plugin-magento
 ```
 
-**Manual Installation**
+**Custom Installation**
 
 Download or clone the code from our git repository:
 
