@@ -120,7 +120,7 @@ class DoorToDoor extends \Magento\Shipping\Model\Carrier\AbstractCarrier impleme
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @param RateRequest $request
-     * @return DataObject|bool|null
+     * @return Result
      * @api
      */
     public function collectRates(RateRequest $request)
