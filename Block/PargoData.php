@@ -75,7 +75,7 @@ class PargoData extends \Magento\Framework\View\Element\Template
     }
 
     /**
-     * Function to return the map url, chosing between live or staging dependant on the admin live dropdown
+     * Function to return the map url, choosing between live or staging dependent on the admin live dropdown
      * @return mixed
      */
     public function getMapUrl()

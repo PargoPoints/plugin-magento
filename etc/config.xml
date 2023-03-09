@@ -13,6 +13,10 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
     <default>
         <carriers>
+            <pargo_generalsettings>
+                <username></username>
+                <password></password>
+            </pargo_generalsettings>
             <pargo_customshipping>
                 <model>Pargo\CustomShipping\Model\Carrier\Custom</model>
                 <name>Pargo</name>
@@ -57,7 +61,6 @@
                 <specificcountry>ZA</specificcountry>
                 <specificerrmsg>This shipping method is not available. To use this shipping method, please contact us.</specificerrmsg>
             </pargo_customshipping_doortodoor>
-
         </carriers>
     </default>
 </config>
