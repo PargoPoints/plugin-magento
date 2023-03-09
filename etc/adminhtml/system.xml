@@ -73,9 +73,7 @@
                 <field id="price" translate="label" type="text" sortOrder="70" showInDefault="1" showInWebsite="1"
                        showInStore="0">
                     <label>Pickup Point Flat Rate Shipping Price</label>
-                    <comment>Flat rates are required, even when using live rates, due to their being used as a fallback
-                        when the API is unavailable.
-                    </comment>
+                    <comment>A flat rate is required. This is the amount that you will be charging your customers for this shipping method at checkout.</comment>
                     <validate>validate-no-empty validate-number validate-zero-or-greater</validate>
                 </field>
 
