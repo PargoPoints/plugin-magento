@@ -79,8 +79,8 @@ class Config extends \Magento\Framework\App\Helper\AbstractHelper
     public function isAvailable()
     {
         $date_current = strtotime($this->timezone->formatDate());
-        $date_start = strtotime($this->getConfig('date_start'));
-        $date_end = strtotime($this->getConfig('date_end'));
+        $date_start = strtotime($this->getConfig('date_start') ?? "now");
+        $date_end = strtotime($this->getConfig('date_end') ?? "now");
         $frequency = $this->getConfig('frequency');
         $day = strtolower(date('D', $date_current));
 
