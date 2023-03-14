@@ -44,6 +44,18 @@ pipeline {
                     vaultCredentialsId: 'pargo-ansible-vault',
                     extras: "-e plugin_version_tag=dev-$GIT_BRANCH"
                     }
+            post {
+                success {
+                    slackSend(channel: '#eng-builds',
+                message: "Magento Staging 2.4.4 Deploy - SUCCESSFUL: \nBuild #: ${env.BUILD_NUMBER} - (<${env.BUILD_URL}|Open>) \nBranch: ${env.BRANCH_NAME} \nView Changes in this build: ${RUN_CHANGES_DISPLAY_URL}",
+                color: 'good')
+                }
+                failure {
+                    slackSend(channel: '#eng-builds',
+        message: "Magento Staging 2.4.4 Deploy - FAILED: \nBuild #: ${env.BUILD_NUMBER} \nLink: (<${env.BUILD_URL}|Open>)",
+        color: 'danger')
+                }
+            }
             }
         }
 }
