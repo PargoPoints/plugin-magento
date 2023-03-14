@@ -24,7 +24,7 @@ pipeline {
                 }
             }
             steps {
-                    sh "pip3 install urllib"
+                    sh "pip3 install urllib3"
                     sh "python3 ci/packagist_check.py $GIT_BRANCH $GIT_COMMIT"
             }
         }
